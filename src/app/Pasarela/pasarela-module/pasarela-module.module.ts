@@ -12,7 +12,7 @@ import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.compo
 import { HeaderpasarelaComponent } from './pages/header-pasarela/headerpasarela/headerpasarela.component';
 
 
-//dlores
+
 @NgModule({
   declarations: [
     PagPagoComponent,
@@ -20,7 +20,7 @@ import { HeaderpasarelaComponent } from './pages/header-pasarela/headerpasarela/
     HeaderpasarelaComponent
   ],
   imports: [
-    SharedModule,
+    
     /**
      * TODO: PARA USUAR DOBLE BINDING    
      */
