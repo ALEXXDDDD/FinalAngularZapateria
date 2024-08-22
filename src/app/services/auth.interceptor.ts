@@ -50,7 +50,7 @@ export class AuthInterceptor implements HttpInterceptor {
         );
        }
     } */
-    
+    // Respolviendo actualziaciones
     return  next.handle(request).pipe(
       catchError(  
         (err:HttpErrorResponse)=>
