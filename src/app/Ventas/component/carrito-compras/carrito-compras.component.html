@@ -1,0 +1,39 @@
+<p>carrito-compras works!</p>
+<app-welcome-header></app-welcome-header>
+<p>
+    Tu carrito de Compras
+</p>
+<ul>
+    <li *ngFor="let item of carrito">
+        {{item.producto.nombreProd}}
+        -Precio
+        {{item.producto.precioUnitario}}
+        <img src="{{item.producto.fotografia}}" alt="">
+        
+        <button (click)="quitar1(item)">-</button>
+        {{item.cantidad}}
+        <button (click)="agregar1(item)">+</button>
+        <br>
+       
+        <button  type="button" (click)="eliminarProducto(item)">Eliminar</button>
+
+        
+    </li>
+    <div>
+            Total de precios: {{ totalPrecios }}
+          </div>
+</ul>
+<button (click)="realizarEnvio(modalEdit)">Envio</button>
+<button  [routerLink]="['/pasarela']">Pagar</button>
+<ng-template #modalEdit>
+    <app-envio-domicilio
+    [title]="titleModal"
+    [dreccion]="direccionSelect"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)"
+    >
+
+    
+    </app-envio-domicilio>
+
+  </ng-template>

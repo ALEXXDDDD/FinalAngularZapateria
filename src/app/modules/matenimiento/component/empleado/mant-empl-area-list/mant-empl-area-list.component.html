@@ -1,0 +1,48 @@
+<h1>EMPLEADO CON SU AREA </h1>
+<table class="table">
+    
+    <thead>
+      <tr>
+        <tr>
+          <th scope="col" >IdEmpleado</th>
+          <th scope="col">Nombre Apellido</th>
+          <th scope="col">AREA</th>
+        
+        <th>
+        
+        
+        <button  class="btn btn-secondary btn-sm">
+          <i class="fas fa-plus">Nuevo Area</i>
+      </button>
+      </tr>
+    </thead>
+   
+      <tbody *ngFor="let list of responseDetProduccio">
+        <tr >
+          <td>{{list.idOrden}}</td>
+          <td>{{list.nombreCompleto}}</td>
+          <td>{{list.nombreArea}}</td>
+          
+          <td>
+        <button (click)="editarAreaEmpleado(modalEdit,list)" class="btn btn-primary mr-4">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button  class="btn btn-sucess mr-4">
+          <i class="fa-solid fa-plus"></i>
+      </button>
+        <button  type="button" class="btn btn-danger mr-4">
+            <i class="fas fa-trash"></i>
+        </button>
+        </tr>
+      </tbody>    
+      
+      
+    
+  </table>
+  
+    <ng-template #modalEdit>
+      
+    </ng-template>
+
+
+      

@@ -1,0 +1,58 @@
+<div class="container">
+    <form [formGroup]="form">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <th></th>
+                <th>ID</th>
+                <th>Nombre de Rol</th>
+                <th>Descripcion</th>
+            
+                <th>
+                    <button (click)="addRoles()" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i>
+                    </button>
+                </th>
+            </thead>
+        
+        <tbody>
+            <ng-container formArrayName="roles"
+            *ngFor="let direccion of rolesArrayForm.controls let i = index "
+                
+            >
+            <tr [formGroupName]="i">
+                <td >{{i+1}}</td>
+                <td>
+                    <input type="number" class="form-control" formControlName="irol">
+                </td>
+                <td>
+                    <input type="text" class="form-control" formControlName="nombreRol">
+                </td>
+                <td>
+                    <input type="text" class="form-control" formControlName="descripRol">
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" (click)="removeRol(i)">
+                        <i class=" fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        
+        
+        </ng-container>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <button
+                    [disabled]="form.invalid" (click)="save()" class=" btn btn-primary btn-sm"   
+                    >
+                    <i class=" fas fa-save"></i>
+                    Guardar
+                    </button>
+
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    </form>
+</div>

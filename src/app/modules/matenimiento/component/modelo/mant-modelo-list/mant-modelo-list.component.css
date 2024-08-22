@@ -1,0 +1,79 @@
+.row{
+    
+    color: rgb(3, 3, 2);
+    margin-top: 20px;
+    font-size: 15px;
+    border-radius: 20px;
+}
+.prd{
+   
+    
+}
+.img_producto{
+    width: 138px;
+    margin: auto;
+}
+img{
+    margin-left: 180px;
+    margin-top: 20px;
+    }
+    html{
+        
+    }
+    th{
+        color: rgb(24, 18, 18);
+    }
+    table{
+        
+    }
+    td{
+        
+    }
+    button{
+        color: rgb(32, 24, 24);
+    }
+    h1{
+        text-align: center;
+        background-color: black;
+        color: white; 
+        
+        margin-bottom: 20px;
+        margin-left: 20px;
+    } 
+    #containerProd{
+        background-color: black;
+        color: wheat;
+        border-radius: 50px;
+        /* margin: auto; */
+        margin-left: 20px;
+    }
+    ul{
+        background-color: #1e5ce7;
+        text-align: center;
+        border-radius: 27px;
+        height: 48px;
+        padding: 11px;
+    } 
+    thead{
+        background-color: black;
+        
+    } 
+    .containerButonn{
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-around;
+        /* width: 264px; */
+        margin-bottom: 25px;
+    }
+   
+    th{
+        color: white;
+    }
+    h2{
+        text-align: center;
+        background-color: black;
+        color: white; 
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }   

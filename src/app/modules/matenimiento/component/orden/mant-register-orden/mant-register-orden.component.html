@@ -1,0 +1,85 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left" >{{title}}</h4>
+    <!-- (click)="modalRef?.hide() -->
+    <button type="button" class="btn-close close pull-right" aria-label="Close" >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  
+  
+    <form action="" [formGroup]="myForm">
+        <div class="form-group" *ngFor="let listUnidad of responseVwCliente">
+            <label for="">Seleccione El Cliente </label>
+            <br>
+            <select class="form-select" name="" id="" formControlName="nombreCliente"  >
+                <option *ngFor="let clie of listUnidad.clientes"  value={{clie.nombreCliente}}  >{{clie.nombreCliente}} </option>
+            </select>
+           
+        </div>
+        <div class="form-group" >
+            <label for="">Estado</label>
+            <br>
+            <select class="form-select" name="" id="" formControlName="estadoOrden"  >
+                <option   value="Activo"  > Activo </option>
+                <option   value="InacActivo"  > InacActivo </option>
+            </select>
+           
+        </div>
+        <div class="form-group" >
+            <label for="">Codigo de la Orden </label>
+            <br>
+            <input type="text" class="form-control" formControlName="codigoOrden">
+           
+        </div>
+        <div class="form-group" >
+            <label for="">Fecha  </label>
+            <br>
+            <input type="date" class="form-control" formControlName="fechaOrden">
+           
+        </div>
+        <div class="form-group" >
+            <label for="">Fecha Requerida  </label>
+            <br>
+            <input type="date" class="form-control" formControlName="fechaRequerido">
+           
+        </div>
+        <div class="form-group" >
+            <label for="">Seleccione El Producto </label>
+            <br>
+            
+            
+            <select   class="form-select" name="" id=""  formControlName="nombreProd">
+                <option *ngFor="let listProducto of responseProducto" value={{listProducto.nombreProd}}   >{{listProducto.nombreProd}}  </option>
+            </select>
+           
+        </div>
+        <button class="btn btn-danger">Agregar Mas Producto </button>
+
+
+        <input type="number" formControlName="precioUnitario" placeholder="precioUnitario">
+        <div class="form-group" >
+            <label for="">Seleccione la Cantidad </label>
+            <br>
+            <input type="number" formControlName="cantidad" placeholder="Cantidad">
+            <br>
+            Unidad
+            <select *ngFor="let listUnidad of responseUnidad"  formControlName="nombreUnidad" class="form-select" name="" id=""   >
+                
+                <option >{{listUnidad.nombreUnidad}}  </option>
+            </select>
+        </div>
+        <div>
+            <input type="number" formControlName="montoTotal" placeholder="Monto Total">
+        </div>
+        <div >
+            <button class="btn btn-danger" (click)="cerrarModal(false)">
+                CANCELAR
+            </button>
+            <button class="btn btn-primary" (click)="guardar()">
+                GUARDAR
+            </button>
+        </div>
+
+    </form>   
+  
+

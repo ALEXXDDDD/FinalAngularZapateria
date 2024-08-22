@@ -1,0 +1,30 @@
+<app-welcome-header></app-welcome-header>
+
+<h1>Nuestros Productos</h1>
+<aside class="col-lg-3">
+        
+    <img src="./../../../assets/img/Img_Welcome/720X1300-ecco.jpg" alt="" class="imagen">
+</aside>
+
+<section class="colum col-lg-9">
+    <form action="" class="container-producto"
+    *ngFor="let mod of responseProducto"
+    >
+     <a href="" ><img src="{{mod.fotografia}}" alt=""></a><br>
+     <div class="container">
+         <label class="vista" for="">Nombre De Producto </label>
+            <p>  </p>
+         <label for="">{{mod.nombreProd}}</label><br>
+         <br>
+         <label class="vista" for="">Precio</label>
+   
+         <label for="">{{mod.precioUnitario}}</label><br>
+         <button class="btn btn-danger" id="danger">Agregar Carrito</button>
+     </div>
+     
+     
+ </form>
+         
+ </section>
+
+

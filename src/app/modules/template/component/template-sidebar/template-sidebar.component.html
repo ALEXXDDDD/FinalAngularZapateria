@@ -1,0 +1,39 @@
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            
+    <img src="./../../../assets/img/Img_Welcome/images.png" alt="">
+            <a class="nav-link"  href="" routerLink="mantenimiento/inicioSidebar"><i class="fas fa-card" class="mr-5"></i>Inicio</a>
+            <div class="nav" *ngFor="let d of meny">
+
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" 
+                [attr.data-bs-target]="'#'+ d.target"
+                aria-expanded="false" aria-controls="pagesCollapseAuth">
+                    <div class="sb-nav-link-icon"><i class="{{d.incon}}"></i></div>
+                    {{d.name}}
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div *ngFor="let x of d.subMenu" class="collapse" id="{{d.target}}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                    <nav class="sb-sidenav-menu-nested nav">
+       
+                        <a class="nav-link"  href="" [routerLink]="[x.url]"><i class="{{x.incon}}" class="mr-5"></i>{{x.name}}</a>
+                        
+                    </nav>
+                </div>
+                                                               
+            </div>
+        </div>
+        <!-- <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link"  href="" routerLink="mantenimiento/rol"><i class="fas fa-card" class="mr-5"><img src="https://th.bing.com/th/id/R.db36b787a971279c919d456c9ad2d853?rik=PJpzhrqKX8vdNg&pid=ImgRaw&r=0" alt=""></i>Roles de la Empresa</a>
+            <a class="nav-link"  href="" routerLink="mantenimiento/empleado"><i class="fas fa-card" class="mr-5"><img src="https://tse3.mm.bing.net/th/id/OIP.g_t2vqFs1Y0ggeJfygp40QHaEJ?w=324&h=182&c=7&r=0&o=5&pid=1.7" alt=""></i>Empleados</a>
+            <a class="nav-link"  href="" routerLink="mantenimiento/producto"><i class="fas fa-card" class="mr-5"><img src=">
+        <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link"  href="" routerLink="mantenimiento/cliente"><i class="fas fa-card" class="mr-5"><img src="https://tse1.mm.bing.net/th/id/OIP.kFXorh4C86GrIgdOJjnMdQHaFR?rs=1&pid=ImgDetMain" alt=""></i>Clientes</a>
+            <a class="nav-link"  href="" routerLink="mantenimiento/Proveedor"><i class="fas fa-card" class="mr-5"></i>Provedores</a>
+            <a class="nav-link"  href="" routerLink="mantenimiento/ventas"><i class="fas fa-card" class="mr-5"></i>Ventas</a>
+           
+        </nav> -->
+        
+    </nav>
+
+</div>

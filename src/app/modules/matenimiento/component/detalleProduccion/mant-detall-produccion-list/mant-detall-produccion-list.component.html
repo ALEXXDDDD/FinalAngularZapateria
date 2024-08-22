@@ -1,0 +1,91 @@
+<h1> EMPLEADOS</h1>
+<div class="d-grid gap-2">
+      
+  <!-- <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Unidad de Cantidad</a>
+  <ul class="dropdown-menu">
+    
+    <li><a class="dropdown-item" href="#scrollspyHeading4">Ver</a></li>e
+    <li><a class="dropdown-item" href="#scrollspyHeading4">Material-Unidad Cantidad </a></li>
+    <li><hr class="dropdown-divider"></li>
+  </ul>
+  <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">   Modelo</a>
+  <ul class="dropdown-menu">
+    
+    <li><a class="dropdown-item" [routerLink]="['/dasboard/mantenimiento/modelo']" href="#scrollspyHeading4">Ver</a></li>
+    <li><a class="dropdown-item" href="#scrollspyHeading4">Producto-Modelo </a></li>
+    <li><hr class="dropdown-divider"></li>
+  </ul> -->
+  <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="https://imgs.search.brave.com/mQfYhtHiJhgKeKvkPCHAyK5zbCDJAUyoMbFjJSqO7_s/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTM1/MTQzNzYxNy9lcy9m/b3RvL2xhcmdhLWV4/cG9zaWNpJUMzJUIz/bi1kZS1wYXF1ZXRl/cy1lbi1jaW50YS10/cmFuc3BvcnRhZG9y/YS5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9ZVlCWWZmYkJp/b2thRjlyZHE0VDJT/R2l3c2JKX1hELVU2/eF9KSjJUQ0pSRT0" 
+    alt="" class="img_producto">  Materiales</a>
+  <ul class="dropdown-menu">
+    
+    <li><a class="dropdown-item" href="#scrollspyHeading4">Ver</a></li>
+    <li><a class="dropdown-item" href="#scrollspyHeading4">Proveedor-Material </a></li>
+    <li><hr class="dropdown-divider"></li>
+  </ul>
+  <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="https://imgs.search.brave.com/a55-vXiD_9ulT5WAVAruritbgM8BlSHruOlsGO8Fn1o/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjEz/MTM0MzA2L2VzL2Zv/dG8vbXVqZXItZW1v/Y2lvbmFkYS1kaXZp/cnRpJUMzJUE5bmRv/c2UtZGUtY29tcHJh/cy5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9bm13Q1NIVWZ2/RkpfQzU3eGF2Y0FQ/QVdFZ0J1UFhVU3Yy/QURCTmtzOVpubz0"
+     alt="" class="img_producto">  Ordenes</a>
+  <ul class="dropdown-menu">
+    
+    <li><a class="dropdown-item" href="#scrollspyHeading4">Ver</a></li>
+    <li><a class="dropdown-item" href="#scrollspyHeading4">Ordenes-Clientes </a></li>
+    <li><hr class="dropdown-divider"></li>
+  </ul>
+
+</div>
+<button (click)="crearProduccion(modalEdit)"  class="btn btn-primary btn-sm">
+  <i class="fas fa-plus"></i>
+</button>
+<button  class="btn btn-secondary btn-sm" [routerLink]="['/dasboard/mantenimiento/empleado-area']">
+<i class="fas fa-plus">Ver Area</i>
+</button> 
+<table class="table">
+  
+    <thead>
+      <tr>
+        
+        <tr>
+          <th scope="col" >IDProduccion</th>
+          <th scope="col">La Unidad </th>
+          <th scope="col">Meta</th>
+          <th scope="col">Cantidad Faltante </th>
+          <th scope="col">Fecha de Inicio </th>
+          <th scope="col">Fecha de Finalizacion </th>
+          <th scope="col">Estado </th>
+        
+        <th>
+      </tr>
+    </thead>
+   
+      <tbody *ngFor="let list of responseProduccion">
+        <tr *ngFor="let e of list.produccions">
+          
+          
+          
+          <td>
+        <button (click)="editarProduccion(modalEdit,e)" class="btn btn-primary mr-4">
+            <i class="fas fa-edit"></i>
+        </button>
+        
+        <button  type="button" class="btn btn-danger mr-4">
+            <i class="fas fa-trash"></i>
+        </button>
+        </tr>
+      </tbody>    
+      
+      
+    
+  </table>
+  
+    <ng-template #modalEdit>
+      <app-mant-detall-produccion-register
+      [title]="titleModal"
+      [Produccion]="ProduccionSelect"
+      [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)"
+      >
+      </app-mant-detall-produccion-register>
+    </ng-template>
+
+
+      

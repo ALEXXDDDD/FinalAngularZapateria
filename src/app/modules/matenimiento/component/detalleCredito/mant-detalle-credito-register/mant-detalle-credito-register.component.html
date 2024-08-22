@@ -1,0 +1,49 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <button type="button" class="btn-close close pull-rigth">
+        <span class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body" >
+    <form action="" [formGroup]="myForm">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group" >
+                    <label for="">Id Credito</label>
+                    <input type="text" class="form-control" name="" id="idDetalleCredito" formControlName="idDetalleCredito">
+                  
+                </div>
+            </div>
+           
+            <div class="col-4" *ngFor="let ma of responseOrden">
+                <label for="">Codigo del Orden</label>
+                <select *ngFor="let d of ma.ordens" name="" id=""  class="form-select" formControlName="codigoOrden">
+                    <option value="{{d.codigoOrden}}"  >{{d.codigoOrden}}</option>
+                </select>
+            </div>
+            <div class="col-4" >
+                <label for="">Monto de Pago </label>
+                <div class="form-group" >
+                    <input type="number" class="form-control" formControlName="montoAmortizacion">
+                </div>
+            </div>
+            <div class="col-4">
+                <label for="">Fecha de Pago </label>
+                <div class="form-group" >
+                    <input type="date" class="form-control" formControlName="fechaAmortizacion">
+                </div>
+            </div>
+           
+            
+        </div>
+       
+            <button type="button" class="btn btn-primary btn-sm" (click)="guardar()">
+                GUARDAR
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" >
+                Cancelar
+            </button>
+        
+    </form>
+</div>
+

@@ -1,0 +1,78 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <button type="button" class="btn-close close pull-rigth">
+        <span class="visually-hidden">&times;</span>
+    </button>
+</div>
+<div class="modal-body" >
+    <form action="" [formGroup]="myForm">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group" >
+                    <label for="">Id</label>
+                    <input type="text" class="form-control" formControlName="idProvedor" >
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group" >
+                    <label for="">Nombres del proveedor</label>
+                    <input type="text" class="form-control" formControlName="nombrePersona" >
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="">Tipo De Registro</label>
+                    <select name="" id="" class="form-select" formControlName="tipoPersona">
+                        <option value="Proveedor">Proveedor</option>
+                        <option value="Natural">Natural</option>
+                        <option value="Juridico">Juridico</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="">Tipo De Documento</label>
+                    <select name="" id="" class="form-select" formControlName="tipoDocumento">
+                        <option value="DNI">DNI</option>
+                        <option value="RUC">RUC</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="">Numero de Documento</label>
+                    <input type="text" class="form-control"  formControlName="numerodocumento">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="">Telefono</label>
+                    <input type="text" class="form-control" formControlName="telefono">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="">Codigo de Ubigueo</label>
+                    <input type="text" class="form-control" formControlName="codigoUbigeo" >
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="">Direccion</label>
+                    <input type="text" class="form-control" formControlName="direccion">
+                </div>
+            </div>
+           
+        </div>
+       
+            <button type="button" class="btn btn-primary btn-sm" (click)="guardar()">
+                GUARDAR
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" >
+                Cancelar
+            </button>
+        
+    </form>
+</div>

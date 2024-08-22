@@ -1,0 +1,183 @@
+<html>
+  <h1>Productos</h1>
+<!--Start Cabecera Productos -->
+    <div class="d-grid gap-2">
+      
+      <!-- <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Unidad de Cantidad</a>
+      <ul class="dropdown-menu">
+        
+        <li><a class="dropdown-item" href="#scrollspyHeading4">Ver</a></li>e
+        <li><a class="dropdown-item" href="#scrollspyHeading4">Material-Unidad Cantidad </a></li>
+        <li><hr class="dropdown-divider"></li>
+      </ul>
+      <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">   Modelo</a>
+      <ul class="dropdown-menu">
+        
+        <li><a class="dropdown-item" [routerLink]="['/dasboard/mantenimiento/modelo']" href="#scrollspyHeading4">Ver</a></li>
+        <li><a class="dropdown-item" href="#scrollspyHeading4">Producto-Modelo </a></li>
+        <li><hr class="dropdown-divider"></li>
+      </ul> -->
+      <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="https://imgs.search.brave.com/mQfYhtHiJhgKeKvkPCHAyK5zbCDJAUyoMbFjJSqO7_s/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTM1/MTQzNzYxNy9lcy9m/b3RvL2xhcmdhLWV4/cG9zaWNpJUMzJUIz/bi1kZS1wYXF1ZXRl/cy1lbi1jaW50YS10/cmFuc3BvcnRhZG9y/YS5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9ZVlCWWZmYkJp/b2thRjlyZHE0VDJT/R2l3c2JKX1hELVU2/eF9KSjJUQ0pSRT0" 
+        alt="" class="img_producto">  Proveedor</a>
+      <ul class="dropdown-menu">
+        
+        <li><a class="dropdown-item" [routerLink]="['/dasboard/mantenimiento/proveedor']">Ver</a></li>
+        <li><a class="dropdown-item" [routerLink]="['/dasboard/mantenimiento/proveedor']">Proveedor-Material </a></li>
+        <li><hr class="dropdown-divider"></li>
+      </ul>
+      <a class="btn btn-primary" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false"><img src="https://imgs.search.brave.com/a55-vXiD_9ulT5WAVAruritbgM8BlSHruOlsGO8Fn1o/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjEz/MTM0MzA2L2VzL2Zv/dG8vbXVqZXItZW1v/Y2lvbmFkYS1kaXZp/cnRpJUMzJUE5bmRv/c2UtZGUtY29tcHJh/cy5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9bm13Q1NIVWZ2/RkpfQzU3eGF2Y0FQ/QVdFZ0J1UFhVU3Yy/QURCTmtzOVpubz0"
+         alt="" class="img_producto">  Clientes</a>
+      <ul class="dropdown-menu">
+        
+        <li><a class="dropdown-item" [routerLink]="['/dasboard/mantenimiento/cliente']">Ver</a></li>
+        <li><hr class="dropdown-divider"></li>
+      </ul>
+    
+    </div>
+  <!--End  Cabecera Productos -->    
+    <br>
+   
+  <!--Columnas son datos  -->  
+  <form [formGroup]="myFormFilter">
+    <div class="card-body">
+      <div class="card bg-light mb-3" >
+        <div class="card-header">Busqueda</div>
+        <div class="card-body">
+            <div class="row">
+              <div class="col-3">
+                <div class="form-group">
+                  <label for="">Nombre de Producto</label>
+                  <input type="text" class="form-control" formControlName="nombreRol">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  <label for="">Codigo</label>
+                  <input type="text" class="form-control" formControlName="descripRol">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  <br>
+                  <button (click)="filtrar()" class="btn btn-primary btn-sm">
+                    <i class="fas fa-search"></i>
+                  </button>
+                  <button class="btn btn-danger btn-sm">
+                    <i class="fas fa-broom"></i>
+                  </button>
+    
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+
+  </form>
+ 
+ <table class="table">
+    
+  <thead>
+    <ul>Productos Acabados </ul>
+    <tr>
+
+      <th scope="col">Nombre Producto</th>       
+      <th scope="col">Stock</th>
+
+    
+      
+    </tr>
+  </thead>
+  <tbody *ngFor="let list of responseStoreProducto">
+    <tr >
+  
+      <td>{{list.nombreProd}}</td>
+      <td>{{list.stock}}</td>          
+    </tr>
+    
+  </tbody>
+</table>
+     
+  <!--End Cabecera Productos -->
+<h2>Lista De Productos</h2>
+
+
+  <!--Start Cabecera Buttones CRUD Productos -->
+  
+  
+  <div class="row">
+    <div class="col-xs-6 col-6">
+      <!-- <pagination [totalItems]="5" [(ngModel)]="currentPage"></pagination> -->
+      <select (change)="changeItemsPerPage()" [(ngModel)]="itemsPerPage"  class="form-select">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </div>
+   </div> 
+        
+    <button  class="btn btn-primary btn-sm">
+      <i class="fas fa-plus"> </i>
+       
+    </button>
+
+
+
+    
+  <!--End Cabecera Buttones CRUD Productos -->
+  <table class="table ">
+  
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre Prodcuto</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Imagen Producto</th>
+        <button (click)="crearProducto(modalEdit)"  class="btn btn-primary btn-sm" id="button-Mas">
+            <i class="fas fa-plus"></i>
+        </button>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let list of responseProducto">
+        <td >{{list.idProducto}}</td>
+        <td>{{list.nombreProd}}</td>
+        <td>{{list.precioUnitario}}</td>
+        <br>
+        <img src="{{list.fotografia}}" alt="" class="img_producto">
+        
+        <input type="file" name="Actualizar Imagen" id="">
+       <td>
+        <button (click)="editarProducto(modalEdit,list)" class="btn btn-primary mr-4">
+          <i class="fas fa-edit"></i>
+      </button>
+      <button type="button" class="btn btn-danger mr-4">
+          <i class="fas fa-trash"></i>
+      </button>
+       </td>
+      
+        
+      </tr>
+      <div class="row">
+        <div class="col-xs-12 col-12">
+          <!-- <pagination [totalItems]="5" [(ngModel)]="currentPage"></pagination> -->
+          <pagination (pageChanged)="changePage($event)" [totalItems]="totalItems"  [itemsPerPage]="  itemsPerPage" [previousText]="'Anterior'" [nextText]="'Siguiente'"></pagination>
+        </div>
+        
+      </div>  
+      <div class="card">
+        
+  
+  <ng-template #modalEdit>
+    <app-mant-producto-register
+    [title]="titleModal"
+   
+    [accion]="accionModal"
+  
+    >
+    </app-mant-producto-register>
+  </ng-template>
+  
+

@@ -1,0 +1,52 @@
+<h1>USUARIOS</h1>
+<table class="table">
+    
+    <thead class="BarraLat">
+      <tr> 
+        <th scope="col">ID</th>
+        <th scope="col">Nombres</th>
+        <th scope="col">Documento</th>
+        <th scope="col">Numero de Documento</th>
+        <th scope="col">Direccion</th>
+        <th scope="col">Telefono</th>
+       
+        
+      </tr>
+    </thead>
+    <tbody *ngFor="let list of persona">
+      <tr >
+        <th scope="row">{{list.idPersona}}</th>
+        <td>{{list.nombrePersona}}</td>
+        <td>{{list.tipoDocumento}}</td>
+        <td>{{list.numeroDocumento}}</td>
+        <td>{{list.direccion}}</td>
+        <td>{{list.telefono}}</td>
+        
+        
+        <!-- 
+        <button (click)="eliminarRol(car.irol)" type="button" class="btn btn-danger mr-4">
+            <i class="fas fa-trash"></i>
+        </button> -->
+      <button  class="btn btn-primary mr-4">
+            <i class="fas fa-edit"></i>
+        </button>
+        
+      </tr>
+      
+    </tbody>
+    
+    
+  
+  <ng-template #modalEdit>
+    <!-- <app-mant-rol-registrer
+    [title]="titleModal"
+    [Producto]="productoEnviar"
+    [accion]="accionModal"
+  (closeModalEmmit)="getCloseModalEmmit($event)"
+    >
+    </app-mant-rol-registrer> -->
+  </ng-template>
+  <button  class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"> </i>
+            Nuevo Usuario
+      </button>

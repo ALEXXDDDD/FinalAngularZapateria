@@ -1,0 +1,16 @@
+.row{
+    background-color: black;
+    color: wheat;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    border-radius: 20px;
+}
+.prd{
+    background-color: white;
+    color: black;
+}
+img{
+    margin-left: 180px;
+    margin-top: 20px;
+    }

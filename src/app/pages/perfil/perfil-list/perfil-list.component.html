@@ -1,0 +1,11 @@
+
+<app-welcome-header></app-welcome-header>
+<h2>Tu perfil</h2>
+<tbody *ngFor="let p of responsePerfil">
+    <ul>{{p.email}}</ul>
+    <ul>{{p.nombrePersona}}</ul>
+    <ul>{{p.direccion}}</ul>
+    <ul>{{p.fotografia}}</ul>
+    <ul>{{p.usuario}}</ul>
+    <button class="btn btn-danger" (click)="logout()">Cerrar Sesion</button>
+</tbody>

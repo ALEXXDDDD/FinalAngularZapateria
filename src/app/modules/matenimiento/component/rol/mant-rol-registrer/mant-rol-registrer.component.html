@@ -1,0 +1,51 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left" >{{title}}</h4>
+    <!-- (click)="modalRef?.hide() -->
+    <button type="button" class="btn-close close pull-right" aria-label="Close" >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  
+  <DIv class="row" >
+    <form action="" [formGroup]="myForm">
+        <div class="col-12 mt-5">
+            <div class="form-group">
+                <label for="" aria-placeholder="Ingrese Nokbre Rol">ID</label>
+                <input type="text" formControlName="irol"  class="form-control" placeholder="id">
+            </div>
+        </div>
+        <div class="col-12 mt-5">
+            <div class="form-group">
+                <label for="" aria-placeholder="Ingrese Nokbre Rol">Nombre de Rol</label>
+                <input type="text" formControlName="nombreRol"  class="form-control" placeholder="Ingrese Nombre de Rol">
+            </div>
+
+            <div *ngIf="myForm.get('nombreRol')?.errors && myForm.touched">
+                <span class="text-danger" *ngIf="myForm.get('nombreRol')?.hasError('required')" >Campo Requerido </span>
+            </div>
+
+        </div>
+        <div class="col-12 mt-5">
+            <div class="form-group">
+                <label for="" aria-placeholder="">Descripcion </label>
+                <input type="text" formControlName="descripRol" class="form-control" placeholder="Ingrese Descripcion">
+            </div>
+
+            <div *ngIf="myForm.get('descripRol')?.errors && myForm.touched">
+                <span class="text-danger" *ngIf="myForm.get('descripRol')?.hasError('required')" >Campo Requerido </span>
+            </div>
+        </div>
+        
+            <div class="col-6  mt-3">
+                <button  [disabled]="myForm.invalid" class="btn btn-primary" (click)="guardar()">
+                                Guardar
+                </button>
+            </div>
+            <div class="col-6 mt-3 ">    
+                <button class="btn btn-danger">
+                    Cancelar
+                </button>
+            </div>
+    </form>
+        
+  </DIv>

@@ -1,0 +1,38 @@
+
+<div >
+    
+    <form action="" *ngFor="let item of responsePerfil" [formGroup]="myForm">
+        
+        <ul>Tu Productos</ul>
+        <li *ngFor="let item of carrito">
+            {{item.producto.nombreProd}}
+            -Precio
+            {{item.producto.precioUnitario}}
+            <img src="{{item.producto.fotografia}}" alt="">
+            
+          
+            <button  type="button" (click)="eliminarProducto(item)">Eliminar</button>
+        </li>
+        <ul>Total</ul>
+        <input type="number">
+        <ul>Fecha que Necesitas</ul>
+        <input type="date" name="" id="">
+        <ul>Tu direccion</ul>
+        <input type="text" value="{{item.direccion}}" type="text" 
+
+        formControlName="direccion"
+
+        [readonly]="!isEditable" 
+        placeholder="{{item.direccion}}"
+        >
+        <br>
+        <app-api-maps-google *ngIf="isEditable"></app-api-maps-google>
+        <button class="btn btn-dark" *ngIf="isEditable" (click)="guardar()" >
+            Actualizar Direccion
+        </button>
+        <button *ngIf="!isEditable" (click)="enableEditing()"  class="btn btn-primary">Cambiar Direccion</button>
+        <br>
+        <button (click)="saveChanges()" class="btn btn-danger">Confirmar Pedido</button> <!-- *ngIf="isEditable"-->
+    </form>
+
+</div>

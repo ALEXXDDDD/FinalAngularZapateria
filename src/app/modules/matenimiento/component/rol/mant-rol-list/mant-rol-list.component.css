@@ -1,0 +1,25 @@
+
+th{
+    color: rgb(245, 245, 245);
+}
+thead{
+    background-color: black;
+}
+td{
+    color: rgb(15, 13, 13);
+}
+#button-MAS{
+    color: white;
+}
+button{
+    color: rgb(19, 13, 13);
+}
+h1{
+    text-align: center;
+    background-color: black;
+    color: white; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}

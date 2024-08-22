@@ -1,0 +1,41 @@
+<p>listar-detalle works!</p>
+<h2>{{title}}</h2>
+<div *ngIf="frmLoadSt == loadStateEnum.Loading" class="home"  >
+    <h1 class="text-white">Buscando algo que leer...</h1>
+
+    <ng-template #sc>
+        <div class="loader">
+            <svg viewBox="0 0 80 80">
+              <circle r="32" cy="40" cx="40" id="test"></circle>
+            </svg>
+          </div>
+          
+          <div class="loader triangle">
+            <svg viewBox="0 0 86 80">
+              <polygon points="43 8 79 72 7 72"></polygon>
+            </svg>
+          </div>
+          
+          <div class="loader">
+            <svg viewBox="0 0 80 80">
+              <rect height="64" width="64" y="8" x="8"></rect>
+            </svg>
+          </div>
+          
+    </ng-template>
+</div>
+<div *ngIf="frmLoadSt == loadStateEnum.Success" class="home"  >
+    <tbody  *ngFor="let car of detalleProductoResponse"> 
+        <ul>{{car.categoria}}</ul>
+        <ul>{{car.material}}</ul>
+        <ul>{{car.color}}</ul>
+        <ul>{{car.talla}}</ul>
+        <ul>{{car.nombreProd}}</ul>
+        <ul>{{car.precioUnitario}}</ul>
+      
+    </tbody>
+    <button >Agregar Al Carrito</button>
+</div>
+
+
+ 

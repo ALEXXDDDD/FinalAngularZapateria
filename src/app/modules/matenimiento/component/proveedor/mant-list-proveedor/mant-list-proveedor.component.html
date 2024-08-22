@@ -1,0 +1,50 @@
+<div class="container-fluid mt-4">
+    <div class="card bg-light mb-3">
+        <div class="card-header"><strong>Pedidos a Proveedores</strong></div>
+        <div class="card-body"></div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID Proveedor</th>
+                        <th>Nombres</th>
+                        <th>Material</th>
+                        <th>Fecha de la Entrega</th>
+                        <th>Fecha del Pedido</th>
+                        <th>Precio</th>
+                        <th>Telefono</th>
+                        <th>Cantidad</th>
+                        <button class="btn btn-primary" (click)="crearProveedor(modalEdit)"><i class="fas fa-plus"></i></button>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let d of responseProveedor" >
+                    <tr *ngFor="let e of d.proveedors">
+                        <td>{{e.idProvedor}}</td>
+                        <td>{{e.nombreProveedor}}</td>
+                        <td>{{e.nombreMaterial}}</td>
+                        <td>{{e.fechaEntrega}}</td>
+                        <td>{{e.fechaPedido}}</td>
+                        <td>{{e.precioUnitario}}</td>
+                        <td>{{e.telefono}}</td>
+                        <td>{{e.cantidad}}</td>
+                        <td>
+                            <button class="btn btn-primary" (click)="editarProveedor(modalEdit,e)"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" (click)="editarProveedor(modalEdit,e)"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+<ng-template #modalEdit>
+    <app-mant-register-proveedor
+    [title]="titleModal"
+    [Proveedor]="proveedorEnviar"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModal($event)"
+    >
+    </app-mant-register-proveedor>
+  </ng-template>

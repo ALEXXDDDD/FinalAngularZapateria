@@ -1,0 +1,53 @@
+<div class="container-fluid mt-4">
+    <div class="card bg-light mb-3">
+        <div class="card-header"><strong>Listado De Usuarios</strong></div>
+        <div class="card-body"></div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Email</th>
+
+                        <th>Tipo</th> 
+                        <th>ROL</th>                     
+                        <button (click)="crearCliente(modalEdit)" class="btn btn-primary" ><i class="fas fa-plus"></i>
+                            Agregar Cliente
+                        </button>
+                    </tr>
+                </thead>
+                 <tbody  *ngFor="let d of Usuario">
+                    <tr *ngFor="let e of d.usuarios">
+                        <td>{{e.usuario}}</td>
+                        <td>{{e.email }}</td>
+                        <td>{{e.tipoPersona}}</td>
+                        <td>{{e.nombreRol}}</td>
+                        <td>
+                            <button class="btn btn-primary" ><i class="fas fa-edit"></i>
+                                Actualizar
+                            </button>
+                        </td>
+                        <td>
+                            <button  type="button" class="btn btn-danger mr-4"><i class="fas fa-trash"></i>
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                 </tbody>
+                 
+            </table>
+        </div>
+    </div>
+
+</div>
+<ng-template #modalEdit>
+    <app-mant-cliente-register
+    [title]="titleModal"
+    [responsListCliente] = "usuarioSelect"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)"
+    >
+
+    
+    </app-mant-cliente-register>
+  </ng-template>

@@ -1,0 +1,42 @@
+<div class="container-fluid mt-4">
+    <div class="card bg-light mb-3">
+        <div class="card-header"><strong>Salida De Materiales Historial</strong></div>
+        <div class="card-body"></div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Codigo de Produccion </th>
+                        <th>Material Sacado</th>
+                        <th>Estado</th>
+                        <th>Cuanto Saco</th>
+                        
+                        <button class="btn btn-danger" (click)="crearSalidaMateria(modalEdit)"><i class="fas fa-plus"></i></button>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let d of salidaMaterial" >
+                    <tr *ngFor="let e of d.salidaMaterials">
+                        <td>{{e.idProduccion}}</td>
+                        <td>{{e.nombreMaterial}}</td>
+                        <td>{{e.estado}}</td>
+                        <td>{{e.cantidad}}</td>
+                        <td>
+                            <button class="btn btn-primary" (click)="editarSalidaMaterial(modalEdit,e)"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+<ng-template #modalEdit>
+    <app-mant-salida-material-register
+    [title]="title"
+    [salidaMaterial]="selectSalidaMaterial"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModal($event)"
+    >
+    </app-mant-salida-material-register>
+  </ng-template>

@@ -1,0 +1,63 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left" >{{title}}</h4>
+    <!-- (click)="modalRef?.hide() -->
+    <button type="button" class="btn-close close pull-right" aria-label="Close" >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  
+  <DIv class="row" >
+    <form action="" [formGroup]="myForm">
+        <div class="col-12 mt-5">
+            <div class="form-group">
+                <label for="" aria-placeholder="Ingrese Nokbre Rol">Numero de MODELO</label>
+                <input type="text" formControlName="idModelo"  class="form-control" placeholder="id">
+            </div>
+        </div>
+        <div class="col-12 mt-5">
+            <div class="form-group">
+                <label for="" aria-placeholder="Ingrese Nokbre Rol">El Nombre de Modelo</label>
+                <input type="text" formControlName="nombreModelo"  class="form-control" placeholder="Ingrese Nombre de Rol">
+            </div>
+
+            <div *ngIf="myForm.get('nombreModelo')?.errors && myForm.touched">
+                <span class="text-danger" *ngIf="myForm.get('nombreModelo')?.hasError('required')" >Campo Requerido </span>
+            </div>
+
+        </div>
+        <div class="col-12 mt-5">
+            <div class="form-group">
+                <label for="" aria-placeholder="Ingrese Nokbre Rol">Codigo Del Modelo</label>
+                <input type="text" formControlName="codigoModelo"  class="form-control" placeholder="Ingrese Nombre de Modelo">
+            </div>
+
+            <div *ngIf="myForm.get('codigoModelo')?.errors && myForm.touched">
+                <span class="text-danger" *ngIf="myForm.get('codigoModelo')?.hasError('required')" >Campo Requerido </span>
+            </div>
+
+        </div>
+        <div class="col-12 mt-5">
+            <div class="form-group">
+                <label for="" aria-placeholder="">Descripcion Breve Del Modelo </label>
+                <input type="text" formControlName="descripcionModelo" class="form-control" placeholder="Ingrese Descripcion">
+            </div>
+
+            <div *ngIf="myForm.get('desc')?.errors && myForm.touched">
+                <span class="text-danger" *ngIf="myForm.get('descripcionModelo')?.hasError('required')" >Campo Requerido </span>
+            </div>
+        </div>
+        
+            <div class="col-6  mt-3">
+                <button  [disabled]="myForm.invalid" class="btn btn-primary" (click)="guardar()">
+                                Guardar
+                </button>
+            </div>
+            <div class="col-6 mt-3 ">    
+                <button class="btn btn-danger">
+                    Cancelar
+                </button>
+            </div>
+    </form>
+        
+  </DIv>
+

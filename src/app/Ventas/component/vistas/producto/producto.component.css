@@ -1,0 +1,257 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial';
+}
+.logo{
+    width: 98px;
+    margin-right: 143px;
+    margin-top: -18px;
+    margin-bottom: -19px;
+}
+.narvar2{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #e9e1e1;
+    margin-top: -2px;
+    padding: 24px;
+   
+}
+.narvar2A  {
+    margin-right: 192px;
+}
+
+
+.narvar3{
+    width: 100%;
+    background-color: #000000;
+    padding: 24px;
+}
+.narvar2B{
+    margin-right: 29px;
+    border: none;
+    text-decoration: none;
+    border-radius: 50px;
+    color: #e5a631;
+    background-color: #0e0909;
+    /* margin-top: 22px; */
+    padding: 15px;
+    
+     }
+     .narvar2B>a{
+        background-color: #0e0a0a;
+        margin-top: 20px;
+     }
+     .narvar2B>a:hover{
+        background-color: #857c7c;
+     }
+.narvar2P{
+    margin-left: 142px;
+}
+.narv1{
+    margin-left: 55px;
+    background-color: #e9dbdb;
+    border: none;
+    text-decoration: none;
+    color: black;
+}
+.aCuenta{
+    color: black;
+    text-decoration: none;
+}
+.aNarvar{
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+}
+.aNarvar:hover{
+    background-color: #000000;
+}
+strong{
+    margin-left: 96px;
+}
+.BOTON-Produc{
+    background-color: #161616;
+    margin-right: 20px;
+    margin-left: 24px;
+    margin-top: 77px;
+    padding-top: 0px;
+    /* padding: 14px; */
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    color: #f3ebeb;
+    border-radius: 64px;
+    text-decoration: none;
+}
+.BOTON-Produc:hover{
+    background-color: black;
+}
+.buscador1{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    background-color: #7c7676;
+    margin-top: 27px;
+}
+.form-buscador{
+    width: 432px;
+    margin-right: 72px;
+    border: none;
+    border-radius: 84px;
+    margin-bottom: 26px;
+    padding: 12px;
+}
+.contendido-centro{
+    display: flex;
+}
+.imgLogin{
+    vertical-align: middle;
+    width: 51px;
+    margin-right: -48px
+
+}
+.imgCarrito{
+    vertical-align: middle;
+    width: 51px;
+    margin-right: -48px
+}
+.ButonCarrito{
+    border: none;
+    color: rgb(238, 9, 9);
+    margin: auto;
+    margin-left: 135px;
+    margin-top: 20px;
+}
+.contendido-centro>.texto-centro{
+    text-align: center;
+    margin-left: 50px;
+    font-size: 50px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin-top: 43px;
+    margin-bottom: 66px;
+    border-style: solid;
+    background-color: rgba(187, 187, 187, 0.692);
+}
+.contendido-centro>h3{
+    padding: 20px;
+    margin-left: 27px;
+    font-size: 40px;
+    margin-right: 612px;
+    font-family: impact;
+}
+.carousel {
+    margin-top: 43px;
+    
+
+}
+.PIE{
+    background-color: black;
+    color: white;
+    display: flex;
+}
+.pie1{
+    display: flex;
+
+}
+.a1{
+    color: black;
+    text-decoration: none;
+}
+u:hover{
+    background-color: #0e0909;
+}
+a:hover{
+    background-color: rgb(255, 251, 251);
+}
+.infoContenido{
+    margin-top: 16px;
+    margin-left: 107px;
+}
+
+.AYUDA{
+    margin-top: 10px;
+    margin-bottom: 30px;
+    font-family: impact;
+    font-size: 30px;
+}
+.AYUDA>label{
+    margin-top: 10px;
+}
+#contenido-img-bt{
+    width: 250px;
+    height: 100px;
+}
+.imagen-contenido{
+    background-color: rgb(229 219 219 / 84%);
+    width: 100%;
+    height: 298px;
+    border: 39px;
+    padding: 22px;
+}
+h1{
+  text-align: center;
+  background-color: black;
+  color: white; 
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+} 
+.container-producto{
+    display: flex;
+    width: 1 em;
+    flex-direction: column;
+    background-color: #7879c4;
+    display: co7;
+    align-content: flex-end;
+    /* align-items: flex-start; */
+    padding-left: 49px;
+    /* padding-right: 50px; */
+    margin-right: 250px;
+    margin-left: 150px;
+    margin-top: 32px;
+    border-radius: 74px;
+}
+#danger{
+    margin-right: 250px;
+    margin-bottom: 20px;
+}
+#nav{
+    margin-top: 50px;
+    color: red;
+}
+
+.imagen{
+  width: 150%;
+  margin-left: 334px;
+
+}
+.imagenCentral{
+    margin-top: 10px;
+}
+.vista{
+    color: aliceblue;
+    font-family: fantasy;
+    font-size: 20px;
+}
+
+#seccion{
+    background-color: #161616;
+    padding: 30px;
+    margin: 10px 0px;
+}
+.container-modelo{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #000;
+  color: white;
+  margin-top: 39px;
+  margin-bottom: 40px;
+}
+a{
+    font-size: 1.2em;
+    text-decoration: none;
+}

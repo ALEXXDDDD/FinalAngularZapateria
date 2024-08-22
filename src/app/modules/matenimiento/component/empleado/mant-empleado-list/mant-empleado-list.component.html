@@ -1,0 +1,71 @@
+
+
+
+<div class="container-fluid mt-4">
+  <div class="card bg-light mb-3">
+      <div class="card-header"><strong>Listado De Empleados</strong></div>
+      <div class="card-body"></div>
+      <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col" >IdEmpleado</th>
+                  <th scope="col">Nombre Apellido</th>
+                  <th scope="col">Sueldo</th>
+                  <th scope="col">Telefono</th>
+                  <th scope="col">Fotografia</th>
+                  <th>
+                    <button (click)="crearEmpleado(modalEdit)"  class="btn btn-primary btn-sm">
+                      <i class="fas fa-plus"></i>
+                      Agregar Empleado
+                    </button>
+                  </th>
+                <th>
+              </tr>
+              </thead>
+              <tbody *ngFor="let list of responseEmpleado">
+                <tr *ngFor="let e of list.empleado">
+                  <td>{{e.idEmpleado}}</td>
+                  <td>{{e.nombrePersona + " " + e.apellidoEmp}}</td> 
+               
+                  <td>{{e.salario}}</td>      
+
+                  <td>{{e.direccion}}</td>  
+                  <img src="{{e.fotografiaEmpleado}}" alt="">
+                  
+                  <td>
+                    <button (click)="editarEmpleado(modalEdit,e)" class="btn btn-primary mr-4">
+                    <i class="fas fa-edit"></i>
+                      Actualizar
+                    </button>
+                    //
+                    <button (click)="eliminarEmpleado(e.idEmpleado)" type="button" class="btn btn-danger mr-4">
+                    <i class="fas fa-trash"></i>
+                    Eliminar
+                    </button> 
+                    //            
+                    <button  class="btn btn-secondary btn-sm" [routerLink]="['/dasboard/mantenimiento/empleado-area']">
+                      <i class="fas fa-plus"></i>
+                      Ver Area
+                    </button>
+                </tr>
+              </tbody>
+               
+          </table>
+      </div>
+  </div>
+
+</div>
+  
+    <ng-template #modalEdit>
+      <app-mant-empleado-register
+      [title]="titleModal"
+      [empleado]="empleadoSelect"
+      [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)"
+      >
+      </app-mant-empleado-register>
+    </ng-template>
+
+
+      

@@ -1,0 +1,9 @@
+<app-welcome-header></app-welcome-header>
+<p>vist-zapatilla works!</p>
+<h5>Zapatos</h5>
+<tbody *ngFor="let zap of responseVerModelos">
+
+    Nombre del Producto =><ul>{{zap.nombreProd}}</ul>
+    Modelo =><ul>{{zap.nombreModelo}}</ul>
+    Precio =><ul>{{zap.precioUnitario}}</ul>
+</tbody>

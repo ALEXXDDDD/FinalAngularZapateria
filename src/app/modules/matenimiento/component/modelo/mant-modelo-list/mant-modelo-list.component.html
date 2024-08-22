@@ -1,0 +1,113 @@
+<h1>Modelos</h1>
+<div class="d-grid gap-2">
+      
+  <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Unidad de Cantidad</a>
+  <ul class="dropdown-menu">
+    
+    <li><a class="dropdown-item" href="#scrollspyHeading4" [routerLink]="['/dasboard/mantenimiento/producto']">Ver</a></li>
+      <li><a class="dropdown-item" href="#scrollspyHeading4">Productos-Modelo</a></li>
+      <li><hr class="dropdown-divider"></li>
+  </ul>
+  <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">   Modelo</a>
+  <ul class="dropdown-menu">
+    
+    <li><a class="dropdown-item" [routerLink]="['/dasboard/mantenimiento/modelo']" href="#scrollspyHeading4">Ver</a></li>
+      <li><a class="dropdown-item" href="#scrollspyHeading4">Producto-Modelo </a></li>
+      <li><hr class="dropdown-divider"></li>
+  </ul>
+  
+
+</div>
+    
+    <div class="container text-center">
+      <div class="row">
+        <div class="container text-center">
+          <div class="row">
+            <div class="col" id="containerProd">
+              
+              Modelos Populares
+              <div class="prd">
+                <ul >Zapato Color Negro</ul>
+    
+              </div>
+              
+            </div> 
+            
+            <tbody class="col" id="containerProd">
+              Modelos 
+              <div class="prd" *ngFor="let mod of responseModelo">
+                <ul>{{mod.nombreModelo}}</ul>  
+         
+              </div>
+              
+            <tr>   </tr> 
+            </tbody>
+            <div class="col" id="containerProd">
+              Modelos Menos Populares
+              <div class="prd">
+                <ul >Zapato Color Negro</ul>
+            
+              </div>
+              
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="container text-center">
+      <div class="row">
+        
+        </div> 
+        
+    
+     
+    
+       
+<table class="table">
+    
+    <thead>
+      <tr>
+        <tr>
+          <th scope="col" >IdEmpleado</th>
+          <th scope="col">Nombre del Modelos </th>
+          <th scope="col">Codigo del MOdelo</th>
+          <th scope="col">Breve Descripcion </th>
+        <th>
+        
+        <button (click)="crearModelo(modalEdit)"  class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i>
+        </button>
+      </tr>
+    </thead>
+   
+      <tbody >
+        <tr  *ngFor="let mod of responseModelo">
+         
+          <td>{{mod.idModelo}}</td>
+          <td>{{mod.nombreModelo}}</td>
+          <td>{{mod.codigoModelo}}</td>
+          <td>{{mod.descripcionModelo}}</td>
+
+
+            <button (click)="editaModelo(modalEdit,mod)" class="btn btn-primary mr-4">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="eliminarModelo(mod.idModelo)" type="button" class="btn btn-danger mr-4">
+                <i class="fas fa-trash"></i>
+            </button>
+        </tr>
+      </tbody>    
+      
+      
+    
+  </table>
+  
+    <ng-template #modalEdit>
+      <app-mant-modelo-resgister 
+      [title]="titleModal"
+      [modelo]="selectModelo"
+      [accion]="accionModal"
+      (closeModalEmmit)="getCloseModalEmmit($event)"
+      >
+      </app-mant-modelo-resgister>
+    </ng-template>
+

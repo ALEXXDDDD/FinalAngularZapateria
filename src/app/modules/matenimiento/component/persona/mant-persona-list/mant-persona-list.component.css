@@ -1,0 +1,28 @@
+html{
+    background-color: black;
+}
+th{
+    color: white;
+}
+table{
+    background-color: rgb(245, 240, 240);
+    color: black;
+}
+td{
+    color: black;
+}
+
+h1{
+    text-align: center;
+    background-color: black;
+    color: white; 
+    
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.BarraLat{
+    background-color: rgb(8, 8, 7);
+    
+}
