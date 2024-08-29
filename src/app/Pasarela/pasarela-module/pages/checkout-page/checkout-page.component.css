@@ -1,0 +1,24 @@
+.container {
+    max-width: 600px;
+    background-color: #f8f9fa;
+  }
+  
+  h2 {
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .btn {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.2rem;
+  }
+  
+  .alert-info {
+    font-size: 1rem;
+  }
+  
+  i.bi-credit-card {
+    font-size: 1.2rem;
+    margin-right: 5px;
+  }
+  

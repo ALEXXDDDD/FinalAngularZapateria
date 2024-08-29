@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { NgModel } from '@angular/forms';
+import { AppComponent } from 'src/app/app.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-checkout-page',
@@ -6,5 +9,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./checkout-page.component.css']
 })
 export class CheckoutPageComponent {
-
+  pay(amount: number){
+    console.log(`Paying ${amount} using Stripe`);
+  }
 }
