@@ -145,3 +145,24 @@
   border-top: 0;
   margin-top: 10px;
 }
+
+/*ajustar el texto y que este un poco separado*/
+
+/* Estilo para la pregunta */
+.chat-box .question {
+  margin-bottom: 10px; /* Ajusta este valor según la separación que desees */
+}
+
+/* Estilo para la respuesta */
+.chat-box .response {
+  margin-top: 5px;  /* Ajusta este valor según la separación que desees */
+  position: relative;
+  padding-left: 20px; /* Espacio para el guion */
+}
+
+.chat-box .response::before {
+  content: "-"; /* Añade un guion antes de la respuesta */
+  position: absolute;
+  left: 0;
+  color: #333; /* Cambia el color del guion según tu preferencia */
+}
