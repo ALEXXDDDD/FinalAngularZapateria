@@ -20,7 +20,7 @@ import { HeaderpasarelaComponent } from './pages/header-pasarela/headerpasarela/
     HeaderpasarelaComponent
   ],
   imports: [
-    
+    SharedModule,
     /**
      * TODO: PARA USUAR DOBLE BINDING    
      */

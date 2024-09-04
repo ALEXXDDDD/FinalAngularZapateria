@@ -1,39 +1,36 @@
-<p>carrito-compras works!</p>
 <app-welcome-header></app-welcome-header>
-<p>
-    Tu carrito de Compras
-</p>
-<ul>
-    <li *ngFor="let item of carrito">
-        {{item.producto.nombreProd}}
-        -Precio
-        {{item.producto.precioUnitario}}
-        <img src="{{item.producto.fotografia}}" alt="">
-        
-        <button (click)="quitar1(item)">-</button>
-        {{item.cantidad}}
-        <button (click)="agregar1(item)">+</button>
-        <br>
-       
-        <button  type="button" (click)="eliminarProducto(item)">Eliminar</button>
 
-        
-    </li>
-    <div>
-            Total de precios: {{ totalPrecios }}
-          </div>
-</ul>
-<button (click)="realizarEnvio(modalEdit)">Envio</button>
-<button  [routerLink]="['/pasarela']">Pagar</button>
+<div class="cart-container">
+    <h2 class="cart-title">Carrito de Compras</h2>
+    <div class="cart-item" *ngFor="let item of carrito">
+        <img [src]="item.producto.fotografia" alt="{{item.producto.nombreProd}}" class="cart-item-image">
+        <div class="cart-item-details">
+            <h3 class="cart-item-name">{{item.producto.nombreProd}}</h3>
+        </div>
+        <div class="cart-item-quantity">
+            <button class="btn-quantity" (click)="quitar1(item)">&#8722;</button>
+            <span>{{item.cantidad}}</span>
+            <button class="btn-quantity" (click)="agregar1(item)">&#43;</button>
+        </div>
+        <div class="cart-item-total">
+            <p class="cart-item-price">${{ item.producto.precioUnitario * item.cantidad }}</p>
+        </div>
+        <button class="btn-delete" type="button" (click)="eliminarProducto(item)">Eliminar</button>
+    </div>
+</div>
+
+<div class="cart-actions">
+    <p>Total: ${{ total }}</p>
+    <button class="btn-primary" (click)="realizarEnvio(modalEdit)">Envio</button>
+    <button class="btn-primary" [routerLink]="['/pasarela']" >Pagar</button>
+</div>
+
 <ng-template #modalEdit>
     <app-envio-domicilio
-    [title]="titleModal"
-    [dreccion]="direccionSelect"
-    [accion]="accionModal"
-    (closeModalEmmit)="getCloseModalEmmit($event)"
+        [title]="titleModal"
+        [dreccion]="direccionSelect"
+        [accion]="accionModal"
+        (closeModalEmmit)="getCloseModalEmmit($event)"
     >
-
-    
     </app-envio-domicilio>
-
-  </ng-template>
+</ng-template>

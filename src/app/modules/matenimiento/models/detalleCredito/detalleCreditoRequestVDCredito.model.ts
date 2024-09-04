@@ -5,5 +5,6 @@ export class ResquestVDetalleCredito {
     nombrePersona: string="";
     relacionCliente: string="" ;
     idCredito: number=0;
+    montoDeuda : number = 0;
     idDetalleCredito: number=0;
 }

@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { BehaviorSubject } from 'rxjs';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { alert_sucess } from 'src/app/funcionts/general.funcionts';
@@ -29,6 +31,7 @@ export class EnvioDomicilioComponent implements OnInit {
   @Output () closeModalEmmit = new EventEmitter<boolean>()
   responsePerfil : ResponsePerfil[]=[]
   myForm:FormGroup 
+  modalRef?: BsModalRef;
   isEditable: boolean = false;  // Estado inicial del input
   inputValue: string = 'Texto inicial';  // Valor inicial del input
   direccionEnvio : RequestVWUsuario = new RequestVWUsuario()
@@ -36,6 +39,7 @@ export class EnvioDomicilioComponent implements OnInit {
   requestDireccion : RequestActualizacionDireccion = new RequestActualizacionDireccion()
   constructor(
     private fb:FormBuilder,
+    private _router:Router,
     private _perfilService:PerfilService,
     private _actuaDireccion : ActuDirecService,
     private _carritoService:CarritoService,
@@ -87,7 +91,18 @@ export class EnvioDomicilioComponent implements OnInit {
 
   saveChanges() {
     this.isEditable = false;
+    this.cerrarModal(true)
+    this.getCloseModalEmmit(true)
+    this._router.navigate(['./pasarela'])
     // Aquí puedes agregar lógica para guardar los cambios, por ejemplo, enviar el valor a un servidor
+  }
+  getCloseModalEmmit(res:boolean)
+  {
+    this.modalRef?.hide()
+    if(res)
+    {
+      this._carritoService.listarCarrito()
+    }
   }
   perfil()
   {
@@ -137,15 +152,31 @@ export class EnvioDomicilioComponent implements OnInit {
       }
     )
   }
+  initMap() {
+    // Aquí configuras tu mapa de Google
+    const map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
+      center: { lat: -34.397, lng: 150.644 },
+      zoom: 8,
+    });
+  }
+
+  loadMap() {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAboUB7-NkXl-FQPhQKJPjvQWT47UAaPT8&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }
   cerrarModal(arg0: boolean) {
     throw new Error('Method not implemented.');
   }
+  
   ngOnInit(): void {
+    (window as any).initMap = this.initMap.bind(this);
+    this.loadMap();
     this.listarCarrito()
     this.perfil()
   }
   
- 
- 
 
 }

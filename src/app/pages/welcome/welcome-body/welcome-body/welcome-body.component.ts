@@ -63,6 +63,8 @@ export class WelcomeBodyComponent implements OnInit {
   }
  
   ngOnInit(): void {
+
+    
     //  this.listarProductos()
      this.filtrar()
      this.cities = [
@@ -141,21 +143,7 @@ export class WelcomeBodyComponent implements OnInit {
       this.filtrar()
     }
   }
-  crearProducto(template: TemplateRef<any>)
-  {
-    this.titleModal ="Nuevo Producto"
-    this.ProductoSelect = new ResponseProducto()
-    this.accionModal = AcciontConstants.crear
-    this.openModal(template);
-
-  }
-  editarProducto(template: TemplateRef<any>, Producto:ResponseProducto)
-  {
-    this.titleModal ="Editar Producto"
-    this.ProductoSelect = Producto
-    this.accionModal = AcciontConstants.editar
-    this.openModal(template);
-  }
+ 
   filtrar()
   {
     

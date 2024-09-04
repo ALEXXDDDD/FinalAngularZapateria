@@ -4,6 +4,7 @@ export class ResponseVDetalleCredito {
     idOrden: number=0;
     nombrePersona: string="";
     relacionCliente: string="" ;
+    montoDeuda: number=0 ;
     idCredito: number=0;
     idDetalleCredito: number=0;
 }

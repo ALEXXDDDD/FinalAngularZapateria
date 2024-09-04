@@ -1,8 +1,20 @@
 <app-welcome-header></app-welcome-header>
-<p>vist-bailarina works!</p>
-<h5>Bailarinas</h5>
-<tbody *ngFor="let bai of responseVerModelos">
-    <ul>{{bai.nombreModelo}}</ul>
-    <ul>{{bai.nombreProd}}</ul>
-    <ul>{{bai.precioUnitario}}</ul>
-</tbody>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="display-4 text-center text-dark mb-5">Bailarinas</h1>
+        <div class="row">
+            <!-- Producto 1 -->
+            <div class="col-lg-4 col-md-6 mb-4" *ngFor="let zapato of responseProducto">
+                <div class="card shadow-sm h-100">
+                    <img src="{{zapato.fotografia}}" alt="Imagen de {{zapato.nombreProd}}" class="card-img-top img-fluid" style="height: 250px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-dark">{{zapato.nombreProd}}</h5>
+                        <p class="card-text text-muted mb-4">$ {{zapato.precioUnitario}}</p>
+                        <button class="btn btn-danger mt-auto" >Añadir al Carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-welcome-footer></app-welcome-footer>
+</body>

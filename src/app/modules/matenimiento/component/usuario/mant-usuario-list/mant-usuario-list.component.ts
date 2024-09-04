@@ -5,8 +5,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ResponseVUsuario } from 'src/app/models/response-vwUsuario-model';
 import { UsuarioService } from '../../../service/usuario/usuario.service';
 import { ResponseUsuario } from '../../../models/usuario/responseUsuario.models';
-import { ResponseVCliente } from '../../../models/cliente/list-cliente-response.model';
 import { AcciontConstants } from 'src/app/constants/general.constans';
+import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
 
 @Component({
   selector: 'app-mant-usuario-list',
@@ -14,78 +14,105 @@ import { AcciontConstants } from 'src/app/constants/general.constans';
   styleUrls: ['./mant-usuario-list.component.css']
 })
 export class MantUsuarioListComponent implements OnInit {
-  Usuario : ResponseUsuario[]=[]
-  usuarioSelect :ResponseVCliente = new ResponseVCliente() 
-  UsuarioV : ResponseVUsuario[]=[]  // Lista 
+  Usuario: ResponseUsuario[] = [];
+  usuariosFiltrados: ResponseVUsuario[] = []; // Lista para manejar los usuarios filtrados
+  usuarioSelect: ResponseVUsuario = new ResponseVUsuario();
   modalRef?: BsModalRef;
-  // UsuarioSelect :ResponseCliente = new ResponseCliente() // Mandar para el register 
-  titleModal : string = ""
-  accionModal : number = 0
-  totalItems:number =0
-  itemsPerPage:number=1
-  // request : RequestFilterGeneric = new RequestFilterGeneric()
-  myFormFilter:FormGroup
+  titleModal: string = "";
+  accionModal: number = 0;
+  myFormFilter: FormGroup;
+  nombreRol: RequestFiltroNombre = new RequestFiltroNombre();
+  mostrarListaCompleta: boolean = true;
 
   constructor(
-    private _router:Router, 
-    private fb:FormBuilder,
+    private _router: Router, 
+    private fb: FormBuilder,
     private modalService: BsModalService,
-    private _usuarioService : UsuarioService
+    private _usuarioService: UsuarioService
   ){
-    this.myFormFilter = this.fb.group(
-      {
-        usuario: [""],
-        password: [""],
-        email: [""],
-        nombrePersona: [""],
-        tipoPersona: [""],
-        direccion: [""],
-        irol: [""],
-        nombreRol: [""],
-        idUsuario: [""],
-      }
-    )
+    this.myFormFilter = this.fb.group({
+      usuario: [""],
+      password: [""],
+      nombreRol: [""],
+      email: [""],
+      nombrePersona: [""],
+      tipoPersona: [""],
+      direccion: [""],
+      irol: [""],
+      idUsuario: [""],
+    });
   }
-  ngOnInit(): void {
-    this.listarUsuario()
-  }
-  listarUsuario()
-  {
-    this._usuarioService.getAll().subscribe(
-      {
-        next:(data:ResponseUsuario[])=>{
-          this.Usuario = data
-        },
-        error:(error)=>{ alert("Ocurrio un Error")},
-        complete:()=>{}
-      }
-    )
-  
-  }
-  crearCliente(template: TemplateRef<any>)
-  {
-    this.titleModal ="Nuevo Cliente"
-    this.usuarioSelect = new ResponseVCliente()
-    this.accionModal = AcciontConstants.crear
-    this.openModal(template);
 
+  ngOnInit(): void {
+    this.listarUsuario();
   }
-  editarCliente(template: TemplateRef<any>, Cliente:ResponseVCliente)
-  {
-    this.titleModal ="Editar Cliente"
-    this.usuarioSelect = Cliente
-    this.accionModal = AcciontConstants.editar
+
+  listarUsuario(): void {
+    this._usuarioService.getAll().subscribe({
+      next: (data: ResponseUsuario[]) => {
+        this.Usuario = data;
+        this.usuariosFiltrados = this.getUsuarios(); // Inicializa con todos los usuarios
+      },
+      error: (error) => { alert("Ocurrió un Error") },
+      complete: () => {}
+    });
+  }
+
+  filtroRol(): void {
+    const valorForm = this.myFormFilter.get('nombreRol')?.value.trim().toLowerCase();
+
+    if (valorForm === '') {
+      this.mostrarListaCompleta = true;
+      this.usuariosFiltrados = this.getUsuarios(); // Vuelve a cargar la lista completa si no hay filtro
+      return;
+    }
+
+    this.mostrarListaCompleta = false;
+    this.nombreRol.nombre = valorForm;
+
+    this._usuarioService.genericFiltrol(this.nombreRol).subscribe({
+      next: (data: ResponseVUsuario[]) => {
+        this.usuariosFiltrados = data; // Actualiza la lista con la respuesta filtrada
+        console.log(data);
+      },
+      error: (error: any) => {
+        console.error('Error al filtrar roles', error);
+      },
+      complete: () => {}
+    });
+  }
+
+  getUsuarios(): ResponseVUsuario[] {
+    return this.Usuario.flatMap(d => d.usuarios); // Aplana la estructura de usuarios
+  }
+
+  crearCliente(template: TemplateRef<any>): void {
+    this.titleModal = "Nuevo Cliente";
+    this.usuarioSelect = new ResponseVUsuario();
+    this.accionModal = AcciontConstants.crear;
     this.openModal(template);
   }
-  openModal(template: TemplateRef<any>) {
+
+  editarCliente(template: TemplateRef<any>, Cliente: ResponseVUsuario): void {
+    this.titleModal = "Editar Cliente";
+    this.usuarioSelect = Cliente;
+    this.accionModal = AcciontConstants.editar;
+    this.openModal(template);
+  }
+
+  openModal(template: TemplateRef<any>): void {
     this.modalRef = this.modalService.show(template);
   }
-  getCloseModalEmmit(res:boolean)
-  {
-    this.modalRef?.hide()
-    if(res)
-    {
-      this.listarUsuario()
+
+  getCloseModalEmmit(res: boolean): void {
+    this.modalRef?.hide();
+    if (res) {
+      this.listarUsuario();
     }
+  }
+  limpiarFiltros() {
+    this.myFormFilter.reset(); // Resetea los campos del formulario
+    this.mostrarListaCompleta = true; // Muestra la lista completa
+    this.listarUsuario(); // Recarga la lista completa
   }
 }

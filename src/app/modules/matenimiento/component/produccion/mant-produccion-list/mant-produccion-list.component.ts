@@ -8,6 +8,7 @@ import { AcciontConstants } from 'src/app/constants/general.constans';
 import { ResponseProduccion } from '../../../models/Produccion/produccion-response.model';
 import { ResponseProducto } from '../../../models/producto/producto-response.model';
 import { ProductoService } from '../../../service/producto/producto.service';
+import { ResponseVProduccion } from '../../../models/Produccion/responseProduccion.model';
 
 @Component({
   selector: 'app-mant-produccion-list',
@@ -18,6 +19,8 @@ export class MantProduccionListComponent implements OnInit{
 
   Produccion : ResponseProduccion []=[]
   responseProducto : ResponseProducto []=[]
+  responseVProduccion:ResponseVProduccion[]=[]
+  responseProduccion:ResponseVWProduccion[]=[]
   modalRef?:BsModalRef
   title:string=""
   accionModal:number=0
@@ -33,8 +36,14 @@ export class MantProduccionListComponent implements OnInit{
   {
 
   }
+  tablaActual: string = 'conAccion';
+
+  mostrarTabla(tabla: string) {
+    this.tablaActual = tabla;
+  }
   ngOnInit(): void {
     this.listarProduccion()
+    this.listarProduccionSinAcciones()
   }
   listarProduccion ()
   {
@@ -48,6 +57,17 @@ export class MantProduccionListComponent implements OnInit{
         error:(error)=>{
           alert_error("No se pudo cargar la data ")
         },
+        complete:()=>{}
+      }
+    )
+  }
+  listarProduccionSinAcciones()
+  {
+    this._ProduccionService.GetProduccion().subscribe
+    (
+      {
+        next:(data:ResponseVProduccion[])=>{this.responseVProduccion=data},
+        error:()=>{},
         complete:()=>{}
       }
     )
@@ -67,6 +87,12 @@ export class MantProduccionListComponent implements OnInit{
     this.accionModal = AcciontConstants.editar
     this.openModal(template)
 
+  }
+  resgitrarProduccion(template:TemplateRef<any>)
+  {
+    this.title=" Ingreso Producto"
+    this.accionModal = AcciontConstants.editar
+    this.openModal(template)
   }
   openModal( template : TemplateRef<any>)
   {

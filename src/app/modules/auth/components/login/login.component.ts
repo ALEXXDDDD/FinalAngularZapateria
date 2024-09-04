@@ -39,27 +39,27 @@ export class LoginComponent implements OnInit {
   }
   ngOnInit(): void {
  
-    this.route.fragment.subscribe(fragment => {
-      if (fragment) {
-        const urlParams = new URLSearchParams(fragment);
-        const idToken = urlParams.get('id_token');
-        const accessToken = urlParams.get('access_token');
+    // this.route.fragment.subscribe(fragment => {
+    //   if (fragment) {
+    //     const urlParams = new URLSearchParams(fragment);
+    //     const idToken = urlParams.get('id_token');
+    //     const accessToken = urlParams.get('access_token');
 
-        if (idToken) {
-          // Validar el id_token en el backend
-          this.oauthService.validateToken(idToken).subscribe(response => {
-            console.log('Token validado:', response);
-            // Manejar la lógica después de la validación del token
-          }, (error: any) => {
-            console.error('Error al validar el token:', error);
-          });
-        } else {
-          console.error('No se encontró id_token en el fragmento de la URL');
-        }
-      } else {
-        console.error('No se encontró el fragmento en la URL');
-      }
-    });
+    //     if (idToken) {
+    //       // Validar el id_token en el backend
+    //       this.oauthService.validateToken(idToken).subscribe(response => {
+    //         console.log('Token validado:', response);
+    //         // Manejar la lógica después de la validación del token
+    //       }, (error: any) => {
+    //         console.error('Error al validar el token:', error);
+    //       });
+    //     } else {
+    //       console.error('No se encontró id_token en el fragmento de la URL');
+    //     }
+    //   } else {
+    //     console.error('No se encontró el fragmento en la URL');
+    //   }
+    // });
   }
   save(name: string, lastName: string) {
     this.frmLoadSt = LoadStateEnum.Loading;
@@ -147,33 +147,33 @@ export class LoginComponent implements OnInit {
     )
 
   }
-  loginGoogle()
-  {
+  // loginGoogle()
+  // {
  
-    this.oauthService.loginGoogle()
+  //   this.oauthService.loginGoogle()
   
-    // this.login()
-    // this.route.fragment.subscribe(fragment => {
-    //   if (fragment) {
-    //     const urlParams = new URLSearchParams(fragment);
-    //     const idToken = urlParams.get('id_token');
-    //     const accessToken = urlParams.get('access_token');
+  //   // this.login()
+  //   // this.route.fragment.subscribe(fragment => {
+  //   //   if (fragment) {
+  //   //     const urlParams = new URLSearchParams(fragment);
+  //   //     const idToken = urlParams.get('id_token');
+  //   //     const accessToken = urlParams.get('access_token');
 
-    //     if (idToken) {
-    //       // Validar el id_token en el backend
-    //       this.oauthService.validateToken(idToken).subscribe(response => {
-    //         console.log('Token validado:', response);
-    //         // Manejar la lógica después de la validación del token
-    //       }, (error: any) => {
-    //         console.error('Error al validar el token:', error);
-    //       });
-    //     } else {
-    //       console.error('No se encontró id_token en el fragmento de la URL');
-    //     }
-    //   } else {
-    //     console.error('No se encontró el fragmento en la URL');
-    //   }
-    // });
+  //   //     if (idToken) {
+  //   //       // Validar el id_token en el backend
+  //   //       this.oauthService.validateToken(idToken).subscribe(response => {
+  //   //         console.log('Token validado:', response);
+  //   //         // Manejar la lógica después de la validación del token
+  //   //       }, (error: any) => {
+  //   //         console.error('Error al validar el token:', error);
+  //   //       });
+  //   //     } else {
+  //   //       console.error('No se encontró id_token en el fragmento de la URL');
+  //   //     }
+  //   //   } else {
+  //   //     console.error('No se encontró el fragmento en la URL');
+  //   //   }
+  //   // });
   
-  }
+  // }
 }

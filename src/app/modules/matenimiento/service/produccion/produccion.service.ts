@@ -5,6 +5,8 @@ import { ResponseProduccion } from '../../models/Produccion/produccion-response.
 import { HttpClient } from '@angular/common/http';
 import { urlConstants } from 'src/app/constants/url.constants';
 import { RequestVWIngresoProducto } from '../../models/ingresoProducto/requestVWIngresoProducto.model';
+import { ResponseVProduccion } from '../../models/Produccion/responseProduccion.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,5 +18,9 @@ export class ProduccionService  extends CrudService<RequestVWProduccion,Response
     ) {
     
       super(http,urlConstants.Produccion)
+   }
+   GetProduccion():Observable<ResponseVProduccion[]>
+   {
+       return this._http.get<ResponseVProduccion[]>(`${this.url_service}/SinAcciones`)
    }
 }

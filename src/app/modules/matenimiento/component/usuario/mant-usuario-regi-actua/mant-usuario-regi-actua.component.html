@@ -1,0 +1,77 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button (click)="cerrarModal(true)" type="button" class="btn-close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <form [formGroup]="myForm" class="modal-body">
+    <div class="row">
+      <!-- ID Empleado -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+            <label for="idEmpleado">ID Usuario</label>
+            <input id="idEmpleado" formControlName="idEmpleado" type="text" class="form-control" placeholder="Ingrese el Identificador">
+        </div>
+      </div>
+
+      </div>
+  
+      <!-- Email -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" formControlName="email" type="email" class="form-control" placeholder="email">
+        </div>
+      </div>
+  
+      <!-- Contraseña -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="nombrePersona">Usuario</label>
+          <input id="nombrePersona" formControlName="nombrePersona" type="text" class="form-control" placeholder="nombrePersona">
+        </div>
+      </div>
+       <!-- Numero Docuemtn -->
+       <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="nombrePersona">Usuario</label>
+          <input id="nombrePersona" formControlName="nombrePersona" type="text" class="form-control" placeholder="nombrePersona">
+        </div>
+      </div>
+  
+       <!-- Rol -->
+    <div class="col-md-6 mb-3">
+      <div class="form-group">
+        <label for="nombreRol">Seleccione el Rol</label>
+        <select id="nombreRol" formControlName="nombreRol" class="form-select">
+          <option value="" disabled>Seleccione un rol</option>
+          <option *ngFor="let rol of Rol" [value]="rol.nombreRol">{{rol.nombreRol}}</option>
+        </select>
+      </div>
+    </div>
+  
+      <!-- Tipo Persona -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="telefono">telefono</label>
+          <input id="telefono" formControlName="telefono" type="text" class="form-control" placeholder="telefono">
+        </div>
+      </div>
+      <!-- Teléfono -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="direccion">direccion</label>
+          <input id="direccion" formControlName="direccion" type="text" class="form-control" placeholder="direccion">
+        </div>
+      </div>
+  
+      <!-- Botones -->
+      <div class="col-12 mt-4">
+        <div class="d-flex justify-content-between">
+          <button type="button" (click)="guardar()" class="btn btn-primary">Guardar</button>
+          <button type="button" (click)="cerrarModal(true)" class="btn btn-danger">Cancelar</button>
+        </div>
+      </div>
+  </form>
+  

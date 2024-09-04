@@ -7,6 +7,16 @@ import { OrdenService } from '../../../service/orden/orden.service';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { ResponseListOrden } from '../../../models/orden/orden-request.model';
 import { RequestUnidad } from '../../../models/unidad/p/unidad-request.model';
+import { DatePipe } from '@angular/common';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
+
+
+enum EstadoOrden {
+  Todas = "todas",
+  A_Tiempo = "a-tiempo",
+  Retrasadas = "retrasadas"
+}
 
 @Component({
   selector: 'app-mant-list-orden',
@@ -17,19 +27,27 @@ export class MantListOrdenComponent implements OnInit {
   responseOrden : ResponseOrden []=[];
   response: ResponseOrden = new ResponseOrden();
   OrdenSelect : ResponseListOrden = new ResponseListOrden()
+  orden : ResponseListOrden []=[]
   UnidadSelect : RequestUnidad = new RequestUnidad()
   responseVWOrden: ResponseListOrden = new ResponseListOrden();
+  nombreRol: RequestFiltroNombre = new RequestFiltroNombre();
   modalRef? : BsModalRef;
   titleModal : string = ""
+  myFormFilter: FormGroup;
+  mostrarListaCompleta: boolean = true;
   accionModal : number = 0
   constructor (
     private _router:Router,
+    private datetTipe:DatePipe,
+    private fb: FormBuilder,
     private modalService: BsModalService,
     private _OrdenService: OrdenService
 
   )
   {
-
+    this.myFormFilter = this.fb.group({
+      nombreRol: [""]
+    });
   }
   ngOnInit():void
   {
@@ -47,6 +65,52 @@ export class MantListOrdenComponent implements OnInit {
       }
 
     )
+  }
+  filtroOrdenRetrasados()
+  {
+    const valorForm = this.myFormFilter.getRawValue();
+    
+    if (valorForm.nombreRol.trim() === '' || valorForm.nombreRol.trim() === 'Todos' ) {
+      this.mostrarListaCompleta = true;
+      this.listarOrden(); // Vuelve a cargar la lista completa si no hay filtro
+      return;
+    }
+    if ( valorForm.nombreRol.trim() === 'A tiempo' ) {
+      this.mostrarListaCompleta = false;
+      this.nombreRol.nombre = valorForm.nombreRol;
+      this._OrdenService.genericFiltrol(this.nombreRol).subscribe({
+        next: (data: ResponseListOrden[]) => {
+          this.orden = data; // Actualiza la lista con la respuesta filtrada
+          console.log(data);
+        },
+        error: (error: any) => {
+          console.error('Error al filtrar roles', error);
+        },
+        complete: () => {}
+      });
+      return;
+    }
+
+    this.mostrarListaCompleta = false;
+    this.nombreRol.nombre = valorForm.nombreRol;
+
+    this._OrdenService.genericFiltrol(this.nombreRol).subscribe({
+      next: (data: ResponseListOrden[]) => {
+        this.orden = data; // Actualiza la lista con la respuesta filtrada
+        console.log(data);
+      },
+      error: (error: any) => {
+        console.error('Error al filtrar roles', error);
+      },
+      complete: () => {}
+    });
+  }
+  formattedFechaOrden(fecha: string | null): string {
+    return this.datetTipe.transform(fecha ?? '', 'yyyy-MM-dd') || '';
+  }
+  
+  formattedFechaRequerido(fecha: string | null): string {
+    return this.datetTipe.transform(fecha ?? '' , 'yyyy-MM-dd')||'';
   }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);

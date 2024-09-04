@@ -1,1 +1,50 @@
-<p>mant-producto-register works!
+<div class="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold mb-6">Registro de Producto</h2>
+  <form [formGroup]="myForm">
+    <div class="mb-4">
+      <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre del Producto</label>
+      <input formControlName="" type="text"  id="nombre" name="nombre" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Nombre del Producto" required>
+    </div>
+    
+    <div class="mb-4">
+      <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
+      <textarea id="descripcion" name="descripcion" rows="3" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Descripción del Producto" required></textarea>
+    </div>
+
+    <div class="mb-4">
+      <label for="precio" class="block text-sm font-medium text-gray-700">Precio</label>
+      <input formControlName="" type="number" id="precio" name="precio" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Precio" required>
+    </div>
+
+    <div class="mb-4">
+      <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
+      <input formControlName="" type="number" id="stock" name="stock" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Cantidad en stock" required>
+    </div>
+
+    <div class="mb-4">
+      <label for="color" class="block text-sm font-medium text-gray-700">Color</label>
+      <input formControlName="" type="text" id="color" name="color" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Color del Producto" required>
+    </div>
+
+    <div class="mb-4">
+      <label for="talla" class="block text-sm font-medium text-gray-700">Talla</label>
+      <input formControlName="" type="text" id="talla" name="talla" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Talla del Producto" required>
+    </div>
+
+    <div class="mb-6">
+      <label for="categoria" class="block text-sm font-medium text-gray-700">Categoría</label>
+      <select id="categoria" name="categoria" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+        <option value="">Selecciona una categoría</option>
+        <option value="categoria1">Categoría 1</option>
+        <option value="categoria2">Categoría 2</option>
+        <option value="categoria3">Categoría 3</option>
+      </select>
+    </div>
+
+    <div class="flex justify-end">
+      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        Registrar Producto
+      </button>
+    </div>
+  </form>
+</div>

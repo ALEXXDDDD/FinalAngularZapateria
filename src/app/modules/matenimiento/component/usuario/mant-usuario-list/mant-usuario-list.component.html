@@ -1,53 +1,53 @@
 <div class="container-fluid mt-4">
     <div class="card bg-light mb-3">
         <div class="card-header"><strong>Listado De Usuarios</strong></div>
-        <div class="card-body"></div>
+        <div class="card-header" [formGroup]="myFormFilter">
+            <strong>Filtro Por Roles</strong>
+            <!-- Campo de entrada para el filtro -->
+            <input formControlName="nombreRol" type="text" class="form-control mt-2" placeholder="Filtrar por nombre de rol">
+            <button class="btn btn-success mt-2" (click)="filtroRol()">Filtrar</button>
+            <button type="button" (click)="limpiarFiltros()" class="btn btn-danger">
+                <i class="fas fa-broom mr-1"></i> Limpiar
+              </button>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Usuario</th>
                         <th>Email</th>
-
-                        <th>Tipo</th> 
-                        <th>ROL</th>                     
-                        <button (click)="crearCliente(modalEdit)" class="btn btn-primary" ><i class="fas fa-plus"></i>
-                            Agregar Cliente
-                        </button>
+                        <th>Tipo</th>
+                        <th>ROL</th>
                     </tr>
                 </thead>
-                 <tbody  *ngFor="let d of Usuario">
-                    <tr *ngFor="let e of d.usuarios">
+                <tbody>
+                    <tr *ngFor="let e of usuariosFiltrados">
                         <td>{{e.usuario}}</td>
-                        <td>{{e.email }}</td>
+                        <td>{{e.email}}</td>
                         <td>{{e.tipoPersona}}</td>
                         <td>{{e.nombreRol}}</td>
                         <td>
-                            <button class="btn btn-primary" ><i class="fas fa-edit"></i>
-                                Actualizar
+                            <button class="btn btn-primary" (click)="editarCliente(modalEdit, e)">
+                                <i class="fas fa-edit"></i> Actualizar
                             </button>
                         </td>
                         <td>
-                            <button  type="button" class="btn btn-danger mr-4"><i class="fas fa-trash"></i>
-                                Eliminar
+                            <button type="button" class="btn btn-danger mr-4">
+                                <i class="fas fa-trash"></i> Eliminar
                             </button>
                         </td>
                     </tr>
-                 </tbody>
-                 
+                </tbody>
             </table>
         </div>
     </div>
-
 </div>
-<ng-template #modalEdit>
-    <app-mant-cliente-register
-    [title]="titleModal"
-    [responsListCliente] = "usuarioSelect"
-    [accion]="accionModal"
-    (closeModalEmmit)="getCloseModalEmmit($event)"
-    >
 
-    
-    </app-mant-cliente-register>
-  </ng-template>
+<ng-template #modalEdit>
+    <app-mant-usuario-regi-actua
+        [title]="titleModal"
+        [accion]="accionModal"
+        [usuario]="usuarioSelect"
+        (closeModalEmmit)="getCloseModalEmmit($event)">
+    </app-mant-usuario-regi-actua>
+</ng-template>

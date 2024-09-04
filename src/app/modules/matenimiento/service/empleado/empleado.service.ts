@@ -7,6 +7,7 @@ import { ResponseEmpleado } from '../../models/empleado/response-list-empleado.m
 import { CrudService } from 'src/app/modules/shared/services/crud.service';
 import { ResponseVWEmpleado } from '../../models/empleado/empleadoVW-response.model';
 import { empleadoApiPeru } from '../../models/empleado/empleadoApisPero.model';
+import { RequestFiltroSueldo } from '../../models/empleado/request-flitroSueldo.model';
 
 
 @Injectable({
@@ -24,6 +25,10 @@ export class EmpleadoService extends CrudService<RequestVWEmpleado,ResponseEmple
      let urlApisPeru = "https://dniruc.apisperu.com/api/v1/dni/DNI##?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFzdWhhc25hdmFyc3VhcmV6d0BnbWFpbC5jb20ifQ.fb-pelYw24XgU96jk23og2jOGvHGUn8Z-wllJ3oBenk"
      urlApisPeru = urlApisPeru.replace("DNI##",dni);
      return this.http.get<empleadoApiPeru>(urlApisPeru)
+   }
+   filtroSueldo(request:RequestFiltroSueldo):Observable<ResponseVWEmpleado[]>
+   {
+       return this._http.post<ResponseVWEmpleado[]>(`${this.url_service}/filtro-sueldo`,request)
    }
    /* getAll():Observable<ResponseEmpleado[]>
    {

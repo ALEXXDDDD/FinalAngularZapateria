@@ -15,6 +15,7 @@ import { CarritoService } from 'src/app/services/carrito/carrito.service';
 export class CarritoComprasComponent implements OnInit{
   modalRef?: BsModalRef;
   totalPrecios?: number ;
+  total: number = 0;
   // UsuarioSelect :ResponseCliente = new ResponseCliente() // Mandar para el register 
   usuarioSelect :ResponseUsuario = new ResponseUsuario()
   direccionSelect:RequestActualizacionDireccion = new RequestActualizacionDireccion
@@ -22,14 +23,17 @@ export class CarritoComprasComponent implements OnInit{
   accionModal : number = 1
   carrito:CarritoItem[]=[]
   constructor(
+    
     private _carritoService:CarritoService,
     private modalService: BsModalService,
+    
   )
   {
 
   }
   ngOnInit(): void {
-
+    this.total= this._carritoService.sumarPrecios()
+    this.actualizarTotal();
     this._carritoService.listarCarrito().subscribe(
       {
         next:(data)=>{ this.carrito=data} 
@@ -48,22 +52,30 @@ export class CarritoComprasComponent implements OnInit{
       this._carritoService.listarCarrito()
     }
   }
+  actualizarTotal() {
+    this.total = this.carrito.reduce((acc, item) => acc + (item.producto.precioUnitario * item.cantidad), 0);
+  }
   eliminarProducto(item:CarritoItem):void
   {
+    this.actualizarTotal();
     this._carritoService.removeProducto(item.producto.idProducto)
   }
   cambiarCantidad(item:CarritoItem ,cantidad:number):void
   {
+    this.actualizarTotal();
     this._carritoService.editarCantidad(item.producto.idProducto,cantidad)
   }
   agregar1(item:CarritoItem):void
   {
+    this.actualizarTotal();
+    
     this._carritoService.editarCantidad(item.producto.idProducto,++item.cantidad)
   }
   quitar1(item:CarritoItem ):void
   {
     if(item.cantidad>=2)
       {
+        this.actualizarTotal();
         this._carritoService.editarCantidad(item.producto.idProducto,--item.cantidad)
       }
   }
@@ -76,5 +88,6 @@ export class CarritoComprasComponent implements OnInit{
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
+
 
 }

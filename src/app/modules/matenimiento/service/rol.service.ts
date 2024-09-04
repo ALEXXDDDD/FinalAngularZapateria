@@ -6,6 +6,7 @@ import { urlConstants } from 'src/app/constants/url.constants';
 import { ResponseRol } from '../models/rol/rol-response.model';
 import { RequestRol } from '../models/rol/rol-request.model';
 import { CrudService } from '../../shared/services/crud.service';
+import { RequestFiltroNombre } from '../models/requestFiltroNombre.model';
 
 
 @Injectable({
@@ -19,7 +20,10 @@ export class RolService  extends CrudService<RequestRol,ResponseRol>{
     
       super(http,urlConstants.rol)
    }
-
+   genericFiltrol(request:RequestFiltroNombre):Observable<ResponseRol[]>
+   {
+       return this._http.post<ResponseRol[]>(`${this.url_service}/flitro`,request)
+   }
    
    /**
     * Genracion de los CRUDS 

@@ -8,8 +8,12 @@ import { ResponseProducto } from 'src/app/modules/matenimiento/models/producto/p
 import { ResponseDetalleProducto } from 'src/app/modules/matenimiento/models/producto/producto-responseDetalleProducto.model';
 import { ResponseVDetalleProducto } from 'src/app/modules/matenimiento/models/producto/producto-responseVDetalle.model';
 import { ResponseDetalleProcedureProducto } from 'src/app/modules/matenimiento/models/producto/productoResponseDetalle.model';
+import { ResponseVerModelos } from 'src/app/modules/matenimiento/models/VerStore/verModelosResponse.model';
 import { DetalleProductoService } from 'src/app/modules/matenimiento/service/detalleProducto/detalle-producto.service';
 import { ProductoService } from 'src/app/modules/matenimiento/service/producto/producto.service';
+import { CarritoService } from 'src/app/services/carrito/carrito.service';
+import { VistaServiceService } from 'src/app/services/Vista/vista-service.service';
+import { VistDetalle } from 'src/app/services/Vista/vistDetalle-model';
 
 @Component({
   selector: 'app-listar-detalle',
@@ -19,6 +23,8 @@ import { ProductoService } from 'src/app/modules/matenimiento/service/producto/p
 export class ListarDetalleComponent {
   @Input() title :string=""
   @Input() Producto :ResponseProducto= new ResponseProducto() 
+  @Input() vistDetale :VistDetalle= new VistDetalle() 
+  @Input() VerModelos :ResponseVerModelos= new ResponseVerModelos() 
   @Input() DetalleProducto :ResponseVDetalleProducto= new ResponseVDetalleProducto() 
   @Input() accion :number= 0 
 
@@ -34,9 +40,12 @@ export class ListarDetalleComponent {
   ProductoEnvio : RequestProducto = new RequestProducto()
   frmLoadSt = LoadStateEnum.None;
   loadStateEnum = LoadStateEnum;
+  vistDetalle:VistDetalle[]=[]
   constructor (
     private fb:FormBuilder,
     private  _ProductoService:ProductoService,
+    private _carritoService:CarritoService,
+    private _verZapatilService:VistaServiceService,
     private _DetalleProducto:DetalleProductoService
   )
   {
@@ -50,11 +59,15 @@ export class ListarDetalleComponent {
     )
   }
   carga:number = 1;
-  
+  addProducto(prod:ResponseProducto)
+  {
+    this._carritoService.addProducto(prod)
+  }
   ngOnInit(): void {
      
       this.myForm.patchValue(this.Producto)
-      this.monstrarDetalleProducto(this.Producto.idProducto)
+      // this.monstrarDetalleProducto(this.Producto.idProducto)
+      this.detalle(this.Producto.idProducto)
      
   }
   monstrarDetalleProducto(id:number)
@@ -77,6 +90,18 @@ export class ListarDetalleComponent {
          }
       }
     )
+  }
+  detalle(id:number)
+  {
+    const body = JSON.stringify(id); //
+    this._verZapatilService.detalleProducto(body).subscribe(
+      {
+        next: (data: VistDetalle[]) => {
+          console.log(data);
+          this.vistDetalle = data;
+        }
+      }
+    );
   }
   save(name: string, lastName: string) {
     this.frmLoadSt = LoadStateEnum.Loading;

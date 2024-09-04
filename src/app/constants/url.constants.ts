@@ -1,14 +1,15 @@
 import { PerfilListComponent } from "../pages/perfil/perfil-list/perfil-list.component"
 
 
-export const dominio = "https://localhost:7282/"  
-/* export const dominio = "https://localhost:7287/"  */
+ export const dominio = "https://zapateriaback.somee.com/"
+/* export const dominio = "https://localhost:7282/"  */
+// export const dominio = "https://zapateriaback.somee.com/"
 /**
  * TODO: las constantes para llamar al backedn 
  */
 
 
-// export const dominio = "https://zapateriaback.somee.com/" 
+//  export const dominio = "https://zapateriaback.somee.com/
 
 export const urlConstants ={
     rol: dominio+'api/Rol',
@@ -18,7 +19,7 @@ export const urlConstants ={
     responseMaterialStore:dominio+'api/MaterialStore',
     persona: dominio+'api/Persona/',
     Cliente:dominio+'api/Cliente/',
-    Empleado:dominio+'api/Empleado/',
+    Empleado:dominio+'api/Empleado',
     Modelo:dominio+'api/Modelo',
     Unidad:dominio+'api/Unidad',
     auth:dominio + "api/Auth",
@@ -27,6 +28,7 @@ export const urlConstants ={
     Proveedor:dominio + "api/Proveedor",
     Credito:dominio + "api/Credito",
     Orden:dominio + "api/Orden/",
+    IngresoProducto:dominio + "api/IngresoProducto",
     Produccion:dominio + "api/Produccion",
     SalidaMaterial:dominio+"api/SalidaMaterial",
     detalleCredito:dominio+"api/DetalleCredito",
@@ -36,7 +38,15 @@ export const urlConstants ={
     actualizacionDireccion :dominio+"api/ActualizacionDireccion",
     vistaBailarinas:dominio+"api/BailarinasStore",
     vistaZapatos:dominio+"api/MirarZapatosStore",
-    vistaZapatillas:dominio+"api/ZapatillasStore"
+    vistaZapatillas:dominio+"api/ZapatillasStore",
+    // Vistas
+    traerMaterialesAcabados :dominio+"api/VIstaModeloProducto/Materiales",
+    traerProductosAcabados :dominio+"api/VIstaModeloProducto",
+    traerPerfil :dominio+"api/VIstaModeloProducto",
+    traerVista:dominio+"api/VIstaModeloProducto",
+
+
+
 }
 
     

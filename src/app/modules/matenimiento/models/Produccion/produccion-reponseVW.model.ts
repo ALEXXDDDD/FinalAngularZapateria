@@ -3,6 +3,7 @@ export class ResponseVWProduccion {
     idUnidad: number=0;
     nombreUnidad:string="";
     cantidadFaltante: number=0;
+    cantidadProduccion: number=0;
     descripcion: string="" ;
     meta: number=0;
     fechaInicio: string="";

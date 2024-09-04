@@ -25,7 +25,7 @@ import { VistProductoComponent } from './Ventas/component/vistas/vist-producto/v
 import { VistBailarinaComponent } from './Ventas/component/vistas/mod-bailarinas/vist-bailarina/vist-bailarina.component';
 import { VistaZapatoComponent } from './Ventas/component/vistas/vist-zapato/vista-zapato/vista-zapato.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { TemplateRoutingModule } from './modules/template/template-routing.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { EnvioDomicilioComponent } from './Ventas/component/vistas/envio-domicilio/envio-domicilio.component';
@@ -38,6 +38,7 @@ import { WelcomeBodyComponent } from './pages/welcome/welcome-body/welcome-body/
 import { InicioSidebarComponent } from './modules/matenimiento/component/inicio-sidebar/inicio-sidebar.component';
 import { ApiMapsGoogleComponent } from './Ventas/component/maps-google/api-maps-google/api-maps-google.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { WelcomeFooterComponent } from './pages/welcome/welcome-footer/welcome-footer/welcome-footer.component';
 
 
 @NgModule({
@@ -63,10 +64,12 @@ import { GoogleMapsModule } from '@angular/google-maps';
     EnvioDomicilioComponent,
     PerfilListComponent,
     WelcomeBodyComponent,
-    ApiMapsGoogleComponent
+    ApiMapsGoogleComponent,
+    WelcomeFooterComponent
   ],
   imports: [
     SharedModule,
+  
     BrowserAnimationsModule,
     BrowserModule,
     GoogleMapsModule,
@@ -78,11 +81,12 @@ import { GoogleMapsModule } from '@angular/google-maps';
      */
     FormsModule,
     
-  
+    DatePipe,
     OAuthModule.forRoot(),
     HttpClientModule,
   ],
   providers: [
+    [DatePipe],
     {provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true} //Configuracion de angular 
   ],
   bootstrap: [AppComponent]

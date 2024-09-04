@@ -10,6 +10,7 @@ import { ResponseVUsuario } from 'src/app/models/response-vwUsuario-model';
 import { CorreoVerifApi } from '../../models/usuario/usuarioApiCorreo.model';
 import { ResponseUsuario } from '../../models/usuario/responseUsuario.models';
 import { UsuarioSesionStore } from '../../models/usuario/responseSesionStore.model';
+import { RequestFiltroNombre } from '../../models/requestFiltroNombre.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,10 @@ export class UsuarioService extends CrudService<RequestVWUsuario,ResponseUsuario
   urlHunterIO = urlHunterIO.replace("##correo##",correoUsuario)
    return this.http.get<CorreoVerifApi>(urlHunterIO)
   }
+  genericFiltrol(request:RequestFiltroNombre):Observable<ResponseVUsuario[]>
+  {
+      return this._http.post<ResponseVUsuario[]>(`${this.url_service}/Filtro-nombreRol`,request)
+  }
+  
  
 }

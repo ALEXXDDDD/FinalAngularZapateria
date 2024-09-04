@@ -1,99 +1,130 @@
 <div class="container-fluid mt-4">
-    <div class="card bg-light mb-3">
-        <div class="card-header"><strong>Ordenes</strong></div>
-        <div class="d-grid gap-2">
-            <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Productos</a>
-            <ul class="dropdown-menu">              
-              <li><a class="dropdown-item" href="#scrollspyHeading4" [routerLink]="['/dasboard/mantenimiento/producto']">Ver</a></li>       
-                <li><hr class="dropdown-divider"></li>
-            </ul>
-            <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">   Modelo</a>
-            <ul class="dropdown-menu">              
-              <li><a class="dropdown-item" [routerLink]="['/dasboard/mantenimiento/modelo']" href="#scrollspyHeading4">Ver</a></li>
-                <li><hr class="dropdown-divider"></li>
-            </ul>
-            
-          
+  <div class="card bg-light mb-3">
+      <div class="card-header">
+          <strong>Órdenes</strong>
+      </div>
+      <div class="card-body">
+        <div class="mb-3" [formGroup]="myFormFilter">
+            <label for="orderStatusFilter" class="form-label">Filtrar por Estado</label>
+            <select id="orderStatusFilter" class="form-select" formControlName="nombreRol" (change)="filtroOrdenRetrasados()">
+              <option value="Todos">Todas</option>
+              <option value="A Tiempo">A Tiempo</option>
+              <option  value="Retrasadas">Retrasadas</option>
+            </select>
           </div>
-        <div class="card-body"></div>
-        <div class="table-responsive">
-            <button class="btn btn-primary" (click)="crearOrden(modalEdit)"><i class="fas fa-plus"></i>
-                Agregar Orden
-            </button> 
-        
-    
-            <button class="btn btn-primary" (click)="crearOrden(modalEditUnidad)"><i class="fas fa-plus"></i>
-                Agregar Nueva Unidad
-            </button> 
+
+          <!-- Botones de acción -->
+          <div class="d-grid gap-2 mb-3">
+              <button class="btn btn-primary" (click)="crearOrden(modalEdit)">
+                  <i class="fas fa-plus"></i> Agregar Orden
+              </button>
+              <button class="btn btn-primary" (click)="crearOrden(modalEditUnidad)">
+                  <i class="fas fa-plus"></i> Agregar Nueva Unidad
+              </button>
+          </div>
+
+          <!-- Tabla de órdenes -->
+          <div class="table-responsive" *ngIf="mostrarListaCompleta">
+              <table class="table table-bordered table-striped">
+                  <thead>
+                      <tr>
+                          <th>Fecha de Orden</th>
+                          <th>Fecha Requerida</th>
+                          <th>Estado</th>
+                          <th>Nombre del Cliente</th>
+                          <th>Producto</th>
+                          <th>Cantidad</th>
+                          <th>Precio/Unidad</th>
+                          <th>Total</th>
+                          <th>Acciones</th>
+                      </tr>
+                  </thead>
+                  <tbody *ngFor="let d of responseOrden">
+                      <tr *ngFor="let e of d.ordens">
+                          <td>{{ formattedFechaOrden(e.fechaOrden)}}</td>
+                          <td>{{formattedFechaRequerido(e.fechaRequerido)}}</td>
+                          <td>{{e.estadoOrden}}</td>
+                          <td>{{e.nombreCliente}}</td>
+                          <td>{{e.nombreProd}}</td>
+                          <td>{{e.cantidad}}</td>
+                          <td>{{e.precioUnitario}}</td>
+                          <td>{{e.montoTotal}}</td>
+                          <td>
+                              <button class="btn btn-primary me-1" (click)="editarOrden(modalEdit, e)">
+                                  <i class="fas fa-edit"></i> Actualizar
+                              </button>
+                              <button class="btn btn-primary me-1" >
+                                  <i class="fas fa-download"></i> Descargar Boleta
+                              </button>
+                              <button class="btn btn-danger" (click)="eliminarOrden(e.idUsuario)">
+                                  <i class="fas fa-trash"></i> Eliminar
+                              </button>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+        <!--Flitro Ordenes Retrasadas -->
+          <div class="table-responsive" *ngIf="!mostrarListaCompleta">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Fecha De Orden</th>
-                        <th>Fecha De Requerida</th>
+                        <th>Fecha de Orden</th>
+                        <th>Fecha Requerida</th>
                         <th>Estado</th>
                         <th>Nombre del Cliente</th>
                         <th>Producto</th>
-                        <th>Categoria Producto</th>
                         <th>Cantidad</th>
                         <th>Precio/Unidad</th>
                         <th>Total</th>
-                    
-                            
-                        
+                        <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody *ngFor="let d of responseOrden" >
-                    <tr *ngFor="let e of d.ordens">
-                        <td>{{e.fechaOrden}}</td>
-                        <td>{{e.fechaRequerido}}</td>
-                        <td>{{e.estadoOrden}}</td>
-                        <td>{{e.nombreCliente}}</td>
-                        <td>{{e.nombreProd}}</td>
-                        <td>{{e.cantidad}}</td>
-                        <td>{{e.precioUnitario}}</td>
-                        <td>{{e.montoTotal}}</td>
+                <tbody *ngFor="let d of orden">
+                    <tr >
+                        <td>{{ formattedFechaOrden(d.fechaOrden)}}</td>
+                        <td>{{formattedFechaRequerido(d.fechaRequerido)}}</td>
+                        <td>{{d.estadoOrden}}</td>
+                        <td>{{d.nombreCliente}}</td>
+                        <td>{{d.nombreProd}}</td>
+                        <td>{{d.cantidad}}</td>
+                        <td>{{d.precioUnitario}}</td>
+                        <td>{{d.montoTotal}}</td>
                         <td>
-                            
+                            <button class="btn btn-primary me-1" (click)="editarOrden(modalEdit, d)">
+                                <i class="fas fa-edit"></i> Actualizar
+                            </button>
+                            <button class="btn btn-primary me-1" >
+                                <i class="fas fa-download"></i> Descargar Boleta
+                            </button>
+                            <button class="btn btn-danger" (click)="eliminarOrden(d.idUsuario)">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
                         </td>
-                        <button class="btn btn-primary" (click)="editarOrden(modalEdit,e)"><i class="fas fa-edit"></i>
-                                Actualizar
-                            </button>
-                            <button class="btn btn-primary" (click)="editarOrden(modalEdit,e)"><i class="fas fa-discharge"></i>
-                              Descargar Boleta 
-                          </button>
-                            <button class="btn btn-danger" ><i class="fas fa-trash"></i>
-                                Eliminar
-                            </button>
                     </tr>
                 </tbody>
             </table>
-
         </div>
-    </div>
-
+      </div>
+  </div>
 </div>
+
+<!-- Modal Templates -->
 <ng-template #modalEdit>
-    <app-mant-register-orden
-    [title]="titleModal"
-    [orden]="OrdenSelect"
-    [accion]="accionModal"
-  (closeModalEmmit)="getCloseModalEmmit($event)"
-    >
-    </app-mant-register-orden>
-    <app-mant-unidad-resgister
-    [title]="titleModal"
-    [unidad]="UnidadSelect"
-    [accion]="accionModal"
-  (closeModalEmmit)="getCloseModalEmmit($event)"
-    >
-    </app-mant-unidad-resgister>
-  </ng-template>
-  <ng-template #modalEditUnidad>
-    <app-mant-unidad-resgister
-    [title]="titleModal"
-    [unidad]="UnidadSelect"
-    [accion]="accionModal"
-  (closeModalEmmit)="getCloseModalEmmit($event)"
-    >
-    </app-mant-unidad-resgister>
-  </ng-template>
+  <app-mant-register-orden
+      [title]="titleModal"
+      [orden]="OrdenSelect"
+      [accion]="accionModal"
+      (closeModalEmmit)="getCloseModalEmmit($event)"
+  >
+  </app-mant-register-orden>
+</ng-template>
+<ng-template #modalEditUnidad>
+  <app-mant-unidad-resgister
+
+      [unidad]="UnidadSelect"
+      [accion]="accionModal"
+      (closeModalEmmit)="getCloseModalEmmit($event)"
+  >
+  </app-mant-unidad-resgister>
+</ng-template>

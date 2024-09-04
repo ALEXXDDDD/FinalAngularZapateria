@@ -1,71 +1,143 @@
-
-
-
-<div class="container-fluid mt-4">
-  <div class="card bg-light mb-3">
-      <div class="card-header"><strong>Listado De Empleados</strong></div>
-      <div class="card-body"></div>
-      <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th scope="col" >IdEmpleado</th>
-                  <th scope="col">Nombre Apellido</th>
-                  <th scope="col">Sueldo</th>
-                  <th scope="col">Telefono</th>
-                  <th scope="col">Fotografia</th>
-                  <th>
-                    <button (click)="crearEmpleado(modalEdit)"  class="btn btn-primary btn-sm">
-                      <i class="fas fa-plus"></i>
-                      Agregar Empleado
-                    </button>
-                  </th>
-                <th>
-              </tr>
-              </thead>
-              <tbody *ngFor="let list of responseEmpleado">
-                <tr *ngFor="let e of list.empleado">
-                  <td>{{e.idEmpleado}}</td>
-                  <td>{{e.nombrePersona + " " + e.apellidoEmp}}</td> 
-               
-                  <td>{{e.salario}}</td>      
-
-                  <td>{{e.direccion}}</td>  
-                  <img src="{{e.fotografiaEmpleado}}" alt="">
-                  
-                  <td>
-                    <button (click)="editarEmpleado(modalEdit,e)" class="btn btn-primary mr-4">
-                    <i class="fas fa-edit"></i>
-                      Actualizar
-                    </button>
-                    //
-                    <button (click)="eliminarEmpleado(e.idEmpleado)" type="button" class="btn btn-danger mr-4">
-                    <i class="fas fa-trash"></i>
-                    Eliminar
-                    </button> 
-                    //            
-                    <button  class="btn btn-secondary btn-sm" [routerLink]="['/dasboard/mantenimiento/empleado-area']">
-                      <i class="fas fa-plus"></i>
-                      Ver Area
-                    </button>
-                </tr>
-              </tbody>
-               
-          </table>
+<form>
+  <div class="card bg-light shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <i class="fas fa-search mr-2"></i> Búsqueda por Sueldo
+    </div>
+    <div class="card-body" [formGroup]="myFormFilter">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="sueldoMinimo">Sueldo Mínimo</label>
+            <input type="number" class="form-control" formControlName="sueldoMinimo" placeholder="Ingrese el sueldo mínimo">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="sueldoMaximo">Sueldo Máximo</label>
+            <input type="number" class="form-control" formControlName="sueldoMaximo" placeholder="Ingrese el sueldo máximo">
+          </div>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="button" class="btn btn-primary mr-2" (click)="filtroSueldo()">
+            <i class="fas fa-search mr-1"></i> Buscar
+          </button>
+          <button type="button" class="btn btn-danger" (click)="limpiarFiltros()">
+            <i class="fas fa-broom mr-1"></i> Limpiar
+          </button>
+        </div>
       </div>
+    </div>
   </div>
+</form>
 
+<div class="container-fluid mt-4" *ngIf="mostrarListaCompleta">
+  <div class="card bg-light mb-3">
+    <div class="card-header">
+      <h4 class="mb-0"><strong>Listado De Empleados</strong></h4>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between mb-3">
+        <button (click)="crearEmpleado(modalEdit)" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Agregar Empleado
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">IdEmpleado</th>
+              <th scope="col">Nombre Apellido</th>
+              <th scope="col">Sueldo</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Fotografía</th>
+              <th scope="col" class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let d of responseEmpleado">
+            <tr *ngFor="let e of d.empleado">
+              <td>{{e.idEmpleado}}</td>
+              <td>{{e.nombrePersona}} {{e.apellidoEmp}}</td>
+              <td>{{e.salario | currency}}</td>
+              <td>{{e.telefono}}</td>
+              <td>{{e.usuario1}}</td>
+              <!-- <td>
+                <img [src]="e.fotografiaUrl" alt="Fotografía" class="img-thumbnail" style="max-height: 100px;">
+              </td> -->
+              <td class="text-center">
+                <button (click)="editarEmpleado(modalEdit, e)" class="btn btn-primary btn-sm">
+                  <i class="fas fa-edit"></i> Actualizar
+                </button>
+                <button (click)="eliminarEmpleado(e.idEmpleado)" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+                <button class="btn btn-secondary btn-sm" [routerLink]="['/dashboard/mantenimiento/empleado-area']">
+                  <i class="fas fa-plus"></i> Ver Área
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-  
-    <ng-template #modalEdit>
-      <app-mant-empleado-register
-      [title]="titleModal"
-      [empleado]="empleadoSelect"
-      [accion]="accionModal"
-    (closeModalEmmit)="getCloseModalEmmit($event)"
-      >
-      </app-mant-empleado-register>
-    </ng-template>
+<div class="container-fluid mt-4" *ngIf="!mostrarListaCompleta">
+  <div class="card bg-light mb-3">
+    <div class="card-header">
+      <h4 class="mb-0"><strong>Listado De Empleados</strong></h4>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between mb-3">
+        <button (click)="crearEmpleado(modalEdit)" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Agregar Empleado
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">IdEmpleado</th>
+              <th scope="col">Nombre Apellido</th>
+              <th scope="col">Sueldo</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Fotografía</th>
+              <th scope="col" class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody >
+            <tr *ngFor="let d of responseWEmpleado">
+              <td>{{d.idEmpleado}}</td>
+              <td>{{d.nombrePersona}} {{d.apellidoEmp}}</td>
+              <td>{{d.salario | currency}}</td>
+              <td>{{d.telefono}}</td>
+              <td>{{d.usuario1}}</td>
+              <!-- <td>
+                <img [src]="e.fotografiaUrl" alt="Fotografía" class="img-thumbnail" style="max-height: 100px;">
+              </td> -->
+              <td class="text-center">
+                <button (click)="editarEmpleado(modalEdit, d)" class="btn btn-primary btn-sm">
+                  <i class="fas fa-edit"></i> Actualizar
+                </button>
+                <button (click)="eliminarEmpleado(d.idEmpleado)" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+                <button class="btn btn-secondary btn-sm" [routerLink]="['/dashboard/mantenimiento/empleado-area']">
+                  <i class="fas fa-plus"></i> Ver Área
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
-
-      
+<ng-template #modalEdit>
+  <app-mant-empleado-register
+    [title]="titleModal"
+    [empleado]="empleadoSelect"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)">
+  </app-mant-empleado-register>
+</ng-template>

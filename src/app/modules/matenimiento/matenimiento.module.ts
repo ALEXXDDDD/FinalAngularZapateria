@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatenimientoRoutingModule } from './matenimiento-routing.module';
 import { MantRolListComponent } from './component/rol/mant-rol-list/mant-rol-list.component';
@@ -39,6 +39,9 @@ import { MantCreditoRegisterComponent } from './component/credito/mant-credito-r
 import { MantDetalleCreditoLisComponent } from './component/detalleCredito/mant-detalle-credito-lis/mant-detalle-credito-lis.component';
 import { MantDetalleCreditoRegisterComponent } from './component/detalleCredito/mant-detalle-credito-register/mant-detalle-credito-register.component';
 import { InicioSidebarComponent } from './component/inicio-sidebar/inicio-sidebar.component';
+import { MantUsuarioRegiActuaComponent } from './component/usuario/mant-usuario-regi-actua/mant-usuario-regi-actua.component';
+import { MantIngresoProductoListComponent } from './component/ingresoProducto/mant-ingreso-producto-list/mant-ingreso-producto-list.component';
+import { MantIngresoProductoRegisterComponent } from './component/ingresoProducto/mant-ingreso-producto-register/mant-ingreso-producto-register.component';
 
 
 
@@ -78,12 +81,16 @@ import { InicioSidebarComponent } from './component/inicio-sidebar/inicio-sideba
     MantCreditoRegisterComponent,
     MantDetalleCreditoLisComponent,
     MantDetalleCreditoRegisterComponent,
+    MantUsuarioRegiActuaComponent,
+    MantIngresoProductoListComponent,
+    MantIngresoProductoRegisterComponent,
    
    
   ],
   imports: [
     CommonModule,
     MatenimientoRoutingModule,
+    DatePipe,
     SharedModule
   ]
 })

@@ -1,98 +1,132 @@
 <html>
-  <h1>LISTA DE CARGO</h1>
-  <form [formGroup]="myFormFilter">
-    <div class="card-body">
-      <div class="card bg-light mb-3" >
-        <div class="card-header">Busqueda</div>
-        <div class="card-body">
+  <head>
+    <!-- Incluye Bootstrap para estilos rápidos y FontAwesome para íconos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  </head>
+
+  <body>
+    <div class="container my-5">
+      <h1 class="text-center text-primary mb-4">Lista de Roles</h1>
+
+      <!-- Formulario de Búsqueda -->
+      <form [formGroup]="myFormFilter">
+        <div class="card bg-light shadow-sm mb-4">
+          <div class="card-header bg-primary text-white">
+            <i class="fas fa-search mr-2"></i> Búsqueda
+          </div>
+          <div class="card-body">
             <div class="row">
-              <div class="col-3">
+              <div class="col-md-4">
                 <div class="form-group">
-                  <label for="">Nombre de Rol</label>
-                  <input type="text" class="form-control" formControlName="nombreRol">
+                  <label for="nombreRol">Nombre de Rol</label>
+                  <input type="text" class="form-control" formControlName="nombreRol" placeholder="Ingrese el nombre del rol">
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-md-4 d-flex align-items-end">
                 <div class="form-group">
-                  <label for="">Descripcion</label>
-                  <input type="text" class="form-control" formControlName="descripRol">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  <br>
-                  <button (click)="filtrar()" class="btn btn-primary btn-sm">
-                    <i class="fas fa-search"></i>
+                  <button type="button" (click)="listarFiltro()" class="btn btn-primary mr-2">
+                    <i class="fas fa-search mr-1"></i> Buscar
                   </button>
-                  <button class="btn btn-danger btn-sm">
-                    <i class="fas fa-broom"></i>
+                  <button type="button" (click)="limpiarFiltros()" class="btn btn-danger">
+                    <i class="fas fa-broom mr-1"></i> Limpiar
                   </button>
-    
                 </div>
               </div>
             </div>
-          
+          </div>
+        </div>
+      </form>
+
+      <!-- Lista Completa de Roles -->
+      <div *ngIf="mostrarListaCompleta" class="listaCompleta">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <select (change)="changeItemsPerPage()" [(ngModel)]="itemsPerPage" class="form-select w-auto">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+          <button (click)="crearRol(modalEdit)" class="btn btn-success">
+            <i class="fas fa-plus mr-1"></i> Crear Rol
+          </button>
+        </div>
+
+        <table class="table table-hover shadow-sm">
+          <thead class="thead-dark bg-primary text-white">
+            <tr>
+              <th>ID</th>
+              <th>Nombre Rol</th>
+              <th>Descripción</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rol of Rol">
+              <td>{{rol.irol}}</td>
+              <td>{{rol.nombreRol}}</td>
+              <td>{{rol.descripRol}}</td>
+              <td class="text-center">
+                <button (click)="editarRol(modalEdit, rol)" class="btn btn-primary btn-sm mr-2">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button (click)="eliminarRol(rol.irol)" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-center">
+          <pagination (pageChanged)="changePage($event)" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" previousText="Anterior" nextText="Siguiente"></pagination>
         </div>
       </div>
+
+      <!-- Lista Filtrada de Roles -->
+      <div *ngIf="!mostrarListaCompleta" class="listaFiltrado">
+        <table class="table table-hover shadow-sm">
+          <thead class="thead-dark bg-primary text-white">
+            <tr>
+              <th>ID</th>
+              <th>Nombre Rol</th>
+              <th>Descripción</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rol of Rol">
+              <td>{{rol.irol}}</td>
+              <td>{{rol.nombreRol}}</td>
+              <td>{{rol.descripRol}}</td>
+              <td class="text-center">
+                <button (click)="editarRol(modalEdit, rol)" class="btn btn-primary btn-sm mr-2">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button (click)="eliminarRol(rol.irol)" class="btn btn-danger btn-sm">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modal para Crear/Editar Rol -->
+      <ng-template #modalEdit>
+        <app-mant-rol-registrer
+          [title]="titleModal"
+          [rol]="rolSelect"
+          [accion]="accionModal"
+          (closeModalEmmit)="getCloseModalEmmit($event)">
+        </app-mant-rol-registrer>
+      </ng-template>
     </div>
 
-  </form>
- <div class="row">
-  <div class="col-xs-6 col-6">
-    <!-- <pagination [totalItems]="5" [(ngModel)]="currentPage"></pagination> -->
-    <select (change)="changeItemsPerPage()" [(ngModel)]="itemsPerPage"  class="form-select">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-    </select>
-  </div>
- </div> 
-<table class="table ">
-  
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Nombre Rol</th>
-        <th scope="col">Descripcion</th>
-        <button (click)="crearRol(modalEdit)"  class="btn btn-primary btn-sm" id="button-MAS">
-            <i class="fas fa-plus"></i>
-        </button>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let car of Rol">
-        <td scope="row">{{car.irol}}</td>
-        <td>{{car.nombreRol}}</td>
-        <td>{{car.descripRol}}</td>
-        <button (click)="editarRol(modalEdit,car)" class="btn btn-primary mr-4">
-            <i class="fas fa-edit"></i>
-        </button>
-        <button (click)="eliminarRol(car.irol)" type="button" class="btn btn-danger mr-4">
-            <i class="fas fa-trash"></i>
-        </button>
-      
-        
-      </tr>
-      
-    </tbody>
-   
-  </table>
-  <div class="row">
-    <div class="col-xs-12 col-12">
-      <!-- <pagination [totalItems]="5" [(ngModel)]="currentPage"></pagination> -->
-      <pagination (pageChanged)="changePage($event)" [totalItems]="totalItems"  [itemsPerPage]="  itemsPerPage" [previousText]="'Anterior'" [nextText]="'Siguiente'"></pagination>
-    </div>
-    
-  </div>
-   
-  <ng-template #modalEdit>
-    <app-mant-rol-registrer
-    [title]="titleModal"
-    [rol]="rolSelect"
-    [accion]="accionModal"
-  (closeModalEmmit)="getCloseModalEmmit($event)"
-    >
-    </app-mant-rol-registrer>
-  </ng-template>
+    <!-- Scripts de Bootstrap y Angular necesarios -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  </body>
 </html>

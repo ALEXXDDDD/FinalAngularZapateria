@@ -5,6 +5,9 @@ export class ResponseVUsuario {
     nombrePersona: string ="";
     tipoPersona: string ="";
     direccion: string ="" ;
+
+    numeroDocumento: string ="";
+
     irol: number= 0;
     nombreRol: string ="";
     idUsuario: number= 0;

@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RequestFilterGeneric } from '../../../models/genericFilterRequest.model';
 import { ResponseFilterGeneric } from '../../../models/genericFilterResponse.models';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
 
 @Component({
   selector: 'app-mant-rol-list',
@@ -16,143 +17,148 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
   styleUrls: ['./mant-rol-list.component.css']
 })
 export class MantRolListComponent implements OnInit {
-  Rol : ResponseRol[]=[] // Lista 
+  nombre: string = '';
+  Rol: ResponseRol[] = []; // Lista de roles
   modalRef?: BsModalRef;
-  rolSelect :ResponseRol = new ResponseRol() // Mandar para el register 
-  titleModal : string = ""
-  accionModal : number = 0
-  totalItems:number =0
-  itemsPerPage:number=1
-  request : RequestFilterGeneric = new RequestFilterGeneric()
-  myFormFilter:FormGroup
+  rolSelect: ResponseRol = new ResponseRol(); // Para mandar al registro
+  titleModal: string = "";
+  accionModal: number = 0;
+  totalItems: number = 0;
+  itemsPerPage: number = 1;
+  request: RequestFilterGeneric = new RequestFilterGeneric();
+  myFormFilter: FormGroup;
+  nombreRol: RequestFiltroNombre = new RequestFiltroNombre();
+  mostrarListaCompleta: boolean = true;
 
   constructor(
-    private _router:Router, 
-    private fb:FormBuilder,
+    private _router: Router, 
+    private fb: FormBuilder,
     private modalService: BsModalService,
-    private _rolService : RolService
-  ){
-    this.myFormFilter = this.fb.group(
-      {
-        
-        nombreRol: [""],
-        descripRol: [""]
-      }
-    )
+    private _rolService: RolService
+  ) {
+    this.myFormFilter = this.fb.group({
+      nombreRol: [""],
+      descripRol: [""]
+    });
   }
-  /**
-   * FIXME: El lo primero que se ejecuta al cargar la pagina 
-   */
-  ngOnInit(): void {
-    /* let token = sessionStorage.getItem("token")
-    const jwtHeaders = new HttpHeaders(
-      {
-        'Content-Type':'application/json',
-        'Authorization':`Bearer ${token}`
-      }
-    )
-    
-    if(!token){
-      alert("No as iniciado Sesion")
-      this._router.navigate(['auth'])
-    } */
-    this.filtrar()
-  }
-  listarRoles()
-  {
-    this._rolService.getAll().subscribe(
-      {
-        next:(data:ResponseRol[]) => {
-          this.Rol=data;
-          
-          console.log(data)
-        },
-        error:(error) => {
-          console.log(error)
-        },
-        complete:() => {}
-      }
-    )
-  }
-  crearRol(template: TemplateRef<any>)
-  {
-    this.titleModal ="Nuevo Rol"
-    this.rolSelect = new ResponseRol()
-    this.accionModal = AcciontConstants.crear
-    this.openModal(template);
 
+  ngOnInit(): void {
+    this.filtrar(); // Se carga la lista completa al iniciar
   }
-  editarRol(template: TemplateRef<any>, rol:ResponseRol)
-  {
-    this.titleModal ="Editar Rol"
-    this.rolSelect = rol
-    this.accionModal = AcciontConstants.editar
+
+  listarRoles() {
+    this._rolService.getAll().subscribe({
+      next: (data: ResponseRol[]) => {
+        this.Rol = data;
+        console.log(data);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {}
+    });
+  }
+
+  crearRol(template: TemplateRef<any>) {
+    this.titleModal = "Nuevo Rol";
+    this.rolSelect = new ResponseRol();
+    this.accionModal = AcciontConstants.crear;
     this.openModal(template);
   }
+
+  editarRol(template: TemplateRef<any>, rol: ResponseRol) {
+    this.titleModal = "Editar Rol";
+    this.rolSelect = rol;
+    this.accionModal = AcciontConstants.editar;
+    this.openModal(template);
+  }
+
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
-  getCloseModalEmmit(res:boolean)
-  {
-    this.modalRef?.hide()
-    if(res)
-    {
-      this.filtrar()
+
+  getCloseModalEmmit(res: boolean) {
+    this.modalRef?.hide();
+    if (res) {
+      this.filtrar();
     }
   }
-  eliminarRol(id:number)
-  {
-    let result= confirm("Estas seguro de eliminar ")
-    if (result)
-    {
-      this._rolService.delete(id).subscribe(
-        {
-          next:(data:number)=>{
-            alert("Eliminado Existosamente")
-          },
-          error:(error)=>{},
-          complete:()=>{}
-        }
-      )
+
+  listarFiltro() {
+    const valorForm = this.myFormFilter.getRawValue();
+    
+    if (valorForm.nombreRol.trim() === '') {
+      this.mostrarListaCompleta = true;
+      this.filtrar(); // Vuelve a cargar la lista completa si no hay filtro
+      return;
+    }
+
+    this.mostrarListaCompleta = false;
+    this.nombreRol.nombre = valorForm.nombreRol;
+
+    this._rolService.genericFiltrol(this.nombreRol).subscribe({
+      next: (data: ResponseRol[]) => {
+        this.Rol = data; // Actualiza la lista con la respuesta filtrada
+        console.log(data);
+      },
+      error: (error: any) => {
+        console.error('Error al filtrar roles', error);
+      },
+      complete: () => {}
+    });
+  }
+
+  eliminarRol(id: number) {
+    let result = confirm("¿Estás seguro de eliminar?");
+    if (result) {
+      this._rolService.delete(id).subscribe({
+        next: () => {
+          alert("Eliminado exitosamente");
+          this.filtrar(); // Recargar la lista después de eliminar
+        },
+        error: (error) => {
+          console.error('Error al eliminar rol', error);
+        },
+        complete: () => {}
+      });
     }
   }
-  filtrar()
-  {
-    
-    let valuedorm = this.myFormFilter.getRawValue()
 
-    this.request.filtros.push({name:"nombreRol",value: valuedorm.nombreRol} );
-    this.request.filtros.push({name:"descripRol",value: valuedorm.descripRol} );
-    
-    this._rolService.genericFilter(this.request).subscribe
-    (
-      {
-        next:(data:ResponseFilterGeneric<ResponseRol>)=>{
-          console.log(data)
-          this.Rol  = data.lista;
-          this.totalItems = data.totalRegistros
-          
-        },
-        error:(error)=>{
-          console.log("ERROR")
-        },
-        complete:(
+  filtrar() {
+    const valorForm = this.myFormFilter.getRawValue();
 
-        )=>{
-          console.log("Compelete")
-        }
+    // this.request.filtros = [
+    //   { name: "nombreRol", value: valorForm.nombreRol },
+    //   { name: "descripRol", value: valorForm.descripRol }
+    // ];
+
+    this._rolService.genericFilter(this.request).subscribe({
+      next: (data: ResponseFilterGeneric<ResponseRol>) => {
+        this.Rol = data.lista;
+        this.totalItems = data.totalRegistros;
+        console.log(data);
+      },
+      error: (error) => {
+        console.error("Error al filtrar roles", error);
+      },
+      complete: () => {
+        console.log("Filtrado completado");
       }
-    )
-    
+    });
   }
-  changePage(event:PageChangedEvent)
-  {
-    this.request.numeroPagina = event.page
-  this.filtrar()
+
+  changePage(event: PageChangedEvent) {
+    this.request.numeroPagina = event.page;
+    this.filtrar();
   }
-  changeItemsPerPage()
-  {
-    this.request.cantidad = this.itemsPerPage
-    this.filtrar()
+
+  changeItemsPerPage() {
+    this.request.cantidad = this.itemsPerPage;
+    this.filtrar();
+  }
+  limpiarFiltros() {
+    this.myFormFilter.reset(); // Resetea los campos del formulario
+    this.mostrarListaCompleta = true; // Muestra la lista completa
+    this.filtrar(); // Recarga la lista completa
   }
 }

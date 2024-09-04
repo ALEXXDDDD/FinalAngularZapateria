@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ResponseProducto } from 'src/app/modules/matenimiento/models/producto/producto-response.model';
 import { ResponseVerModelos } from 'src/app/modules/matenimiento/models/VerStore/verModelosResponse.model';
 import { VistZapatosService } from 'src/app/modules/matenimiento/service/vistaZapatos/vist-zapatos.service';
+import { VistaServiceService } from 'src/app/services/Vista/vista-service.service';
 
 @Component({
   selector: 'app-vista-zapato',
@@ -9,15 +11,17 @@ import { VistZapatosService } from 'src/app/modules/matenimiento/service/vistaZa
 })
 export class VistaZapatoComponent implements OnInit {
   responseVerModelos:ResponseVerModelos[]=[]
+  responseProducto :ResponseProducto[]=[] 
   constructor(
-    private _verZapatosService:VistZapatosService
+    private _verZapatosService:VistZapatosService,
+    private _verZapatilService:VistaServiceService
 
   )
   {
 
   }
   ngOnInit(): void {
-    this.ñostarZapatillas()
+    this.mostarZapatillas("Zapatos")
   }
   ñostarZapatillas()
   {
@@ -30,7 +34,17 @@ export class VistaZapatoComponent implements OnInit {
       }
     )
   }
-
+  mostarZapatillas(request: string) {
+    const body = JSON.stringify(request); //
+    this._verZapatilService.nombreModelo(body).subscribe(
+      {
+        next: (data: ResponseProducto[]) => {
+          console.log(data);
+          this.responseProducto = data;
+        }
+      }
+    );
+  }
 
 }
 

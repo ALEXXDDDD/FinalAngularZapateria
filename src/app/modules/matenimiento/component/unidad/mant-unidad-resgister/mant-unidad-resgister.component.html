@@ -1,1 +1,30 @@
 <p>mant-unidad-resgister works!</p>
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="cerrarModal(false)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <form [formGroup]="myForm">
+    <div class="modal-body">
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                <label for="idUnidad">ID Unidad</label>
+                <input id="idUnidad" formControlName="idUnidad" type="text" class="form-control" placeholder="idUnidad">
+            </div>
+          </div>
+      <div class="mb-3">
+        <label for="nombreUnidad" class="form-label">Nombre de la Unidad</label>
+        <input type="text" id="nombreUnidad" class="form-control" formControlName="nombreUnidad" placeholder="Ingrese el nombre de la unidad" />
+      </div>
+      <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea id="descripcion" class="form-control" formControlName="descriccion" placeholder="Ingrese una descripción"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="cerrarModal(false)">Cancelar</button>
+      <button type="submit" class="btn btn-primary" (click)="guardar()">Guardar</button>
+    </div>
+  </form>

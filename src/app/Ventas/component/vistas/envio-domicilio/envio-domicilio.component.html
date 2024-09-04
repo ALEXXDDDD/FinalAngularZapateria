@@ -1,38 +1,52 @@
+<script 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAboUB7-NkXl-FQPhQKJPjvQWT47UAaPT8&loading=async&callback=initMap">
+</script>
 
-<div >
-    
-    <form action="" *ngFor="let item of responsePerfil" [formGroup]="myForm">
+<div class="container">
+    <form [formGroup]="myForm" *ngFor="let item of responsePerfil" class="order-form">
+        <h2>Tu Pedido</h2>
         
-        <ul>Tu Productos</ul>
-        <li *ngFor="let item of carrito">
-            {{item.producto.nombreProd}}
-            -Precio
-            {{item.producto.precioUnitario}}
-            <img src="{{item.producto.fotografia}}" alt="">
-            
-          
-            <button  type="button" (click)="eliminarProducto(item)">Eliminar</button>
-        </li>
-        <ul>Total</ul>
-        <input type="number">
-        <ul>Fecha que Necesitas</ul>
-        <input type="date" name="" id="">
-        <ul>Tu direccion</ul>
-        <input type="text" value="{{item.direccion}}" type="text" 
+        <ul class="product-list">
+            <li *ngFor="let item of carrito" class="product-item">
+                <img [src]="item.producto.fotografia" alt="{{item.producto.nombreProd}}" class="product-image">
+                <div class="product-details">
+                    <h3>{{item.producto.nombreProd}}</h3>
+                    <p>Precio: {{item.producto.precioUnitario | currency}}</p>
+                    <button type="button" (click)="eliminarProducto(item)" class="btn btn-danger">Eliminar</button>
+                </div>
+            </li>
+        </ul>
+        
+        <div class="form-group">
+            <label for="total">Total</label>
+            <input id="total" type="number" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="fecha">Fecha que Necesitas</label>
+            <input id="fecha" type="date" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="direccion">Tu Dirección</label>
+            <input id="direccion" type="text" formControlName="direccion" class="form-control" 
+                [readonly]="!isEditable" placeholder="{{item.direccion}}">
+        </div>
 
-        formControlName="direccion"
+        <div id="map" class="map-container" *ngIf="isEditable">
+            <app-api-maps-google></app-api-maps-google>
+        </div>
 
-        [readonly]="!isEditable" 
-        placeholder="{{item.direccion}}"
-        >
-        <br>
-        <app-api-maps-google *ngIf="isEditable"></app-api-maps-google>
-        <button class="btn btn-dark" *ngIf="isEditable" (click)="guardar()" >
-            Actualizar Direccion
-        </button>
-        <button *ngIf="!isEditable" (click)="enableEditing()"  class="btn btn-primary">Cambiar Direccion</button>
-        <br>
-        <button (click)="saveChanges()" class="btn btn-danger">Confirmar Pedido</button> <!-- *ngIf="isEditable"-->
+        <div class="form-actions">
+            <button type="button" *ngIf="isEditable" (click)="guardar()" class="btn btn-dark">
+                Actualizar Dirección
+            </button>
+            <button type="button" *ngIf="!isEditable" (click)="enableEditing()" class="btn btn-primary">
+                Cambiar Dirección
+            </button>
+            <button type="button" (click)="getCloseModalEmmit(true)" routerLink="/pasarela" class="btn btn-danger">
+                Confirmar Pedido
+            </button>
+        </div>
     </form>
-
 </div>

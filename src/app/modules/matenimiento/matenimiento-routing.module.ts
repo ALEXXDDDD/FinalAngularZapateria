@@ -16,6 +16,7 @@ import { MantSalidaMaterialListComponent } from './component/salidaMaterial/mant
 import { MantProduccionListComponent } from './component/produccion/mant-produccion-list/mant-produccion-list.component';
 import { MantUsuarioListComponent } from './component/usuario/mant-usuario-list/mant-usuario-list.component';
 import { InicioSidebarComponent } from './component/inicio-sidebar/inicio-sidebar.component';
+import { MantDetalleCreditoLisComponent } from './component/detalleCredito/mant-detalle-credito-lis/mant-detalle-credito-lis.component';
 
 const routes: Routes = [
   {
@@ -65,6 +66,9 @@ const routes: Routes = [
   },
   {
     path: 'empleado-area', component:MantEmplAreaListComponent
+  },
+  {
+    path: 'credito', component:MantDetalleCreditoLisComponent
   }
 
 ];

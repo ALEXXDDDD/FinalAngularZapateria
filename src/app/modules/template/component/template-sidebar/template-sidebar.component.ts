@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TemplateSidebarComponent implements OnInit {
   ngOnInit(): void {
-    this.rellenarMenu()
+     this.rellenarMenu()
   }
 
 
@@ -106,5 +106,17 @@ export class TemplateSidebarComponent implements OnInit {
             ]
       break;
     }
+  }
+ 
+
+  isSidebarHidden: boolean = false;
+  dropdowns: boolean[] = [false, false, false, false, false, false];
+
+  toggleSidebar() {
+    this.isSidebarHidden = !this.isSidebarHidden;
+  }
+
+  toggleDropdown(index: number) {
+    this.dropdowns[index] = !this.dropdowns[index];
   }
 }

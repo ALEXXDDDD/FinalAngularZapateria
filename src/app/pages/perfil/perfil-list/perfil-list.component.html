@@ -1,11 +1,31 @@
-
 <app-welcome-header></app-welcome-header>
-<h2>Tu perfil</h2>
-<tbody *ngFor="let p of responsePerfil">
-    <ul>{{p.email}}</ul>
-    <ul>{{p.nombrePersona}}</ul>
-    <ul>{{p.direccion}}</ul>
-    <ul>{{p.fotografia}}</ul>
-    <ul>{{p.usuario}}</ul>
-    <button class="btn btn-danger" (click)="logout()">Cerrar Sesion</button>
-</tbody>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header text-center">
+          <h2>Tu perfil</h2>
+        </div>
+        <div class="card-body text-center">
+          <div *ngFor="let p of vistPerfil" class="mb-4">
+            <div class="profile-image-container position-relative">
+              <button class="image-button btn btn-outline-secondary rounded-circle p-0" (click)="triggerFileInput(p)">
+                <img [src]="p.fotografia" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                <input type="file" class="file-input d-none" (change)="updateImage($event, p)" />
+                <span class="tooltip-text position-absolute top-100 start-50 translate-middle badge rounded-pill bg-primary">Actualizar imagen</span>
+              </button>
+            </div>
+            <div class="profile-details text-center mt-3">
+              <h3 class="card-title">{{p.nombrePersona}}</h3>
+              <p class="card-text text-muted">Desarrollador de Software</p>
+              <p class="card-text"><strong>Email:</strong> {{p.email}}</p>
+              <p class="card-text"><strong>Usuario:</strong> {{p.usuario}}</p>
+              <p class="card-text"><strong>Ubicación:</strong> {{p.direccion}}</p>
+            </div>
+          </div>
+          <button class="btn btn-danger mt-4" (click)="logout()">Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

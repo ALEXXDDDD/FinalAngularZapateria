@@ -1,30 +1,60 @@
 <app-welcome-header></app-welcome-header>
 
-<h1>Nuestros Productos</h1>
-<aside class="col-lg-3">
-        
-    <img src="./../../../assets/img/Img_Welcome/720X1300-ecco.jpg" alt="" class="imagen">
-</aside>
+<div class="container py-4">
+    <h1 class="display-4 text-center text-primary mb-4">Bienvenido Al Catálogo</h1>
+    
+    <div class="row mb-4">
+        <aside class="col-lg-3 text-center">
+            <img src="./../../../assets/img/Img_Welcome/720X1300-ecco.jpg" alt="Imagen de catálogo" class="img-fluid rounded shadow">
+        </aside>
+        <div class="col-lg-9 d-flex align-items-center">
+            <div class="p-4 border rounded shadow-sm bg-light">
+                <h2 class="text-danger text-center">¡Grandes Ofertas!</h2>
+                <p class="lead text-secondary text-center">
+                    Aprovecha nuestros increíbles descuentos en zapatos de las mejores marcas. 
+                    Encuentra el par perfecto para cualquier ocasión con hasta un 50% de descuento. 
+                    ¡No te pierdas estas ofertas limitadas y renueva tu colección de calzado hoy mismo!
+                </p>
+                <ul class="list-unstyled text-secondary">
+                    <li class="text-center"><strong>Zapatos deportivos:</strong> Descuentos de hasta el 40%</li>
+                    <li class="text-center"><strong>Zapatos formales:</strong> Ahorra hasta el 30%</li>
+                    <li class="text-center"><strong>Sandalias y más:</strong> Rebajas de hasta el 50%</li>
+                </ul>
+                <div class="text-center">
+                    <a href="#productos" class="btn btn-warning mt-3">Ver Todos los Productos</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<section class="colum col-lg-9">
-    <form action="" class="container-producto"
-    *ngFor="let mod of responseProducto"
-    >
-     <a href="" ><img src="{{mod.fotografia}}" alt=""></a><br>
-     <div class="container">
-         <label class="vista" for="">Nombre De Producto </label>
-            <p>  </p>
-         <label for="">{{mod.nombreProd}}</label><br>
-         <br>
-         <label class="vista" for="">Precio</label>
-   
-         <label for="">{{mod.precioUnitario}}</label><br>
-         <button class="btn btn-danger" id="danger">Agregar Carrito</button>
-     </div>
-     
-     
- </form>
-         
- </section>
+    <h2 class="text-center text-secondary mb-5" id="productos">Nuestros Productos</h2>
 
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4" *ngFor="let mod of responseProducto">
+            <div class="card h-100 shadow-sm">
+                <img src="{{mod.fotografia}}" alt="Imagen de {{mod.nombreProd}}" class="card-img-top" style="height: 250px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{mod.nombreProd}}</h5>
+                    <p class="card-text text-muted">$ {{mod.precioUnitario}}</p>
+                    <button class="btn btn-primary mt-auto" (click)="monstrarDetalle(modalEdit, mod, mod.idProducto)">Ver Detalle</button>
+                    <button class="btn btn-success mt-2" (click)="addProducto(mod)">Agregar al carrito</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="row mt-5">
+        <div class="col-12">
+            <pagination (pageChanged)="changePage($event)" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" 
+                previousText="Anterior" nextText="Siguiente"></pagination>
+        </div>
+    </div>
+
+    <ng-template #modalEdit>
+        <app-listar-detalle [title]="titleModal" [Producto]="productoSelect" [accion]="accionModal" 
+            (closeModalEmmit)="getCloseModalEmmit($event)">
+        </app-listar-detalle>
+    </ng-template>
+</div>
+
+<app-welcome-footer></app-welcome-footer>

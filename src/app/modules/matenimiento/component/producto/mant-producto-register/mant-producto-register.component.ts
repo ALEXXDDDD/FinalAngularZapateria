@@ -5,6 +5,7 @@ import { RequestProducto } from '../../../models/producto/producto-request.model
 import { ProductoService } from '../../../service/producto/producto.service';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
+import { RequestVProducto } from '../../../models/producto/requestVProducto.model';
 
 @Component({
   selector: 'app-mant-producto-register',
@@ -31,6 +32,7 @@ export class MantProductoRegisterComponent implements OnInit {
 
   responseProducto : ResponseProducto [] =[]
   envioProducto : RequestProducto = new RequestProducto()
+  envioSelectProducto : RequestProducto = new RequestVProducto()
 
   constructor
   (
@@ -41,14 +43,23 @@ export class MantProductoRegisterComponent implements OnInit {
     this.myForm = this.fb.group
     (
       {
-      idProducto:[{value:0,disable:true},[Validators.required]],
-      nombreProd: [null,Validators.required],
-      codigoProd: [null,Validators.required],
-      precioUnitario:  [null,Validators.required],
-      idUnidad:  [null,Validators.required],
-      stock:  [null,Validators.required],
-      estadoProducto:  [null,Validators.required],
-      fotografia: [null,Validators.required],
+      idProducto: [null,[Validators.required]],
+      nombreProd:[null,Validators.required],
+      codigoProd:[null,Validators.required],
+      nombreUnidad:[null,Validators.required],
+      nombreModelo:[null,Validators.required],
+      precioUnitario: [null,[Validators.required]] ,
+      stock: [null,[Validators.required]],
+      estadoProducto: [null,Validators.required],
+      idUnidad: [null,[Validators.required]],
+      fotografia:["null",Validators.required],
+      idModelo: [null,[Validators.required]],
+      color:[null,Validators.required],
+      categoria:[null,Validators.required],
+      talla: [null,Validators.required],
+      material:[null,Validators.required],
+      descripcion:[null,Validators.required],
+      idDetalleProducto: [null,[Validators.required]],
       }
     )
   }
@@ -99,6 +110,5 @@ export class MantProductoRegisterComponent implements OnInit {
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
-
 
 }

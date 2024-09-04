@@ -12,7 +12,7 @@ import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
   styleUrls: ['./mant-unidad-resgister.component.css']
 })
 export class MantUnidadResgisterComponent implements OnInit {
-  @Input() title :String=""
+  @Input() title :String="Nueva Unidad "
   @Input() unidad :ResponseUnidad= new ResponseUnidad() 
   @Input() accion :number= 0 
 
@@ -29,24 +29,16 @@ export class MantUnidadResgisterComponent implements OnInit {
   {
     this.myForm = this.fb.group(
       {
-        idOrden: [{value:0,disabled:true},[Validators.required]],
-        idProducto: [null,Validators.required],
-        nombreProd:  [null,Validators.required],
-        fechaOrden:  [null,Validators.required],
-        fechaRequerido:  [null,Validators.required],
-        codigoOrden:  [null,Validators.required],
-        estadoOrden: [null,Validators.required],
-        idCliente: [null,Validators.required],
-        nombreCliente:  [null,Validators.required],
-        precioUnitario: [null,Validators.required],
-        montoTotal: [null,Validators.required],
-        categoria:  [null,Validators.required],
-        cantidad: [null,Validators.required],
+        idUnidad: [{value:0,disabled:true},[Validators.required]],
+        nombreUnidad: [null,Validators.required],
+        descriccion:  [null,Validators.required],
+      
       }
     )
   }
   ngOnInit(): void {
     console.log(this.title)
+
     this.myForm.patchValue(this.unidad);
     this.listarUnidad()
   }
@@ -60,6 +52,7 @@ export class MantUnidadResgisterComponent implements OnInit {
   }
   guardar()
   {
+    debugger;
     this.envioUnidad = this.myForm.getRawValue()
     switch(this.accion)
     {
@@ -77,7 +70,7 @@ export class MantUnidadResgisterComponent implements OnInit {
   }
   crearUnidad()
   {
-    this._unidadService.create(this.unidad).subscribe(
+    this._unidadService.create(this.envioUnidad).subscribe(
       {
         next : () => {
           alert_sucess("Se ha Creado el Modelo correctamente")

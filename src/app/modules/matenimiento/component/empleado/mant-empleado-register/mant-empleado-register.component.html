@@ -1,130 +1,138 @@
-<div class="modal-header ">
-    <h4 class="modal-title pull-left">{{title}}</h4>
-    <!-- (click)="modalRef?.hide()" -->
-    <button (click)="cerrarModal(true)" type="button" class="btn-close close pull-right" aria-label="Close">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button (click)="cerrarModal(true)" type="button" class="btn-close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
     </button>
-</div>
-
-<form [formGroup]="myForm" class="modal-body">
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="idEmpleado">IdEmpleado</label>
-        <input id="idEmpleado" formControlName="idEmpleado" type="text" class="form-control" placeholder="Ingrese el Identificador">
+  </div>
+  
+  <form [formGroup]="myForm" class="modal-body">
+    <div class="row">
+      <!-- ID Empleado -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="idEmpleado">ID Empleado</label>
+          <input id="idEmpleado" formControlName="idEmpleado" type="text" class="form-control" placeholder="Ingrese el Identificador">
+        </div>
       </div>
-      
-    <div class="col-12 mt-3">
+  
+      <!-- Tipo Documento -->
+      <div class="col-md-6 mb-3">
         <div class="form-group">
-            <label for="tipoP">Tipo Documento</label>
-            <select name="" id="tipoP" formControlName="tipoDocumento" class="form-select">
-                <option value="DNI">DNI</option>
-                <option value="RUC">RUC</option>
-            </select>
+          <label for="tipoP">Tipo Documento</label>
+          <select id="tipoP" formControlName="tipoDocumento" class="form-select">
+            <option value="DNI">DNI</option>
+            <option value="RUC">RUC</option>
+          </select>
         </div>
-    </div>
-    <div class="form-group col-md-6">
-        <label for="ndoc">Numero Documento</label>
-        <input type="text" formControlName="numeroDocumento" id="ndoc" class="form-control" >
-    </div>
-    <div class="col-2 mt-5">
-        <div class="d-grid gap-2">
-            <button class="btn-block btn btn-primary btn-sm" ><i class="fa-solid fa-magnifying-glass" (click)="buscar()"></i></button>
-        </div>
-    </div>
-    </div>
-    
-    <div class="col-12 mt-3">
+      </div>
+  
+      <!-- Número Documento -->
+      <div class="col-md-6 mb-3">
         <div class="form-group">
-            <label for="nombrePersona">Nombres</label>
-            <input id="nombrePersona" formControlName="nombrePersona" type="text" class="form-control" placeholder="Ingrese el código">
+          <label for="ndoc">Número Documento</label>
+          <input type="text" formControlName="numeroDocumento" id="ndoc" class="form-control" placeholder="Ingrese el Número de Documento">
         </div>
-        
-    </div>
-    <div class="col-12 mt-3">
+      </div>
+  
+      <!-- Buscar -->
+      <div class="col-md-6 mb-3">
+        <div class="d-grid">
+          <button type="button" (click)="buscar()" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass"></i> Buscar
+          </button>
+        </div>
+      </div>
+  
+      <!-- Nombres -->
+      <div class="col-md-6 mb-3">
         <div class="form-group">
-            <label for="usuario1">Usuario</label>
-            <input id="usuario1" formControlName="usuario1" type="text" class="form-control" placeholder="usuario1">
+          <label for="nombrePersona">Nombres</label>
+          <input id="nombrePersona" formControlName="nombrePersona" type="text" class="form-control" placeholder="Ingrese los Nombres">
         </div>
-        
-    </div>
-    <div class="col-12 mt-3">
+      </div>
+  
+      <!-- Usuario -->
+      <div class="col-md-6 mb-3">
         <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" formControlName="email" type="email" class="form-control" placeholder="Ingrese el código">
+          <label for="usuario1">Usuario</label>
+          <input id="usuario1" formControlName="usuario1" type="text" class="form-control" placeholder="Ingrese el Usuario">
         </div>
-        
-    </div>
-    <div class="col-12 mt-3">
+      </div>
+  
+      <!-- Email -->
+      <div class="col-md-6 mb-3">
         <div class="form-group">
-            <label for="password">Contraseña </label>
-            <input id="password" formControlName="password" type="password" class="form-control" placeholder="Ingrese el código">
+          <label for="email">Email</label>
+          <input id="email" formControlName="email" type="email" class="form-control" placeholder="Ingrese el Email">
         </div>
-        
-    </div>
-    <div class="col-12 mt-3">
+      </div>
+  
+      <!-- Contraseña -->
+      <div class="col-md-6 mb-3">
         <div class="form-group">
-            <label for="apellidoEmp">Apellido Empleado</label>
-            <input id="apellidoEmp" formControlName="apellidoEmp" type="text" class="form-control" placeholder="Ingrese el código">
+          <label for="password">Contraseña</label>
+          <input id="password" formControlName="password" type="password" class="form-control" placeholder="Ingrese la Contraseña">
         </div>
-        <!--
-        <div *ngIf="myForm.get('nombre')?.errors &&  myForm.touched ">
-            <small class="text-danger" *ngIf="myForm.get('nombre')?.hasError('required')"> Campo requerido
-            </small>
-        </div>
-        -->
-    </div>
-    <div class="col-12 mt-3">
+      </div>
+  
+      <!-- Apellido Empleado -->
+      <div class="col-md-6 mb-3">
         <div class="form-group">
-            <label for="tipoPersona">Tipo Persona</label>
-            <select name="" id="tipoPersona" formControlName="tipoPersona" class="form-select">
-                <option value="juridica">Juridica</option>
-                <option value="natural">Natural</option>
-            </select>
+          <label for="apellidoEmp">Apellido Empleado</label>
+          <input id="apellidoEmp" formControlName="apellidoEmp" type="text" class="form-control" placeholder="Ingrese el Apellido">
         </div>
+      </div>
+  
+      <!-- Tipo Persona -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="tipoPersona">Tipo Persona</label>
+          <select id="tipoPersona" [value]="empleado.tipoPersona" formControlName="tipoPersona" class="form-select">
+            <option value="juridica">Juridica</option>
+            <option value="natural">Natural</option>
+          </select>
+        </div>
+      </div>
+  
+      <!-- Teléfono -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="tel">Teléfono</label>
+          <input id="tel" formControlName="telefono" type="text" class="form-control" placeholder="Ingrese el Teléfono">
+        </div>
+      </div>
+  
+      <!-- Código Ubigeo -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="ubigeo">Código Ubigeo</label>
+          <input id="ubigeo" formControlName="codigoUbigeo" type="text" class="form-control" placeholder="Ingrese el Código Ubigeo">
+        </div>
+      </div>
+  
+      <!-- Dirección -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="dir">Dirección</label>
+          <input id="dir" formControlName="direccion" type="text" class="form-control" placeholder="Ingrese la Dirección">
+        </div>
+      </div>
+  
+      <!-- Sueldo -->
+      <div class="col-md-6 mb-3">
+        <div class="form-group">
+          <label for="sueldo">Sueldo</label>
+          <input id="sueldo" formControlName="salario" type="text" class="form-control" placeholder="Ingrese el Sueldo">
+        </div>
+      </div>
+  
+      <!-- Botones -->
+      <div class="col-12 mt-4">
+        <div class="d-flex justify-content-between">
+          <button type="button" (click)="guardar()" class="btn btn-primary">Guardar</button>
+          <button type="button" (click)="cerrarModal(true)" class="btn btn-danger">Cancelar</button>
+        </div>
+      </div>
     </div>
-    
-    <div class="col-12 mt-3">
-        <div class="form-control">
-            <label for="tel">Telefono</label>
-            <input type="text" formControlName="telefono" id="tel" class="form-control">
-        </div>
-    </div>
-    <div class="col-12 mt-3">
-        <div class="form-control">
-            <label for="ubigeo">Codigo Ubigeo</label>
-            <input type="" formControlName="codigoUbigeo" id="ubigeo" class="form-control">
-        </div>
-    </div>
-    <div class="col-12 mt-3">
-        <div class="form-control">
-            <label for="dir">Dirección</label>
-            <input type="text" formControlName="direccion" id="dir" class="form-control">
-        </div>
-    </div>
-    <div class="col-12 mt-3">
-        <div class="form-control">
-            <label for="sueldo">Sueldo</label>
-            <input type="text" formControlName="salario" id="sueldo" class="form-control">
-        </div>
-    </div>
-    <!-- <div class="col-12 mt-3">
-        <div class="form-control">
-            <label for="estado">Estado</label>
-            <select id="estado" formControlName="estado" class="form-select">
-                <option value="1">Activo</option>
-                <option value="0">Inactivo</option>
-            </select>
-        </div>
-    </div> -->
-    <div class="col-6 mt-3">
-        <div class="d-grid gap-2">
-            <button  (click)="guardar()"
-                class="btn-block btn btn-primary btn-sm">GUARDAR</button>
-        </div>
-    </div>
-    <div class="col-6 mt-3">
-        <div class="d-grid gap-2">
-            <button class="btn-block btn btn-danger btn-sm" (click)="cerrarModal(true)">CANCELAR</button>
-        </div>
-    </div>
-</form>
+  </form>
+  

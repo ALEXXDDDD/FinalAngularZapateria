@@ -1,60 +1,100 @@
 <div class="container-fluid mt-4">
-    <div class="card bg-light mb-3">
-        <div class="card-header"><strong>Produccion </strong></div>
+    <div class="btn-group mb-3" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary" (click)="mostrarTabla('conAccion')">Producción Con Ingreso de Producto</button>
+        <button type="button" class="btn btn-secondary" (click)="mostrarTabla('sinAccion')">Lista De Producciones</button>
+    </div>
+    <button class="btn btn-primary" (click)="resgitrarProduccion(modalEditIngresoProducto)">
+        <i class="fas fa-edit" ></i> Registrar Ingreso
+    </button>
+    <div *ngIf="tablaActual === 'conAccion'" class="card bg-light mb-3">
+        <div class="card-header"><strong>Producción Con Ingreso de Producto</strong></div>
         <div class="card-body"></div>
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-
                         <th>Nombre Del Producto</th>
-                        <th>Codigo Del Producto</th>
+                        <th>Código De Producción</th>
+                        <th>Cantidad Faltante</th>
                         <th>Cantidad Producida</th>
                         <th>Meta</th>
-                        <th>Fecha De Inicio</th>
-                        <th>Fecha De Fin</th>
-                       
-                     
-                        
+                        <th>Fecha De Ingreso</th>
+                        <th>Fecha De Finalizacion</th>
                         <th>
-                            <button class="btn btn-primary" (click)="crearProduccion(modalEdit)"><i class="fas fa-plus"></i>
-                                Crear Nueva Produccion
+                            <button class="btn btn-primary" (click)="crearProduccion(modalEdit)">
+                                <i class="fas fa-plus"></i> Crear Nueva Producción
                             </button>
                         </th>
-                       
                     </tr>
                 </thead>
-                <tbody *ngFor="let d of Produccion" >
+                <tbody *ngFor="let d of Produccion">
                     <tr *ngFor="let e of d.produccions">
                         <td>{{e.nombreProd}}</td>
-                
+                        <td>{{e.codigoProduccion}}</td>
+                        <td>{{e.cantidadFaltante}}</td>
+                         <td>{{e.cantidadProduccion}}</td>
                         <td>{{e.meta}}</td>
                         <td>{{e.fechaInicio}}</td>
                         <td>{{e.fechaFin}}</td>
-
                         <td>
-                            <button class="btn btn-primary" (click)="editarProduccion(modalEdit,e)"><i class="fas fa-edit"></i>
-                                Actualizar
+                            <button class="btn btn-primary" (click)="editarProduccion(modalEdit, e)">
+                                <i class="fas fa-edit"></i> Actualizar
                             </button>
-                            <button class="btn btn-danger" ><i class="fas fa-edit"></i>
-                                Eliminar 
+                        
+                            <button class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Eliminar
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
 
+    <div *ngIf="tablaActual === 'sinAccion'" class="card bg-light mb-3">
+        <div class="card-header"><strong>Lista De Producciones</strong></div>
+        <div class="card-body"></div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre Del Producto</th>
+                        <th>Código De Producción</th>
+                        <th>Cantidad Faltante</th>
+                        <th>Meta</th>
+                        <th>Fecha De Inicio</th>
+                        <th>Fecha De Fin</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let d of responseVProduccion">
+                    <tr >
+                        <td>{{d.nombreProd}}</td>
+                        <td>{{d.codigoProduccion}}</td>
+                        <td>{{d.cantidadFaltante}}</td>
+                        <td>{{d.meta}}</td>
+                        <td>{{d.fechaInicio}}</td>
+                        <td>{{d.fechaFin}}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
 <ng-template #modalEdit>
     <app-mant-produccion-register
-    [title]="title"
-    [Produccion]="selectProduccion"
-    [accion]="accionModal"
-    (closeModalEmmit)="getCloseModal($event)"
-    >
+        [title]="title"
+        [Produccion]="selectProduccion"
+        [accion]="accionModal"
+        (closeModalEmmit)="getCloseModal($event)">
     </app-mant-produccion-register>
-  </ng-template>
-
+</ng-template>
+<ng-template #modalEditIngresoProducto>
+    <app-mant-ingreso-producto-register
+        [title]="title"
+        [produccion]="selectProduccion"
+        [accion]="accionModal"
+        (closeModalEmmit)="getCloseModal($event)">
+    </app-mant-ingreso-producto-register>
+</ng-template>
