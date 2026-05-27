@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
+import { ResponseLogin } from 'src/app/models/login-response.models';
 import { RequestVWUsuario } from 'src/app/models/request-vwUsuario-model';
 import { ResponseVUsuario } from 'src/app/models/response-vwUsuario-model';
 import { ResponseUsuario } from 'src/app/modules/matenimiento/models/usuario/responseUsuario.models';
@@ -66,14 +67,26 @@ export class FormularioUsuarioComponent implements OnInit {
   }
   crearUsuario()
   {    
-    this._usuarioService.create(this.usuarioEnvio).subscribe(
+    this._usuarioService.loginRegister(this.usuarioEnvio).subscribe(
               {
-              next : (data:ResponseUsuario) => {
+              next : (data:ResponseLogin) => {
+                if(data.nameRol=="Cliente")
+                  {
+                    // debugger
+                    this._router.navigate([''])
+                    sessionStorage.setItem("token", data.token);
+                    sessionStorage.setItem("nombrePersona",data.persona.nombrePersona);
+                    sessionStorage.setItem("idUsuario",data.vwUsuario
+                    .idUsuario.toString());
+                    sessionStorage.setItem("usuario",data.vwUsuario.usuario);
+                    sessionStorage.setItem("nombreRol",data.nameRol);
+                 
+                  }
                 alert("Se creo el Usuario exitosamente ")
               },  
               complete : () => {
                 alert("Ocurrio un error")
-                this._router.navigate(['dasboard'])
+                this._router.navigate([''])
               },
               error : () => {
                 alert("Ocurrio un error")

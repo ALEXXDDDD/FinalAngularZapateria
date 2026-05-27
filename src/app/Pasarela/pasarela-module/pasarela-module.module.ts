@@ -10,18 +10,22 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.component';
 import { HeaderpasarelaComponent } from './pages/header-pasarela/headerpasarela/headerpasarela.component';
+import { EnvioDomicilioComponent } from 'src/app/Ventas/component/vistas/envio-domicilio/envio-domicilio.component';
+import { MatenimientoModule } from 'src/app/modules/matenimiento/matenimiento.module';
 
 
 
 @NgModule({
   declarations: [
     PagPagoComponent,
+    EnvioDomicilioComponent,
     CheckoutPageComponent,
     HeaderpasarelaComponent
+
   ],
   imports: [
     SharedModule,
-    /**
+    /*
      * TODO: PARA USUAR DOBLE BINDING    
      */
     CommonModule,

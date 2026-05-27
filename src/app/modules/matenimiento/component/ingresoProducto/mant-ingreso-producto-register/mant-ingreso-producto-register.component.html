@@ -1,81 +1,124 @@
-<!-- Modal -->
-<div class="fixed inset-0 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full">
-    <!-- Encabezado del Modal -->
-    <div class="p-4 border-b">
-      <h2 class="text-lg font-semibold text-gray-800">{{ title }}</h2>
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-xl shadow-xl border border-gray-200 max-w-2xl w-full overflow-hidden transition-all transform">
+    
+    <div class="bg-slate-800 px-6 py-4 flex items-center justify-between border-b border-gray-100">
+      <h2 class="text-md font-bold text-white tracking-wide uppercase flex items-center space-x-2">
+        <i class="fas fa-boxes text-blue-400"></i>
+        <span>{{ title }}</span>
+      </h2>
+      <button type="button" (click)="cerrarModal(true)" class="text-slate-400 hover:text-white transition-colors focus:outline-none">
+        <i class="fas fa-times text-lg"></i>
+      </button>
     </div>
 
-    <!-- Contenido del Modal -->
     <div class="p-6">
-      <form [formGroup]="myForm" (ngSubmit)="guardar()">
-        <!-- Campo de selección para la fecha -->
-        <div class="mb-4">
-          <label for="fechaIngreso" class="block text-sm font-medium text-gray-700">Fecha de Ingreso</label>
-          <input
-            type="date"
-            id="fechaIngreso"
-            formControlName="fechaIngreso"
-            class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          />
-        </div>
+      <form [formGroup]="myForm" (ngSubmit)="guardar()" class="space-y-5">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <div>
+            <label for="fechaIngreso" class="block text-xs font-bold text-slate-600 uppercase mb-2">Fecha de Ingreso</label>
+            <input
+              type="date"
+              id="fechaIngreso"
+              formControlName="fechaIngreso"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            />
+          </div>
 
-        <!-- Campo de selección para el código de orden -->
-        <div class="mb-4">
-          <label for="codigoOrden" class="block text-sm font-medium text-gray-700">Código de Orden</label>
-          <select
-            id="codigoOrden"
-            formControlName="codigoProduccion"
-            class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          >
-            <option value="">Seleccione un código de orden</option>
-            <option *ngFor="let e of responseVProduccion" [value]="e.codigoProduccion">
-              {{ e.codigoProduccion }}
-            </option>
-          </select>
-        </div>
-          <!-- Campo de selección para el Nombre Producto -->
-          <div class="mb-4">
-            <label for="nombreProd" class="block text-sm font-medium text-gray-700">Seleccione el Producto</label>
+          <div>
+            <label for="codigoProduccion" class="block text-xs font-bold text-slate-600 uppercase mb-2">Código de Producción</label>
+            <select
+              id="codigoProduccion"
+              formControlName="codigoProduccion"
+              class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            >
+              <option value="" disabled selected>Seleccione un código</option>
+              <option *ngFor="let e of produccion1" [value]="e.codigoProduccion">
+                {{ e.codigoProduccion }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="nombreProd" class="block text-xs font-bold text-slate-600 uppercase mb-2">Seleccione el Producto</label>
             <select
               id="nombreProd"
               formControlName="nombreProd"
-              class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
             >
-              <option value="">Seleccione el Producto del Orden</option>
+              <option value="" disabled selected>Seleccione el producto de la orden</option>
               <option *ngFor="let e of responseProducto" [value]="e.nombreProd">
                 {{ e.nombreProd }}
               </option>
             </select>
           </div>
 
-        <!-- Campo de entrada para la cantidad -->
-        <div class="mb-4">
-          <label for="cantidad" class="block text-sm font-medium text-gray-700">Cantidad</label>
-          <input
-            type="number"
-            id="cantidad"
-            formControlName="cantidad"
-            class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          />
+          <div>
+            <label for="codigoOrden" class="block text-xs font-bold text-slate-600 uppercase mb-2">Código de Orden</label>
+            <select 
+              id="codigoOrden" 
+              class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
+              formControlName="codigoOrden"
+            >
+              <option value="" disabled selected>Seleccione una orden</option>
+              <option *ngFor="let listProducto of responseListOrden" [value]="listProducto.codigoOrden">
+                {{ listProducto.codigoOrden }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="cantidadFaltante" class="block text-xs font-bold text-slate-600 uppercase mb-2">Cantidad Faltante</label>
+            <input
+              type="number"
+              id="cantidadFaltante"
+              formControlName="cantidadFaltante"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            />
+          </div>
+
+          <div>
+            <label for="cantidad" class="block text-xs font-bold text-slate-600 uppercase mb-2">Cantidad a Ingresar</label>
+            <input
+              type="number"
+              id="cantidad"
+              formControlName="cantidad"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            />
+          </div>
         </div>
 
-        <!-- Botones de acción -->
-        <div class="flex justify-end space-x-2 mt-6">
+        <div>
+          <label for="descripcion" class="block text-xs font-bold text-slate-600 uppercase mb-2">Descripción / Observaciones</label>
+          <textarea
+            id="descripcion"
+            rows="2"
+            formControlName="descripcion"
+            placeholder="Añada detalles adicionales sobre el ingreso de producto..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          ></textarea>
+        </div>
+
+        <div class="pt-4 border-t border-gray-100 flex justify-end space-x-2">
           <button
             type="button"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             (click)="cerrarModal(true)"
+            class="inline-flex items-center space-x-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm px-4 py-2 rounded-lg transition-colors duration-150"
           >
-            Cancelar
+            <span>Cancelar</span>
           </button>
+          
           <button
             type="submit"
-            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            [disabled]="estCantidad()"
+            class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2 rounded-lg shadow-sm transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
           >
-            Guardar
+            <i class="fas fa-save"></i>
+            <span>Guardar Ingreso</span>
           </button>
         </div>
+
       </form>
     </div>
   </div>

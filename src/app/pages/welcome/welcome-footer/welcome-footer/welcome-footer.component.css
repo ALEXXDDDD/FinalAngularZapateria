@@ -1,70 +1,19 @@
-/* General Styles */
-body, html {
-    height: 100%;
-    margin: 0;
-  }
-  
-  .wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .content {
-    flex: 1;
-  }
-  
-  .footer {
-    background-color: #000; /* Fondo negro */
-    padding: 20px 0; /* Espaciado vertical */
-  }
-  
-  .footer h5 {
-    color: #fff; /* Títulos en blanco */
-    margin-bottom: 15px;
-  }
-  
-  .footer p,
-  .footer a {
-    color: #fff; /* Texto y enlaces en blanco */
-    margin-bottom: 0;
-  }
-  
-  .footer a:hover {
-    text-decoration: underline; /* Subrayado al pasar el cursor */
-  }
-  
-  .social-icons .btn-social {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .social-icons .btn-social i {
-    margin-right: 8px;
-  }
-  
-  ul.list-unstyled {
-    padding-left: 0;
-  }
-  
-  ul.list-unstyled li {
-    margin-bottom: 10px;
-  }
-  
-  .text-md-end {
-    text-align: right; /* Alinear a la derecha en pantallas medianas en adelante */
-  }
-  
-  .container {
-    max-width: 1140px;
-    margin: 0 auto;
-  }
-  
-  @media (max-width: 767.98px) {
-    .text-md-end {
-      text-align: left; /* Alinear a la izquierda en pantallas pequeñas */
+ /* Efecto hover suave para los enlaces del footer */
+    .footer-link {
+      transition: color 0.3s ease;
     }
-  }
-  
+    .footer-link:hover {
+      color: #0dcaf0 !important; /* Tono celeste claro al pasar el cursor */
+    }
+    /* Estilo personalizado para botones de redes sociales */
+    .btn-social-custom {
+      background-color: #f8f9fa; /* Fondo claro */
+      color: #212529 !important; /* Texto oscuro */
+      border: none;
+      transition: all 0.3s ease;
+    }
+    .btn-social-custom:hover {
+      background-color: #0dcaf0; /* Cambia a celeste en hover */
+      color: #212529 !important;
+      transform: translateY(-3px); /* Pequeño salto animado */
+    }

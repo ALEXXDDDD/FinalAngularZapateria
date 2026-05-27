@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AuthRoutingModule } from './auth-routing.module';
@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module';
 import { FormularioUsuarioComponent } from './components/formulario/formulario-usuario/formulario-usuario.component';
 import { FormularioRecupClaveComponent } from './components/formulario/formulario-recup-clave/formulario-recup-clave.component';
 import { LoadingWidgetComponent } from './components/widgets/loading-widget/loading-widget.component';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 
 
 
@@ -17,9 +18,29 @@ import { LoadingWidgetComponent } from './components/widgets/loading-widget/load
   declarations: [
     LoginComponent,
     FormularioUsuarioComponent,
-    LoadingWidgetComponent,
+
     FormularioRecupClaveComponent
    
+  ],
+  
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('818272992678-cacnetaor3df10ftd9ldih4ft588ajnb.apps.googleusercontent.com')
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('YOUR_FACEBOOK_APP_ID')
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    }
   ],
   imports: [
     CommonModule,

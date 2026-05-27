@@ -1,44 +1,55 @@
 <html >
-  
+  <script src="https://accounts.google.com/gsi/client" async defer></script>  
 
-<!--<a ><img class="omh-login" src="./../../../assets/img/imagen-login.jpg" alt="" href="" [routerLink]="['/contactenos']"></a>-->
-  <body  >
+
+  <!-- <asl-google-signin-button type='icon' size='medium'></asl-google-signin-button>     -->
+<div *ngIf="frmLoadSt == loadStateEnum.None">
+        <!--<a ><img class="omh-login" src="./../../../assets/img/imagen-login.jpg" alt="" href="" [routerLink]="['/contactenos']"></a>-->
+    <body  >
    
       <div class="login">
-        <h1>Login</h1>
-        <div class="col-md-9 col-lg-6 col-xl-5">
-          <img  src="./../../../assets/img/Img_Welcome/images.png" alt="">
+      <h1>Login</h1>
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img  src="./../../../assets/img/Img_Welcome/images.png" alt="">
 
-        </div>
-    
-        <form method="post" [formGroup]="loginForm" >
-          <input formControlName="usuario" type="text" name="u" placeholder="Username" />
-          <input formControlName="password" type="password" name="p" placeholder="Password"/>
-          <a href="">Te olvidaste</a>
-          <br>
-          <a href="" routerLink="register">No tienes Cuenta ?</a>
-          <button [disabled]="loginForm.invalid" (click)="login()" type="submit" class="btn btn-primary btn-block btn-large">Ingresar</button>
-         
-          
-                    
-        </form>      
+      </div>
+  
+      <form method="post" [formGroup]="loginForm" >
+        <input formControlName="usuario" type="text" name="u" placeholder="Username" />
+        <input formControlName="password" type="password" name="p" placeholder="Password"/>
+        <a href="">Te olvidaste</a>
+        <br>
+        <a href="" routerLink="register">No tienes Cuenta ?</a>
+        <button [disabled]="loginForm.invalid" (click)="login()" type="submit" class="btn btn-primary btn-block btn-large">Ingresar</button>
+       
+        
+                  
+      </form>   
+      <!-- <asl-google-signin-button type='icon' size='medium'></asl-google-signin-button>  -->
+      <!-- <div id="g_id_onload"
+           data-client_id="818272992678-0n17gkh83hg7vh176r94rrigdcuqql8i.apps.googleusercontent.com"
+           data-callback="handleCredentialResponse">
+      </div>
+      <div class="g_id_signin" data-type="standard"></div> -->
+      <div id="buttonDiv"></div>
+
       </div >
-        <!-- <div class="button-pag" >
-            <button type="button"   (click)="loginGoogle()"class="btn btn-primary ">
-              Iniciar Sesion con Facebook
-              <i class="fab fa-facebook-f"></i>
-            </button>
-             <br>     
-           <button (click)="loginGoogle()" type="button" class="btn btn-primary btn-floating mx-1">
-              Iniciar Sesion con Google
-              <i class="fab fa-google"></i>
-            </button> -->
-                
+      <!-- <div class="button-pag" >
+          <button type="button"   (click)="loginGoogle()"class="btn btn-primary ">
+            Iniciar Sesion con Facebook
+            <i class="fab fa-facebook-f"></i>
+          </button>
+           <br>     
+         <button (click)="loginGoogle()" type="button" class="btn btn-primary btn-floating mx-1">
+            Iniciar Sesion con Google
+            <i class="fab fa-google"></i>
+          </button> -->
+              
       
-          
-  </body>
-  <div *ngIf="frmLoadSt == loadStateEnum.None">
-      
+            
+    
+        
+      </body>
   </div>
   <div *ngIf="frmLoadSt == loadStateEnum.Loading">
     <app-loading-widget ></app-loading-widget>

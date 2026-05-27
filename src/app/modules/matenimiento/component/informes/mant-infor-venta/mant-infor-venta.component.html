@@ -1,0 +1,154 @@
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <i class="fas fa-shopping-basket text-blue-400"></i>
+          <span>Gestión de Órdenes</span>
+        </h2>
+
+        <div class="inline-flex rounded-lg border border-slate-700 bg-slate-900 p-1 self-start md:self-auto">
+          <button type="button" 
+                  (click)="mostrarListaCompleta = true"
+                  [class.bg-slate-700]="mostrarListaCompleta"
+                  [class.text-white]="mostrarListaCompleta"
+                  class="px-4 py-1.5 text-xs font-bold uppercase rounded-md text-slate-400 hover:text-slate-200 transition-all">
+            Todas las Órdenes
+          </button>
+          <button type="button" 
+                  (click)="mostrarListaCompleta = false"
+                  [class.bg-slate-700]="!mostrarListaCompleta"
+                  [class.text-white]="!mostrarListaCompleta"
+                  class="px-4 py-1.5 text-xs font-bold uppercase rounded-md text-slate-400 hover:text-slate-200 transition-all">
+            Retrasadas / Pendientes
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-100">
+            <tr>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Fecha Orden</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Fecha Requerida</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Estado</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Cliente</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Producto</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Cant.</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Precio U.</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Total</th>
+              <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200" [formGroup]="myForm">
+            <ng-container *ngFor="let d of responseOrden">
+              <tr *ngFor="let e of d.ordens" class="hover:bg-slate-50/70 transition-colors duration-150">
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-medium text-slate-600">{{ formattedFechaOrden(e.fechaOrden) }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-medium text-slate-600">{{ formattedFechaRequerido(e.fechaRequerido) }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs">
+                  <span [class.bg-emerald-100]="e.estadoOrden === 'Entregado' || e.estadoOrden === 'Completo'" [class.text-emerald-800]="e.estadoOrden === 'Entregado' || e.estadoOrden === 'Completo'"
+                        [class.bg-amber-100]="e.estadoOrden === 'Pendiente' || e.estadoOrden === 'Retrasado'" [class.text-amber-800]="e.estadoOrden === 'Pendiente' || e.estadoOrden === 'Retrasado'"
+                        class="inline-flex items-center px-2 py-0.5 rounded-full text-2xs font-bold uppercase tracking-wide">
+                    {{ e.estadoOrden }}
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-semibold text-slate-800">{{ e.nombreCliente }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs text-slate-700 font-medium">{{ e.nombreProd }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-mono text-slate-600">{{ e.cantidad }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-mono text-slate-600">S/. {{ e.precioUnitario }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-bold text-slate-900">S/. {{ e.montoTotal }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-center text-xs">
+                  <button type="button" 
+                          (click)="verInforme(e)" 
+                          class="inline-flex items-center space-x-1 bg-blue-50 text-blue-600 hover:bg-blue-100 px-2.5 py-1.5 rounded font-bold transition-all">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Informe</span>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="space-y-4" *ngIf="mostrarInforme">
+      
+      <div class="flex items-center justify-end space-x-2 bg-slate-100 p-3 rounded-xl border border-gray-200">
+        <button (click)="ocultarInforme()" 
+                class="inline-flex items-center space-x-1 bg-white border border-gray-300 text-slate-700 hover:bg-slate-50 font-semibold text-xs px-4 py-2 rounded-lg shadow-sm transition-colors">
+          <i class="fas fa-times text-slate-400"></i>
+          <span>Cerrar Vista</span>
+        </button>
+        <button (click)="descargarPDF()" 
+                class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-4 py-2 rounded-lg shadow-sm transition-colors">
+          <i class="fas fa-download"></i>
+          <span>Descargar PDF</span>
+        </button>
+      </div>
+
+      <div id="informe" class="bg-white p-8 md:p-12 rounded-xl shadow-xl border border-gray-200 max-w-4xl mx-auto font-sans tracking-tight">
+        
+        <header class="flex flex-col sm:flex-row justify-between items-center border-b-2 border-slate-100 pb-8 gap-4">
+          <div class="text-center sm:text-left">
+            <h1 class="text-3xl font-black text-slate-800 uppercase tracking-tight">Informe de Ventas</h1>
+            <p class="text-sm font-bold text-blue-600">Zapatería "El Buen Paso"</p>
+          </div>
+          <div class="text-center sm:text-right bg-slate-50 px-4 py-2 rounded-lg border border-gray-100">
+            <span class="text-2xs font-bold text-slate-400 uppercase block">Fecha de Emisión</span>
+            <span class="text-sm font-mono font-bold text-slate-700">{{ fechaActual | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </header>
+
+        <section class="py-8 border-b border-gray-100">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Detalles del Cliente</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
+            <div class="space-y-1">
+              <p><strong class="text-slate-800 font-semibold">Nombre:</strong> {{ responseVWOrden.nombrePersona }}</p>
+              <p><strong class="text-slate-800 font-semibold">Teléfono:</strong> {{ responseVWOrden.telefono }}</p>
+              <p><strong class="text-slate-800 font-semibold">Email:</strong> {{ responseVWOrden.email }}</p>
+            </div>
+            <div class="space-y-1">
+              <p><strong class="text-slate-800 font-semibold">Dirección:</strong> {{ responseVWOrden.direccion }}</p>
+              <p><strong class="text-slate-800 font-semibold">Código Ubigeo:</strong> <span class="font-mono">{{ responseVWOrden.codigoUbigeo }}</span></p>
+            </div>
+          </div>
+        </section>
+
+        <section class="py-8">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Resumen de la Venta</h3>
+          <div class="overflow-hidden border border-gray-200 rounded-lg">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-gray-200">
+                  <th class="px-4 py-3 text-xs font-bold text-slate-600 uppercase">Producto</th>
+                  <th class="px-4 py-3 text-xs font-bold text-slate-600 uppercase text-center">Cantidad</th>
+                  <th class="px-4 py-3 text-xs font-bold text-slate-600 uppercase text-right">Precio Unitario</th>
+                  <th class="px-4 py-3 text-xs font-bold text-slate-600 uppercase text-right">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 text-sm text-slate-700">
+                <tr class="hover:bg-slate-50/50">
+                  <td class="px-4 py-4 font-medium text-slate-900">{{ responseVWOrden.nombreProd }}</td>
+                  <td class="px-4 py-4 text-center font-mono text-slate-600">{{ responseVWOrden.cantidad }}</td>
+                  <td class="px-4 py-4 text-right font-mono text-slate-600">S/. {{ responseVWOrden.precioUnitario }}</td>
+                  <td class="px-4 py-4 text-right font-bold text-slate-900">S/. {{ responseVWOrden.montoTotal }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <footer class="border-t border-gray-100 pt-8 text-center space-y-2">
+          <p class="text-sm font-semibold text-slate-700">Gracias por su compra en Zapatería "El Buen Paso".</p>
+          <p class="text-xs text-slate-400">Para soporte técnico o consultas sobre su comprobante, llame al <span class="font-semibold text-slate-600">999-999-999</span> o escríbanos a <span class="font-semibold text-slate-600">contacto@zapateriaejemplo.com</span></p>
+        </footer>
+
+      </div>
+    </div>
+
+  </div>
+</div>

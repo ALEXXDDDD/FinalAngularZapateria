@@ -1,81 +1,88 @@
-<div class="modal-header">
-    <h4 class="modal-title pull-left">{{title}}</h4>
-    <button type="button" class="btn-close close pull-rigth">
-        <span class="visually-hidden">&times;</span>
+<div class="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden max-w-3xl mx-auto">
+  
+  <div class="bg-slate-800 px-6 py-4 flex items-center justify-between border-b border-gray-200">
+    <h3 class="text-lg font-bold text-white tracking-wide uppercase">
+      {{ title }}
+    </h3>
+    <button type="button" class="text-slate-400 hover:text-white transition-colors duration-150 focus:outline-none">
+      <i class="fas fa-times text-xl"></i>
     </button>
-</div>
-<div class="modal-body" >
-    <form action="" [formGroup]="myForm">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group" >
-                    <label for=""> CODIGO DE PRODUCCION</label>
-                    <input type="text" name="" id="" formControlName="codigoProduccion">
-                  
-                </div>
-                <div class="form-group" >
-                    <label for=""> ID DE PRODUCCION</label>
-                    <input type="number" name="" id="" formControlName="idProduccion">
-                  
-                </div>
-                <div class="form-group" >
-                    <label for=""> ID DE PRODUCCION</label>
-                    <input type="number" name="" id="" formControlName="idUnidad">
-                  
-                </div>
-            </div>
-            <div class="col-4" >
-                <label for="">Nombres del Producto</label>
-                <div class="form-group" >
-                    <select name="" id=""  class="form-select" formControlName="nombreProd">
-                        <option *ngFor="let ma of responseProducto "  value={{ma.nombreProd}}>{{ma.nombreProd}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group" *ngFor="let ma of responseUnidad">
-                    <label for="">Nombre de la  UNIDAD</label>
-                    <select name="" id=""  class="form-select" formControlName="nombreUnidad">
-                        <option value={{ma.idUnidad}}  >{{ma.nombreUnidad}}</option>
-                    </select>
-                </div>
-            </div>
-           <div>
-            <select class="form-select" name="" id="" formControlName="estadoProduccion"  >
-                <option   value="Activo"  formControlName="estadoProduccion"> Activo </option>
-                <option   value="InacActivo"  formControlName="estadoProduccion"> InacActivo </option>
-            </select>
-           </div>
-           <input type="number" formControlName="meta" placeholder="Meta"> 
-        </div>
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Cantidad Que Debe Ingresar </label>
-                    <input type="number" class="form-control"  formControlName="cantidadFaltante">
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Fecha iNICIO</label>
-                    <input type="date" class="form-control" formControlName="fechaInicio">
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Fecha FIN</label>
-                    <input type="date" class="form-control" formControlName="fechaFin">
-                </div>
-            </div>
-        </div>
-       
-            <button type="button" class="btn btn-primary btn-sm" (click)="guardar()">
-                GUARDAR
-            </button>
-            <button type="button" class="btn btn-danger btn-sm" >
-                Cancelar
-            </button>
-        
-    </form>
-</div>
+  </div>
 
+  <div class="p-6">
+    <form [formGroup]="myForm">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Código de Producción</label>
+          <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="codigoProduccion">
+        </div>
+
+        <div>
+          <label for="productoSelect" class="block text-xs font-bold text-slate-600 uppercase mb-2">Seleccione la Orden</label>
+          <select id="productoSelect" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="codigoOrden">
+            <option value="" disabled selected>Seleccione un producto</option>
+            <option *ngFor="let listProducto of responseListOrden" [value]="listProducto.codigoOrden">
+              {{ listProducto.codigoOrden }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Nombres del Producto</label>
+          <select class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="nombreProd">
+            <option *ngFor="let ma of responseProducto" [value]="ma.nombreProd">
+              {{ ma.nombreProd }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Nombre de la Unidad</label>
+          <select class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="nombreUnidad">
+            <option *ngFor="let ma of responseUnidad" [value]="ma.nombreUnidad">
+              {{ ma.nombreUnidad }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Estado de Producción</label>
+          <select class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="estadoProduccion">
+            <option value="Activo">Activo</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Meta</label>
+          <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="meta">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Fecha Inicio</label>
+          <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="fechaInicio">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Fecha Fin</label>
+          <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="fechaFin">
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <label for="descripcion" class="block text-xs font-bold text-slate-600 uppercase mb-2">Descripción</label>
+        <textarea id="descripcion" rows="3" formControlName="descripcion" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Escriba los detalles de la producción..."></textarea>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-end space-x-2">
+        <button type="button" class="inline-flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm px-4 py-2 rounded-lg transition-colors duration-150">
+          <span>Cancelar</span>
+        </button>
+        <button type="button" (click)="guardar()" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2 rounded-lg shadow-sm transition-colors duration-150">
+          <i class="fas fa-save"></i>
+          <span>Guardar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

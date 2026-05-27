@@ -28,10 +28,10 @@ export class MantModeloResgisterComponent implements OnInit {
   {
     this.myForm = this.fb.group
     ({
-      idModelo: [null,Validators.required],
+      idModelo: [{value:0,disabled:true},Validators.required],
       nombreModelo: [null,Validators.required] ,
       codigoModelo: [null,Validators.required] ,
-      descripcionModelo: [null,Validators.required] ,
+      descripModelo: [null,Validators.required] ,
     })
   }
   guardar()

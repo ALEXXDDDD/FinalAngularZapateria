@@ -11,6 +11,9 @@ import { ProductoService } from '../../../service/producto/producto.service';
 import { ResponseProducto } from '../../../models/producto/producto-response.model';
 import { UnidadService } from '../../../service/unidad/unidad.service';
 import { ResponseUnidad } from '../../../models/unidad/p/unidad-response.model';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-mant-register-orden',
@@ -24,21 +27,25 @@ export class MantRegisterOrdenComponent implements OnInit {
 
   @Output() closeModalEmmit = new EventEmitter<boolean>();
   myForm: FormGroup;
+  mostrarInforme: boolean = false;
   responseProducto: ResponseProducto[] = [];
   responseOrden : ResponseListOrden[] = []
   responseUnidad: ResponseUnidad[] = [];
+  fechaActual: Date = new Date();
   responseVwCliente: ResponseVWCliente[] = [];
   envioOrder: RequestVWOrden = new RequestVWOrden();
+  responseVWOrden: ResponseListOrden = new ResponseListOrden();
 
   constructor(
     private fb: FormBuilder,
     private _clienteService: ClienteService,
     private _ordenService: OrdenService,
+    private datetTipe:DatePipe,
     private _productoService: ProductoService,
     private _unidadService: UnidadService
   ) {
     const dataNow = new Date();
-    const idUsuario = sessionStorage.getItem('idUsuario');
+    const idUsuario = parseInt(sessionStorage.getItem('idUsuario') || '0', 10);
     this.myForm = this.fb.group({
       idOrden: [{ value: 0, disabled: true }, [Validators.required]],
       nombreProd: [null, Validators.required],
@@ -46,12 +53,13 @@ export class MantRegisterOrdenComponent implements OnInit {
       fechaRequerido: [null, Validators.required],
       codigoOrden: [null, Validators.required],
       estadoOrden: ['Activo', Validators.required],
+      stock:[{ value: null, disabled: true }, Validators.required],
       nombreCliente: [null, Validators.required],
       precioUnitario: [{ value: null, disabled: true }, Validators.required],
       montoTotal: [{ value: null, disabled: true }, Validators.required],
       cantidad: [null, Validators.required],
       nombreUnidad: [null, Validators.required],
-      idUsuario: [{ value: idUsuario }, [Validators.required]],
+      idUsuario: [idUsuario , [Validators.required]],
     });
   }
 
@@ -73,8 +81,15 @@ export class MantRegisterOrdenComponent implements OnInit {
     this.myForm.get('nombreUnidad')?.valueChanges.subscribe(() => {
       this.actualizarMontoTotal();
     });
+    this.myForm.get('nombreProd')?.valueChanges.subscribe(value => {
+      this.actualizarStock(value);
+    });
   }
-
+  estCantidad(): boolean {
+    
+    const cantidadFaltante = this.myForm.get('stock')?.value;
+    return cantidadFaltante === 0;
+  }
   listarProductos() {
     this._productoService.getAll().subscribe({
       next: (data: ResponseProducto[]) => {
@@ -85,7 +100,7 @@ export class MantRegisterOrdenComponent implements OnInit {
       }
     });
   }
-
+ 
   listarUnidad() {
     this._unidadService.getAll().subscribe({
       next: (data: ResponseUnidad[]) => { this.responseUnidad = data; }
@@ -110,6 +125,13 @@ export class MantRegisterOrdenComponent implements OnInit {
     }
     this.actualizarMontoTotal();
   }
+  actualizarStock(nombreProd: string | null) {
+    const producto = this.responseProducto.find(p => p.nombreProd === nombreProd);
+    if (producto) {
+      this.myForm.get('stock')?.setValue(producto.stock, { emitEvent: false });
+    }
+
+  }
 
   actualizarMontoTotal() {
     const cantidad = this.myForm.get('cantidad')?.value || 0;
@@ -124,23 +146,65 @@ export class MantRegisterOrdenComponent implements OnInit {
     this.myForm.get('montoTotal')?.setValue(montoTotal, { emitEvent: false });
   }
 
-  guardar() {
-    if (this.myForm.valid) {
-      this.envioOrder = this.myForm.value;
-      // Realiza la operación de guardado aquí
-      // Ejemplo: this._ordenService.save(this.envioOrder).subscribe();
-      alert_sucess("Orden guardada exitosamente.");
-      this.cerrarModal(true);
-    } else {
-      alert_error("Por favor, complete todos los campos requeridos.");
+ crearOrden()
+ {
+  this._ordenService.create(this.envioOrder).subscribe(
+    {
+      next:()=>{ alert_sucess("Se creo correctamente el orde") },
+      error:()=>{ alert_error("No se pudo crear el Orden")},
+      complete:()=>{ this.cerrarModal(true)}
     }
-  }
-
-  cerrarModal(resultado: boolean) {
-    this.closeModalEmmit.emit(resultado);
-  }
-
-  agregarMasProducto() {
+  )
+ }
+  guardar()
+  {
+    debugger
+   
+      this.envioOrder = this.myForm.getRawValue()
+      switch(this.accion)
+      {
+        case AcciontConstants.crear: 
+          this.crearOrden()
+          break;
+        case AcciontConstants.editar: 
+        this.actualizarOrde()
+          break;
+        case AcciontConstants.eliminar: 
+          break;
+        
+      
+      
+        
+      }
+      console.log(this.myForm.getRawValue())
+    }
+   actualizarOrde()
+   {
+    this._ordenService.update(this.envioOrder).subscribe(
+      {
+        next:()=>{alert_sucess("Se actualizo")},
+        error:()=>{},
+        complete:()=>{}
+      }
+    )
+   }
+    cerrarModal(res:boolean)
+    {
+      this.closeModalEmmit.emit(res)
+      //true Hubo modificacion en la base de datos
+      
+  
+      //false => No hubo modificacion de la base de datos
+    }
+    agregarMasProducto() {
     // Lógica para agregar más productos
-  }
+    }
+    formattedFechaOrden(fecha: string | null): string {
+      return this.datetTipe.transform(fecha ?? '', 'yyyy-MM-dd') || '';
+    }
+    
+    formattedFechaRequerido(fecha: string | null): string {
+      return this.datetTipe.transform(fecha ?? '' , 'yyyy-MM-dd')||'';
+    }
+  
 }

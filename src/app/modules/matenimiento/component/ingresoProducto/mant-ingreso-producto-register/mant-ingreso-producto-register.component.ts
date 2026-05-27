@@ -9,6 +9,10 @@ import { ResponseVProduccion } from '../../../models/Produccion/responseProducci
 import { alert_error } from 'src/app/funcionts/general.funcionts';
 import { ResponseProducto } from '../../../models/producto/producto-response.model';
 import { ProductoService } from '../../../service/producto/producto.service';
+import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
+import { ResponseVWProduccion } from '../../../models/Produccion/produccion-reponseVW.model';
+import { OrdenService } from '../../../service/orden/orden.service';
+import { ResponseListOrden } from '../../../models/orden/orden-request.model';
 
 @Component({
   selector: 'app-mant-ingreso-producto-register',
@@ -24,8 +28,11 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
 
   // Variables
   Produccion: ResponseProduccion[] = [];
-  responseProducto : ResponseProducto []=[]
-  productoEnviar : ResponseProducto = new ResponseProducto ()
+  responseProducto: ResponseProducto[] = [];
+  produccion1: ResponseVWProduccion[] = [];
+  responseListOrden : ResponseListOrden[]=[]
+  nombreRol: RequestFiltroNombre = new RequestFiltroNombre();
+  productoEnviar: ResponseProducto = new ResponseProducto();
   requestIngresoProducto: RequestIngresoProducto = new RequestIngresoProducto();
   responseVProduccion: ResponseVProduccion[] = [];
   myForm: FormGroup;
@@ -33,55 +40,99 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private produccionService: ProduccionService,
-    private _productoService : ProductoService,
+    private _OrdenService: OrdenService,
+    private _productoService: ProductoService,
     private ingresoProductoService: IngresoProductoService
   ) {
     this.myForm = this.fb.group({
       idProduccion: [{ value: 0, disabled: true }, Validators.required],
       idProducto: [{ value: 0, disabled: true }, Validators.required],
-      nombreProd:[null,Validators.required],
+      nombreProd: [null, Validators.required],
       cantidad: [null, Validators.required],
+      cantidadFaltante: [{ value: null, disabled: true }, Validators.required],
       fechaIngreso: [null, Validators.required],
+      descripcion: [null, Validators.required],
       codigoProduccion: [null, Validators.required],
+      codigoOrden: [null, Validators.required],
       idUnidad: [{ value: 0, disabled: true }, Validators.required],
       idIngresoProducto: [{ value: 0, disabled: true }, Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.listarProductos()
+    this.listarProductos();
     this.inicializarDatos();
+    this.estCantidad()
+    this.filtrarOrdenAcIna('Activo');
+    
+    this.myForm.get('codigoProduccion')?.valueChanges.subscribe(value => {
+      this.actualizarCantidad(value);
+    });
+  }
+  filtrarOrdenAcIna(nombre:string)
+  {
+
+
+
+    this.nombreRol.nombre = nombre;
+
+    this._OrdenService.genericFiltroOrdenActivo(this.nombreRol).subscribe({
+      next: (data: ResponseListOrden[]) => {
+        this.responseListOrden = data; // Actualiza la lista con la respuesta filtrada
+        console.log("Orden Activo",data);
+      },
+      error: (error: any) => {
+        console.error('Error al filtrar roles', error);
+      },
+      complete: () => { }
+    });
+  }
+  estCantidad(): boolean {
+    
+    const cantidadFaltante = this.myForm.get('cantidadFaltante')?.value;
+    return cantidadFaltante === 0;
   }
 
+
   inicializarDatos(): void {
-    this.listarProduccion();
+    this.listarProduccion("Activo");
     this.listarProduccionSinAcciones();
     this.myForm.patchValue(this.requestIngresoProducto);
   }
 
-  listarProduccion(): void {
-    this.produccionService.getAll().subscribe({
-      next: (data: ResponseProduccion[]) => {
-        this.Produccion = data;
+  actualizarCantidad(codProduccion: string): void {
+    
+    const produccion = this.produccion1.find(p => p.codigoProduccion === codProduccion);
+    if (produccion) {
+      this.myForm.get('cantidadFaltante')?.setValue(produccion.cantidadFaltante, { emitEvent: false });
+      this.myForm.get('codigoOrden')?.setValue(produccion.codigoOrden, { emitEvent: false });
+    }
+  }
+
+  listarProduccion(nombre:string): void {
+    this.nombreRol.nombre = nombre;
+    this.produccionService.genericFiltroProduccionActivo(this.nombreRol).subscribe({
+      next: (data: ResponseVWProduccion[]) => {
+        this.produccion1 = data;
       },
       error: () => {
         this.mostrarError("No se pudo cargar la data de producción.");
       }
     });
   }
-  listarProductos()
-  {
+
+  listarProductos(): void {
     this._productoService.getAll().subscribe({
-      next: (data:ResponseProducto[])=>{
-        this.responseProducto = data 
-        console.log("Productos",data)
+      next: (data: ResponseProducto[]) => {
+        this.responseProducto = data;
       },
-      error: (error)=>{
-        alert("Ocurrio Un error ")
-      },      
-      complete: ()=>{}
-    })
+      error: (error) => {
+        alert("Ocurrió un error");
+      },
+      complete: () => { }
+    });
   }
+
   listarProduccionSinAcciones(): void {
     this.produccionService.GetProduccion().subscribe({
       next: (data: ResponseVProduccion[]) => {
@@ -95,21 +146,23 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
 
   guardar(): void {
     debugger
-    if (this.myForm.valid) {
-      this.requestIngresoProducto = this.myForm.getRawValue();
-      switch (this.accion) {
-        case AcciontConstants.crear:
-          this.crearIngresoProducto();
-          break;
-        case AcciontConstants.editar:
-          this.crearIngresoProducto();
-          break;
-        case AcciontConstants.eliminar:
-          this.eliminarIngresoProducto();
-          break;
-      }
-    } else {
-      this.mostrarError("Por favor, complete todos los campos obligatorios.");
+    if (this.myForm.get('cantidadFaltante')?.value === 0) {
+      // Mostrar un mensaje de error
+      this.mostrarError("La cantidad faltante es 0. No se puede proceder.");
+      return; // No continuar con la creación
+    }
+    
+    this.requestIngresoProducto = this.myForm.getRawValue();
+    switch (this.accion) {
+      case AcciontConstants.crear:
+        this.crearIngresoProducto();
+        break;
+      case AcciontConstants.editar:
+        this.crearIngresoProducto();
+        break;
+      case AcciontConstants.eliminar:
+        this.eliminarIngresoProducto();
+        break;
     }
   }
 

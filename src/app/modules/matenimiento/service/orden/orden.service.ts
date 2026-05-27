@@ -9,6 +9,8 @@ import { ResponseOrden } from '../../models/orden/orden-response.model';
 import { RequestFiltroNombre } from '../../models/requestFiltroNombre.model';
 import { Observable } from 'rxjs';
 import { ResponseListOrden } from '../../models/orden/orden-request.model';
+import { MercadoPagoRequest } from './mercadoPagoRequest';
+import { MercadoPagoResponse } from './mercadoPagoResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +25,13 @@ export class OrdenService extends CrudService<RequestVWOrden,ResponseOrden> {
    genericFiltrol(request:RequestFiltroNombre):Observable<ResponseListOrden[]>
    {
        return this._http.post<ResponseListOrden[]>(`${this.url_service}flitro`,request)
+   }
+   genericFiltroOrdenActivo(request:RequestFiltroNombre):Observable<ResponseListOrden[]>
+   {
+       return this._http.post<ResponseListOrden[]>(`${this.url_service}filtro-activos`,request)
+   }
+   serviceGenerarPreferencia(mercadoRequest:MercadoPagoRequest):Observable<MercadoPagoResponse[]>
+   {
+    return this._http.post<MercadoPagoResponse[]>(`${this.url_service}mercadoPago`,mercadoRequest)
    }
 }

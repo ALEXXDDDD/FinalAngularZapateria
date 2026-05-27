@@ -4,6 +4,8 @@ import { ResponseProveedor } from '../../models/proveedor/responseProveedor.mode
 import { HttpClient } from '@angular/common/http';
 import { urlConstants } from 'src/app/constants/url.constants';
 import { CrudService } from 'src/app/modules/shared/services/crud.service';
+import { Observable } from 'rxjs';
+import { ResponseVWProveedor } from '../../models/proveedor/responseVWProveedor.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,4 +18,10 @@ export class ProveedorService  extends CrudService<RequestVWProveedor,ResponsePr
     
       super(http,urlConstants.Proveedor)
    }
+   filtroProductoAcabado():Observable<ResponseVWProveedor[]>
+   {
+       return this._http.get<ResponseVWProveedor[]>(`${this.url_service}/productos-acabados`)
+   }
+
+
 }

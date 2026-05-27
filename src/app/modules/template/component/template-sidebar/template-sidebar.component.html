@@ -2,6 +2,7 @@
   <div class="flex items-center justify-center h-20 border-b border-gray-700">
     <img src="./../../../assets/img/Img_Welcome/images.png" alt="Logo" class="h-12 w-12">
   </div>
+  <li><a href="dasboard/mantenimiento/inicioSidebar" class="block py-2">Inicio</a></li>
   <ul class="flex-1 overflow-y-auto">
     <li class="border-b border-gray-700">
       <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(0)">
@@ -10,6 +11,7 @@
           <i class="fas fa-angle-down"></i>
         </span>
       </button>
+
       <ul [class.hidden]="!dropdowns[0]" class="pl-8 bg-gray-700">
         <li><a href="dasboard/mantenimiento/rol" class="block py-2">Roles</a></li>
         <li><a href="dasboard/mantenimiento/empleado" class="block py-2">Empleados</a></li>
@@ -40,7 +42,6 @@
       </button>
       <ul [class.hidden]="!dropdowns[2]" class="pl-8 bg-gray-700">
         <li><a href="dasboard/mantenimiento/producto" class="block py-2">Productos</a></li>
-        <li><a href="dasboard/mantenimiento/produccion" class="block py-2">Ingreso de Producto</a></li>
         <li><a href="dasboard/mantenimiento/modelo" class="block py-2">Modelos de Zapatos</a></li>
       </ul>
     </li>
@@ -54,7 +55,7 @@
       </button>
       <ul [class.hidden]="!dropdowns[3]" class="pl-8 bg-gray-700">
         <li><a href="dasboard/mantenimiento/credito" class="block py-2">Créditos Disponibles</a></li>
-        <li><a href="#" class="block py-2">Informe de Crédito</a></li>
+        <!-- <li><a href="#" class="block py-2">Informe de Crédito</a></li> -->
       </ul>
     </li>
     <!-- Materiales -->
@@ -68,7 +69,6 @@
       <ul [class.hidden]="!dropdowns[4]" class="pl-8 bg-gray-700">
         <li><a href="dasboard/mantenimiento/salidaMaterial" class="block py-2">Salida Materiales</a></li>
         <li><a href="dasboard/mantenimiento/material" class="block py-2">Materiales</a></li>
-        <li><a href="dasboard/mantenimiento/producto" class="block py-2">Productos</a></li>
       </ul>
     </li>
     <!-- Informes -->
@@ -80,9 +80,23 @@
         </span>
       </button>
       <ul [class.hidden]="!dropdowns[5]" class="pl-8 bg-gray-700">
-        <li><a href="#" class="block py-2">Informe de Ventas</a></li>
-        <li><a href="#" class="block py-2">Informe de Productos</a></li>
-        <li><a href="#" class="block py-2">Informe de Materiales</a></li>
+        <li><a href="dasboard/mantenimiento/informeVentas" class="block py-2">Informe de Ventas</a></li>
+        <!-- <li><a href="#" class="block py-2">Informe de Productos</a></li>
+        <li><a href="#" class="block py-2">Informe de Materiales</a></li> -->
+      </ul>
+    </li>
+    <!-- Informes -->
+    <li class="border-b border-gray-700">
+      <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(6)">
+        Proveedor
+        <span class="float-right">
+          <i class="fas fa-angle-down"></i>
+        </span>
+      </button>
+      <ul [class.hidden]="!dropdowns[6]" class="pl-8 bg-gray-700">
+        <li><a href="dasboard/mantenimiento/proveedorlist" class="block py-2">Proveedor</a></li>
+        <li><a href="dasboard/mantenimiento/proveedor" class="block py-2">Pedidos Proveedores</a></li>
+        <li><a href="#" class="block py-2">Comprobante Proveedor</a></li>
       </ul>
     </li>
   </ul>

@@ -41,6 +41,7 @@ export class MantRegisterProveedorComponent  {
     (
       {
         idProvedor: [{value:0,disabled:true},[Validators.required]],
+        idPersona:[{value:0,disabled:true},[Validators.required]],
         nombrePersona: [null,Validators.required],
         tipoPersona: [null,Validators.required],
         tipoDocumento:  [null,Validators.required],

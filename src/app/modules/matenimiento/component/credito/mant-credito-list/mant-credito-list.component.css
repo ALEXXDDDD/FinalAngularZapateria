@@ -1,0 +1,9 @@
+/* estilos personalizados para el componente */
+.container {
+    max-width: 800px;
+  }
+  
+  .table th, .table td {
+    text-align: center;
+  }
+  

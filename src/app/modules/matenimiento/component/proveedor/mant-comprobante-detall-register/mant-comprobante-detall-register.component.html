@@ -1,0 +1,64 @@
+<div class="max-w-lg mx-auto mt-10 p-8 bg-gray-900 text-white rounded-xl shadow-2xl">
+  <h2 class="text-3xl font-semibold mb-6 text-white text-center">Registro de Entrada de Materiales</h2>
+  
+  <form [formGroup]="myForm">
+    <!-- Nombre del Material -->
+    <div class="mb-6">
+      <label for="nombreMaterial" class="block text-lg font-medium text-gray-300 mb-2">Nombre del Material</label>
+      <select  formControlName="nombreMaterial"  id="nombreMaterial" name="nombreMaterial" class="mt-1 p-3 block w-full bg-gray-800 border border-gray-700 rounded-lg shadow-md focus:ring-blue-500 focus:border-blue-500 text-white text-sm transition duration-300 ease-in-out" required>
+        <option value="">Selecciona el Material</option>
+        <option *ngFor="let e of responseWMaterial" value="{{e.nombreMaterial}}">{{e.nombreMaterial}}</option>
+      </select>
+    </div>
+
+    <!-- Código Comprobante -->
+    <div class="mb-6">
+      <label for="codigoComprobante" class="block text-lg font-medium text-gray-300 mb-2">Código Comprobante</label>
+      <select formControlName="codigoComprobante" id="codigoComprobante" name="codigoComprobante" class="mt-1 p-3 block w-full bg-gray-800 border border-gray-700 rounded-lg shadow-md focus:ring-blue-500 focus:border-blue-500 text-white text-sm transition duration-300 ease-in-out" required>
+        <option value="">Selecciona el Proveedors</option>
+        <option *ngFor="let d of responseVWProveedor" value="{{d.codigoComprobante}}">{{d.codigoComprobante}}</option>
+      </select>
+    </div>
+
+    <!-- Cantidad -->
+    <div class="mb-6">
+      <label for="quantity" class="block text-lg font-medium text-gray-300 mb-2">Cantidad</label>
+      <input
+        type="number"
+        id="quantity"
+        formControlName="cantidad"
+        class="mt-1 block w-full p-3 bg-gray-800 border border-gray-700 rounded-lg shadow-md focus:ring-blue-500 focus:border-blue-500 text-white text-sm transition duration-300 ease-in-out"
+        placeholder="Ingrese la cantidad"
+      />
+    </div>
+
+    <!-- Precio Unitario -->
+    <div class="mb-6">
+      <label for="supplier" class="block text-lg font-medium text-gray-300 mb-2">Precio Unitario</label>
+      <input
+        type="text"
+        id="supplier"
+        formControlName="precioUnitario"
+        class="mt-1 block w-full p-3 bg-gray-800 border border-gray-700 rounded-lg shadow-md focus:ring-blue-500 focus:border-blue-500 text-white text-sm transition duration-300 ease-in-out"
+        placeholder="Ingrese el precio unitario"
+      />
+    </div>
+
+    <!-- Botones -->
+    <div class="flex justify-end">
+      <button
+        type="reset"
+        class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded-lg mr-3 transition duration-300 ease-in-out"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        (click)="guardar()"
+        class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-5 rounded-lg transition duration-300 ease-in-out"
+      >
+        Registrar Entrada
+      </button>
+    </div>
+  </form>
+</div>

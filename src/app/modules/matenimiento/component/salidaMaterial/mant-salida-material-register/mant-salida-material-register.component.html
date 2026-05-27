@@ -1,59 +1,70 @@
 <div class="modal-header">
-    <h4 class="modal-title pull-left">{{title}}</h4>
-    <button type="button" class="btn-close close pull-rigth">
-        <span class="visually-hidden">&times;</span>
+    <h4 class="modal-title">{{title}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="cerrarModal(false)">
+        <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<div class="modal-body" >
-    <form action="" [formGroup]="myForm">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group" >
-                    <label for="">Selecciona el Coigo de Produccion</label>
-                    <input type="text" name="" id="" formControlName="idProduccion">
-                  
-                </div>
-            </div>
-            <div class="col-4" >
-                <label for="">Nombres del Material</label>
-                <div class="form-group" >
-                    <select name="" id=""*ngFor="let ma of response"  class="form-select" formControlName="nombreMaterial">
-                        <option *ngFor="let mat of ma.material" value="{{mat.nombreMaterial}}">{{mat.nombreMaterial}}</option>
+
+<div class="modal-body">
+    <form [formGroup]="myForm">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="idProduccion">Código de Producción Activas</label>
+                    <select id="codigoProduccion" class="form-select" formControlName="codigoProduccion">
+                        <option *ngFor="let mat of responseProduccion" [value]="mat.codigoProduccion">
+                            {{mat.codigoProduccion}}
+                        </option>
                     </select>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="form-group" *ngFor="let ma of responseUnidad">
-                    <label for="">ID UNIDAD</label>
-                    <select name="" id=""  class="form-select" formControlName="nombreUnidad">
-                        <option value="{{ma.idUnidad}}"  >{{ma.idUnidad}}</option>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="nombreMaterial">Nombre del Material</label>
+                    <select id="nombreMaterial" class="form-select" formControlName="nombreMaterial">
+                        <option *ngFor="let mat of responseVWMaterial" [value]="mat.nombreMaterial">
+                            {{mat.nombreMaterial}}
+                        </option>
                     </select>
                 </div>
             </div>
-           
-            
-        </div>
-        <div class="row">
-            <div class="col-4">
+
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label for="">Cantidad Que Debe Ingresar </label>
-                    <input type="number" class="form-control"  formControlName="cantidad">
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Fecha Que Va Retirar</label>
-                    <input type="date" class="form-control" formControlName="fechaSalida">
+                    <label for="stock">Stock Disponible</label>
+                    <input type="number" class="form-control" id="stock" formControlName="stock" readonly>
                 </div>
             </div>
         </div>
-       
-            <button type="button" class="btn btn-primary btn-sm" (click)="guardar()">
-                GUARDAR
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="cantidad">Cantidad a Retirar</label>
+                    <input 
+                    [max]="myForm.get('stock')?.value"
+                    [min]="1"
+                    
+                    type="number" class="form-control" id="cantidad" formControlName="cantidad">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="fechaSalida">Fecha del Retiro</label>
+                    <input type="date" class="form-control" id="fechaSalida" formControlName="fechaSalida">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary me-2" [disabled]="estCantidad()" (click)="guardar()">
+                Guardar
             </button>
-            <button type="button" class="btn btn-danger btn-sm" >
+            <button type="button" class="btn btn-danger" (click)="cerrarModal(false)">
                 Cancelar
             </button>
-        
+        </div>
     </form>
 </div>

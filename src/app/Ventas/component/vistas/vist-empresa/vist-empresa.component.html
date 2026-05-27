@@ -1,32 +1,54 @@
-<app-welcome-header></app-welcome-header>
 
-
-<div class="container mt-5">
-    <div class="row">
-      <div class="col-md-6">
-        <img src="./../../../../../assets/img/Empresa.jpg" alt="Imagen de la Empresa" class="img-fluid rounded">
-      </div>
-      <div class="col-md-6">
-        <h2 class="mb-3">Sobre la Empresa</h2>
-        <p class="lh-sm">
-          La empresa D Lopez se dedica a la fabricación de calzados, ofreciendo una variedad de modelos como urbanos, tacos, zapatos y bailarinas. La empresa realiza ventas mayoristas a tiendas especializadas en calzado, especialmente en Huancayo, contando con un listado de clientes definidos.
-        </p>
-        <div class="mt-4">
-          <button class="btn btn-primary me-2">
-            Facebook
-          </button>
-          <button class="btn btn-secondary me-2">
-            Instagram
-          </button>
-          <button class="btn btn-info">
-            Twitter
-          </button>
+<div class="container my-5 py-4">
+    <div class="row align-items-center g-4">
+      
+      <div class="col-lg-6">
+        <div class="position-relative overflow-hidden rounded-4 shadow-lg">
+          <img src="./../../../../../assets/img/Empresa.jpg" alt="Instalaciones de la Empresa D'Lopez" class="img-fluid w-100 transition-img" style="object-fit: cover; max-height: 400px;">
         </div>
       </div>
+      
+      <div class="col-lg-6">
+        <div class="bg-dark text-light p-4 p-md-5 rounded-4 shadow-lg border-start border-4 border-info">
+          
+          <h2 class="h1 fw-bold mb-3 text-white">Sobre la Empresa</h2>
+          <div class="bg-info mb-4 rounded" style="width: 50px; height: 3px;"></div>
+          
+          <p class="lh-base text-white-50 fs-5 mb-4">
+            La empresa <strong class="text-info">D'Lopez</strong> se dedica con pasión a la fabricación de calzados, ofreciendo una variedad exclusiva de modelos urbanos, tacos, zapatos y bailarinas. Realizamos ventas mayoristas a tiendas especializadas, liderando el mercado especialmente en <span class="text-white fw-semibold">Huancayo</span> con una red de clientes corporativos definidos.
+          </p>
+          
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <a href="#" class="btn btn-light btn-sm rounded-pill px-3 py-2 d-flex align-items-center gap-2 hover-social shadow-sm">
+              <i class="fab fa-facebook-f text-primary"></i> <span class="small fw-bold text-dark">Facebook</span>
+            </a>
+            <a href="#" class="btn btn-light btn-sm rounded-pill px-3 py-2 d-flex align-items-center gap-2 hover-social shadow-sm">
+              <i class="fab fa-instagram text-danger"></i> <span class="small fw-bold text-dark">Instagram</span>
+            </a>
+            <a href="#" class="btn btn-light btn-sm rounded-pill px-3 py-2 d-flex align-items-center gap-2 hover-social shadow-sm">
+              <i class="fab fa-x-twitter text-dark"></i> <span class="small fw-bold text-dark">Twitter</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
     </div>
-  </div>
-  
- <app-welcome-footer></app-welcome-footer>
+</div>
+
+<style>
+  .hover-social {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+  .hover-social:hover {
+    transform: translateY(-3px);
+    background-color: #0dcaf0 !important; /* Cambia a celeste claro al pasar el mouse */
+  }
+  .hover-social:hover span, .hover-social:hover i {
+    color: #fff !important; /* El texto se vuelve blanco en hover */
+  }
+</style>
+ 
 
   
   

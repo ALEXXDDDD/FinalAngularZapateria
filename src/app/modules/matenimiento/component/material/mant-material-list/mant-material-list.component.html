@@ -1,68 +1,125 @@
-<h1>Materiales</h1>
-<table class="table">
-    
-  <thead>
-    <ul>Materiales Acabados </ul>
-    <tr>
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
 
-      <th scope="col">Nombre Material</th>       
-      <th scope="col">Stock</th>
-
-    
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       
-    </tr>
-  </thead>
-  <tbody *ngFor="let list of responseMaterialesAcabados">
-    <tr >
-  
-      <td>{{list.nombreMaterial}}</td>
-      <td>{{list.stock}}</td>          
-    </tr>
-    
-  </tbody>
-</table>
-<table class="table">
-    
-    <thead>
-      <button (click)="crearMaterial(modalEdit)" class="btn btn-primary mr-4" id="#button-Mas">
-        <i class="fas fa-plus"></i>
+      <div class="inline-flex rounded-lg border border-gray-200 bg-slate-100 p-1">
+        <button type="button" 
+                (click)="listarMateriales()"
+                [class.bg-white]="!mostrarLista"
+                [class.text-slate-800]="!mostrarLista"
+                [class.shadow-sm]="!mostrarLista"
+                class="px-4 py-2 text-xs font-bold uppercase rounded-md text-slate-500 hover:text-slate-700 transition-all duration-150">
+          Lista de Materiales
+        </button>
+        <button type="button" 
+                (click)="listarMaterialesAcabados()"
+                [class.bg-white]="mostrarLista"
+                [class.text-slate-800]="mostrarLista"
+                [class.shadow-sm]="mostrarLista"
+                class="px-4 py-2 text-xs font-bold uppercase rounded-md text-slate-500 hover:text-slate-700 transition-all duration-150">
+          Materiales Acabados
+        </button>
+        <button type="button" 
+                class="px-4 py-2 text-xs font-bold uppercase rounded-md text-slate-500 hover:text-slate-700 transition-all duration-150">
+          Ver Proveedores
+        </button>
+      </div>
+
+      <button (click)="crearMaterial(modalEdit)" 
+              class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150 self-end sm:self-auto">
+        <i class="fas fa-plus text-xs"></i>
+        <span>Añadir Material</span>
       </button>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Nombre Material</th>       
-        <th scope="col">Stock</th>
-        <th scope="col">Marca</th>
-      
-        
-      </tr>
-    </thead>
-    <tbody *ngFor="let list of responseVWMaterial">
-      <tr >
-        <td scope="row">{{list.idMaterial}}</td>
-        <td>{{list.nombreMaterial}}</td>
-        <td>{{list.stock}}</td>  
-        <td>{{list.marca}}</td>
-        
-       
-        <button  type="button" class="btn btn-danger mr-4">
-            <i class="fas fa-edit"></i>
-        </button> 
-        <button  type="button" class="btn btn-danger mr-4">
-          <i class="fas fa-trash"></i>
-      </button> 
-      
-        
-      </tr>
-      
-    </tbody>
-  </table>
-  
-  <ng-template #modalEdit>
-    <app-mant-material-register
-    [title]="titleModal"
-    [material]="materialSelect"
-    [accion]="accionModal"
-  (closeModalEmmit)="getCloseModalEmmit($event)"
-    >
-    </app-mant-material-register> 
-  </ng-template>
+    </div>
+
+    <div *ngIf="mostrarLista" class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <i class="fas fa-boxes text-emerald-400"></i>
+          <span>Materiales Acabados</span>
+        </h2>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-100">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">ID</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Nombre Material</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Stock</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Marca</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let list of material" class="hover:bg-slate-50/70 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500 font-bold">#{{list.idMaterial}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">{{list.nombreMaterial}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700">{{list.stock}} u.</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{list.marca}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1">
+                <button type="button" class="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white p-2 rounded shadow-sm transition-colors" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="inline-flex items-center bg-rose-600 hover:bg-rose-700 text-white p-2 rounded shadow-sm transition-colors" title="Eliminar">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="!mostrarLista" class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <i class="fas fa-stream text-blue-400"></i>
+          <span>Lista General de Materiales</span>
+        </h2>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-100">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">ID</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Nombre Material</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Stock</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Marca</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let list of responseVWMaterial" class="hover:bg-slate-50/70 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500 font-bold">#{{list.idMaterial}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">{{list.nombreMaterial}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700">{{list.stock}} u.</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{list.marca}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1">
+                <button type="button" class="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white p-2 rounded shadow-sm transition-colors" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="inline-flex items-center bg-rose-600 hover:bg-rose-700 text-white p-2 rounded shadow-sm transition-colors" title="Eliminar">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #modalEdit>
+  <app-mant-material-register
+      [title]="titleModal"
+      [material]="materialSelect"
+      [accion]="accionModal"
+      (closeModalEmmit)="getCloseModalEmmit($event)"
+  >
+  </app-mant-material-register>
+</ng-template>

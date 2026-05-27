@@ -5,6 +5,7 @@ export class ResponseVWProveedor {
     cantidad: number=0;
     precioUnitario: number=0;
     nombreMaterial: string="";
+    codigoComprobante:string=""
     telefono: string="";
     montoTotal: number=0 ;
     idProvedor: number=0;

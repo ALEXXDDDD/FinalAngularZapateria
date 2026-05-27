@@ -10,6 +10,9 @@ import { ResponseOrden } from '../../../models/orden/orden-response.model';
 import { ClienteService } from '../../../service/cliente/cliente.service';
 import { OrdenService } from '../../../service/orden/orden.service';
 import { alert_error } from 'src/app/funcionts/general.funcionts';
+import { VistCredito } from '../../../models/credito/credito-responseVist.model';
+import { ResponseListOrden } from '../../../models/orden/orden-request.model';
+import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
 
 @Component({
   selector: 'app-mant-credito-register',
@@ -19,6 +22,7 @@ import { alert_error } from 'src/app/funcionts/general.funcionts';
 export class MantCreditoRegisterComponent {
   @Input() title :string=""
   @Input() responseVwCredito: ResponseVCredito = new ResponseVCredito();
+  @Input() vistCreditoSelect: VistCredito = new VistCredito();
   @Input() responsListCredito:ResponseVCredito = new ResponseVCredito();
   @Input() accion :number=0
 
@@ -28,7 +32,10 @@ export class MantCreditoRegisterComponent {
   //Declaracion de Variables 
 
   myForm:FormGroup
+  responseVOrden:ResponseListOrden[]=[]
+  requestFiltro: RequestFiltroNombre = new RequestFiltroNombre()
   requestCiente:RequestCredito = new RequestCredito();
+  responseVistCredito:VistCredito[]=[]
   responseCliente:ResponseVWCliente[]=[]
   responseOrden:ResponseOrden[]=[]
   num: string = "";
@@ -44,8 +51,9 @@ export class MantCreditoRegisterComponent {
     this.myForm = this.fb.group(
       {
         idCredito:  [{value:0,disabled:true},[Validators.required]],
-        montoTotal: [null,[Validators.required]] ,
+        montoTotal: ["null",[Validators.required]] ,
         montoPagado: [null,[Validators.required]] ,
+        nombreCliente: [null,[Validators.required]] ,
         montoDeuda: [null,[Validators.required]] ,
         estadoCredito: [null,[Validators.required]] ,
         idCliente: [null,[Validators.required]],
@@ -55,7 +63,8 @@ export class MantCreditoRegisterComponent {
 
   ngOnInit(): void {
     this.listarCliente()
-    this.listarOrden()
+    this.listarCreditoDisponibles('Activo')
+    this.listarOrdenDisponibles("Activo")
     console.log("Titulo =>",this.title);
     console.log("Titulo =>",this.responsListCredito);
     this.myForm.patchValue(this.responsListCredito)
@@ -79,6 +88,37 @@ export class MantCreditoRegisterComponent {
       break;
       case AcciontConstants.eliminar:
       break;
+    }
+  }
+  listarCreditoDisponibles(nomre:string)
+  {
+    this.requestFiltro.nombre = nomre
+    this._CreditoService.genericCreditoDisponible(this.requestFiltro).subscribe(
+      {
+        next:(data:VistCredito[])=>{this.responseVistCredito= data},
+        complete:()=>{},
+        error:()=>{}
+      }
+    )
+  }
+  actualizarDeuda(nombreProd: string | null) {
+   
+
+  }
+
+  listarOrdenDisponibles(nomre:string)
+  {
+    this.requestFiltro.nombre = nomre
+    this._ordenService.genericFiltroOrdenActivo(this.requestFiltro).subscribe(
+      {
+        next:(data:ResponseListOrden[])=>{ this.responseVOrden=data}
+      }
+    )
+  }
+  removeZero(field: string): void {
+    const control = this.myForm.get(field);
+    if (control && control.value === 0) {
+      control.setValue('');
     }
   }
   /**

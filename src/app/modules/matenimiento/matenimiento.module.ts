@@ -36,12 +36,18 @@ import { MantProduccionRegisterComponent } from './component/produccion/mant-pro
 import { MantUsuarioListComponent } from './component/usuario/mant-usuario-list/mant-usuario-list.component';
 import { MantCreditoListComponent } from './component/credito/mant-credito-list/mant-credito-list.component';
 import { MantCreditoRegisterComponent } from './component/credito/mant-credito-register/mant-credito-register.component';
-import { MantDetalleCreditoLisComponent } from './component/detalleCredito/mant-detalle-credito-lis/mant-detalle-credito-lis.component';
 import { MantDetalleCreditoRegisterComponent } from './component/detalleCredito/mant-detalle-credito-register/mant-detalle-credito-register.component';
 import { InicioSidebarComponent } from './component/inicio-sidebar/inicio-sidebar.component';
 import { MantUsuarioRegiActuaComponent } from './component/usuario/mant-usuario-regi-actua/mant-usuario-regi-actua.component';
 import { MantIngresoProductoListComponent } from './component/ingresoProducto/mant-ingreso-producto-list/mant-ingreso-producto-list.component';
 import { MantIngresoProductoRegisterComponent } from './component/ingresoProducto/mant-ingreso-producto-register/mant-ingreso-producto-register.component';
+import { MantInforVentaComponent } from './component/informes/mant-infor-venta/mant-infor-venta.component';
+import { MantComprobanteProveedorListComponent } from './component/comprobanteProveedor/mant-comprobante-proveedor-list/mant-comprobante-proveedor-list.component';
+import { MantComprobanteProveedorRegisterComponent } from './component/comprobanteProveedor/mant-comprobante-proveedor-register/mant-comprobante-proveedor-register.component';
+import { MantProveedorLisComponent } from './component/proveedor/mant-proveedor-lis/mant-proveedor-lis.component';
+import { MantProveedorRegisterComponent } from './component/proveedor/mant-proveedor-register/mant-proveedor-register.component';
+import { MantComprobanteDetallRegisterComponent } from './component/proveedor/mant-comprobante-detall-register/mant-comprobante-detall-register.component';
+import { MantPagoCreditoResgisterComponent } from './component/detalleCredito/mant-pago-credito-resgister/mant-pago-credito-resgister.component';
 
 
 
@@ -79,11 +85,18 @@ import { MantIngresoProductoRegisterComponent } from './component/ingresoProduct
     MantProduccionRegisterComponent,
     MantCreditoListComponent,
     MantCreditoRegisterComponent,
-    MantDetalleCreditoLisComponent,
+  
     MantDetalleCreditoRegisterComponent,
     MantUsuarioRegiActuaComponent,
     MantIngresoProductoListComponent,
     MantIngresoProductoRegisterComponent,
+    MantInforVentaComponent,
+    MantComprobanteProveedorListComponent,
+    MantComprobanteProveedorRegisterComponent,
+    MantProveedorLisComponent,
+    MantProveedorRegisterComponent,
+    MantComprobanteDetallRegisterComponent,
+    MantPagoCreditoResgisterComponent,
    
    
   ],
@@ -92,6 +105,7 @@ import { MantIngresoProductoRegisterComponent } from './component/ingresoProduct
     MatenimientoRoutingModule,
     DatePipe,
     SharedModule
-  ]
+  ],
+   providers: [DatePipe]
 })
 export class MatenimientoModule { }

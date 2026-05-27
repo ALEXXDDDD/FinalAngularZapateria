@@ -1,100 +1,146 @@
-<div class="container-fluid mt-4">
-    <div class="btn-group mb-3" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary" (click)="mostrarTabla('conAccion')">Producción Con Ingreso de Producto</button>
-        <button type="button" class="btn btn-secondary" (click)="mostrarTabla('sinAccion')">Lista De Producciones</button>
-    </div>
-    <button class="btn btn-primary" (click)="resgitrarProduccion(modalEditIngresoProducto)">
-        <i class="fas fa-edit" ></i> Registrar Ingreso
-    </button>
-    <div *ngIf="tablaActual === 'conAccion'" class="card bg-light mb-3">
-        <div class="card-header"><strong>Producción Con Ingreso de Producto</strong></div>
-        <div class="card-body"></div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Nombre Del Producto</th>
-                        <th>Código De Producción</th>
-                        <th>Cantidad Faltante</th>
-                        <th>Cantidad Producida</th>
-                        <th>Meta</th>
-                        <th>Fecha De Ingreso</th>
-                        <th>Fecha De Finalizacion</th>
-                        <th>
-                            <button class="btn btn-primary" (click)="crearProduccion(modalEdit)">
-                                <i class="fas fa-plus"></i> Crear Nueva Producción
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody *ngFor="let d of Produccion">
-                    <tr *ngFor="let e of d.produccions">
-                        <td>{{e.nombreProd}}</td>
-                        <td>{{e.codigoProduccion}}</td>
-                        <td>{{e.cantidadFaltante}}</td>
-                         <td>{{e.cantidadProduccion}}</td>
-                        <td>{{e.meta}}</td>
-                        <td>{{e.fechaInicio}}</td>
-                        <td>{{e.fechaFin}}</td>
-                        <td>
-                            <button class="btn btn-primary" (click)="editarProduccion(modalEdit, e)">
-                                <i class="fas fa-edit"></i> Actualizar
-                            </button>
-                        
-                            <button class="btn btn-danger">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      
+      <div class="inline-flex rounded-lg border border-gray-200 bg-slate-100 p-1">
+        <button type="button" 
+                (click)="mostrarTabla('conAccion')"
+                [class.bg-white]="tablaActual === 'conAccion'"
+                [class.text-slate-800]="tablaActual === 'conAccion'"
+                [class.shadow-sm]="tablaActual === 'conAccion'"
+                class="px-4 py-2 text-xs font-bold uppercase rounded-md text-slate-500 hover:text-slate-700 transition-all duration-150">
+          Con Ingreso de Producto
+        </button>
+        <button type="button" 
+                (click)="mostrarTabla('sinAccion')"
+                [class.bg-white]="tablaActual === 'sinAccion'"
+                [class.text-slate-800]="tablaActual === 'sinAccion'"
+                [class.shadow-sm]="tablaActual === 'sinAccion'"
+                class="px-4 py-2 text-xs font-bold uppercase rounded-md text-slate-500 hover:text-slate-700 transition-all duration-150">
+          Lista De Producciones
+        </button>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button (click)="resgitrarProduccion(modalEditIngresoProducto)" 
+                class="inline-flex items-center space-x-1.5 bg-slate-700 hover:bg-slate-800 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+          <i class="fas fa-edit"></i>
+          <span>Registrar Ingreso</span>
+        </button>
+        
+        <button (click)="crearProduccion(modalEdit)" 
+                class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+          <i class="fas fa-plus"></i>
+          <span>Nueva Producción</span>
+        </button>
+      </div>
     </div>
 
-    <div *ngIf="tablaActual === 'sinAccion'" class="card bg-light mb-3">
-        <div class="card-header"><strong>Lista De Producciones</strong></div>
-        <div class="card-body"></div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Nombre Del Producto</th>
-                        <th>Código De Producción</th>
-                        <th>Cantidad Faltante</th>
-                        <th>Meta</th>
-                        <th>Fecha De Inicio</th>
-                        <th>Fecha De Fin</th>
-                    </tr>
-                </thead>
-                <tbody *ngFor="let d of responseVProduccion">
-                    <tr >
-                        <td>{{d.nombreProd}}</td>
-                        <td>{{d.codigoProduccion}}</td>
-                        <td>{{d.cantidadFaltante}}</td>
-                        <td>{{d.meta}}</td>
-                        <td>{{d.fechaInicio}}</td>
-                        <td>{{d.fechaFin}}</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
-        </div>
+
+    <div *ngIf="tablaActual === 'conAccion'" class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider">Producción Con Ingreso de Producto</h2>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cant. Producción</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Descripción</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Meta</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Fin</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cód. Producción</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cód. Orden</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Faltante</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">F. Registro</th>
+              <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <ng-container *ngFor="let d of Produccion">
+              <tr *ngFor="let e of d.produccions" class="hover:bg-blue-50/30 transition-colors duration-150">
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm font-semibold text-slate-900">{{e.cantidadProduccion}}</td>
+                <td class="px-4 py-3.5 text-sm text-slate-600 max-w-xs truncate" title="{{e.descripcion}}">{{e.descripcion}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600 font-medium">{{e.meta}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 uppercase tracking-wide">
+                    {{e.estadoProduccion}}
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{e.fechaFin}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm font-mono text-slate-700 font-semibold">{{e.codigoProduccion}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm font-mono text-slate-500">{{e.codigoOrden}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm font-semibold text-rose-600">{{e.cantidadFaltante}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-500">{{e.fechaRegistro}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-center text-xs font-medium space-x-1">
+                  <button (click)="editarProduccion(modalEdit, e)" class="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white p-1.5 rounded shadow-sm transition-colors" title="Actualizar">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="inline-flex items-center bg-rose-600 hover:bg-rose-700 text-white p-1.5 rounded shadow-sm transition-colors" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
     </div>
+
+
+    <div *ngIf="tablaActual === 'sinAccion'" class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider">Lista De Producciones Generales</h2>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre Del Producto</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Código De Producción</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cantidad Faltante</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Meta</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha De Inicio</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha De Fin</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let d of responseVProduccion" class="hover:bg-slate-50 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">{{d.nombreProd}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono font-bold text-slate-700">{{d.codigoProduccion}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-rose-600">{{d.cantidadFaltante}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">{{d.meta}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{d.fechaInicio}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{d.fechaFin}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <ng-template #modalEdit>
-    <app-mant-produccion-register
-        [title]="title"
-        [Produccion]="selectProduccion"
-        [accion]="accionModal"
-        (closeModalEmmit)="getCloseModal($event)">
-    </app-mant-produccion-register>
+  <app-mant-produccion-register
+    [title]="title"
+    [Produccion]="selectProduccion"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModal($event)">
+  </app-mant-produccion-register>
 </ng-template>
+
 <ng-template #modalEditIngresoProducto>
-    <app-mant-ingreso-producto-register
-        [title]="title"
-        [produccion]="selectProduccion"
-        [accion]="accionModal"
-        (closeModalEmmit)="getCloseModal($event)">
-    </app-mant-ingreso-producto-register>
+  <app-mant-ingreso-producto-register
+    [title]="title"
+    [produccion]="selectProduccion"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModal($event)">
+  </app-mant-ingreso-producto-register>
 </ng-template>

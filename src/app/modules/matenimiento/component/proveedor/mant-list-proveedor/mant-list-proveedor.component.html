@@ -1,50 +1,126 @@
-<div class="container-fluid mt-4">
-    <div class="card bg-light mb-3">
-        <div class="card-header"><strong>Pedidos a Proveedores</strong></div>
-        <div class="card-body"></div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>ID Proveedor</th>
-                        <th>Nombres</th>
-                        <th>Material</th>
-                        <th>Fecha de la Entrega</th>
-                        <th>Fecha del Pedido</th>
-                        <th>Precio</th>
-                        <th>Telefono</th>
-                        <th>Cantidad</th>
-                        <button class="btn btn-primary" (click)="crearProveedor(modalEdit)"><i class="fas fa-plus"></i></button>
-                    </tr>
-                </thead>
-                <tbody *ngFor="let d of responseProveedor" >
-                    <tr *ngFor="let e of d.proveedors">
-                        <td>{{e.idProvedor}}</td>
-                        <td>{{e.nombreProveedor}}</td>
-                        <td>{{e.nombreMaterial}}</td>
-                        <td>{{e.fechaEntrega}}</td>
-                        <td>{{e.fechaPedido}}</td>
-                        <td>{{e.precioUnitario}}</td>
-                        <td>{{e.telefono}}</td>
-                        <td>{{e.cantidad}}</td>
-                        <td>
-                            <button class="btn btn-primary" (click)="editarProveedor(modalEdit,e)"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-danger" (click)="editarProveedor(modalEdit,e)"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
 
-        </div>
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+      <button 
+        type="button"
+        (click)="crearProveedor(modalEditUnidad)" 
+        class="inline-flex items-center justify-center space-x-1.5 bg-slate-700 hover:bg-slate-800 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+        <i class="fas fa-plus text-xs"></i>
+        <span>Agregar Pedido</span>
+      </button>
+
+      <button 
+        type="button"
+        (click)="crearRegistroCantidad(modalRegisterCantidad)" 
+        class="inline-flex items-center justify-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+        <i class="fas fa-truck-loading text-xs"></i>
+        <span>Registrar Entrada de Pedido</span>
+      </button>
     </div>
 
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <i class="fas fa-boxes text-blue-400"></i>
+          <span>Pedidos a Proveedores</span>
+        </h2>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-100">
+            <tr>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">ID Prov.</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Proveedor</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Material</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">F. Entrega</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">F. Pedido</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Precio U.</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Teléfono</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Cantidad</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <ng-container *ngFor="let d of responseProveedor">
+              <tr *ngFor="let e of d.proveedors" class="hover:bg-slate-50/70 transition-colors duration-150">
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-mono text-slate-500 font-bold">#{{ e.idProvedor }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-semibold text-slate-900">{{ e.nombreProveedor }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs text-slate-700 font-medium">{{ e.nombreMaterial }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-mono text-slate-600">{{ e.fechaEntrega }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-mono text-slate-600">{{ e.fechaPedido }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-mono font-semibold text-slate-900">S/. {{ e.precioUnitario }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs text-slate-600">{{ e.telefono }}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-xs font-bold text-slate-800">{{ e.cantidad }} u.</td>
+              </tr>
+            </ng-container>
+
+            <tr *ngIf="!responseProveedor || responseProveedor.length === 0">
+              <td colspan="8" class="px-4 py-8 text-center text-sm text-slate-400">
+                No hay registros de pedidos a proveedores.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <i class="fas fa-clipboard-list text-emerald-400"></i>
+          <span>Proveedores con Pedidos Activos</span>
+        </h2>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-100">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">ID Prov.</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Nombre Proveedor</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Material Solicitado</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Fecha Estimada Entrega</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Fecha de Pedido</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let e of responseVWProveedor" class="hover:bg-slate-50/70 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500 font-bold">#{{ e.idProvedor }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">{{ e.nombreProveedor }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{{ e.nombreMaterial }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-600">{{ e.fechaEntrega }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-600">{{ e.fechaPedido }}</td>
+            </tr>
+
+            <tr *ngIf="!responseVWProveedor || responseVWProveedor.length === 0">
+              <td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">
+                No hay proveedores con pedidos vigentes pendientes.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </div>
-<ng-template #modalEdit>
-    <app-mant-register-proveedor
+
+<ng-template #modalEditUnidad>
+  <app-mant-proveedor-register
     [title]="titleModal"
-    [Proveedor]="proveedorEnviar"
+    [pedidoProveedor]="proveedorEnviar"
     [accion]="accionModal"
-    (closeModalEmmit)="getCloseModal($event)"
-    >
-    </app-mant-register-proveedor>
-  </ng-template>
+    (closeModalEmmit)="getCloseModalEmmit($event)">
+  </app-mant-proveedor-register>
+</ng-template>
+
+<ng-template #modalRegisterCantidad>
+  <app-mant-comprobante-detall-register
+    [title]="titleModal"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)">
+  </app-mant-comprobante-detall-register>
+</ng-template>

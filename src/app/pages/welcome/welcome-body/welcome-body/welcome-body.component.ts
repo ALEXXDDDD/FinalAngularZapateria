@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { MessageService } from 'primeng/api';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { RequestFilterGeneric } from 'src/app/modules/matenimiento/models/genericFilterRequest.model';
 import { ResponseFilterGeneric } from 'src/app/modules/matenimiento/models/genericFilterResponse.models';
@@ -47,6 +48,7 @@ export class WelcomeBodyComponent implements OnInit {
     private _carritoService:CarritoService,
     private modalService: BsModalService,
     private _productoService : ProductoService,
+    private messageService: MessageService,
     private _modeloService : ModeloService,
 
     
@@ -82,7 +84,13 @@ export class WelcomeBodyComponent implements OnInit {
   }
   addProducto(prod:ResponseProducto)
   {
+    this.messageService.add({ 
+      severity: 'success', 
+      summary: 'Producto Agregado', 
+      detail: `${prod.nombreProd} ha sido agregado al carrito.` 
+    });
     this._carritoService.addProducto(prod)
+    this._carritoService.sumarPrecios()
   }
   monstrarDetalle(template:TemplateRef<any>,producto:ResponseProducto,id:number)
   {

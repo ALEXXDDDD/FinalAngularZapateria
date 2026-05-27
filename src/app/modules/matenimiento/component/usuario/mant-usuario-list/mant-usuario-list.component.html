@@ -1,53 +1,118 @@
-<div class="container-fluid mt-4">
-    <div class="card bg-light mb-3">
-        <div class="card-header"><strong>Listado De Usuarios</strong></div>
-        <div class="card-header" [formGroup]="myFormFilter">
-            <strong>Filtro Por Roles</strong>
-            <!-- Campo de entrada para el filtro -->
-            <input formControlName="nombreRol" type="text" class="form-control mt-2" placeholder="Filtrar por nombre de rol">
-            <button class="btn btn-success mt-2" (click)="filtroRol()">Filtrar</button>
-            <button type="button" (click)="limpiarFiltros()" class="btn btn-danger">
-                <i class="fas fa-broom mr-1"></i> Limpiar
-              </button>
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <i class="fas fa-users-cog text-blue-400"></i>
+          <span>Listado De Usuarios</span>
+        </h2>
+      </div>
+
+      <div class="p-4 bg-slate-50 border-b border-gray-200" [formGroup]="myFormFilter">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          
+          <div class="flex-1 max-w-md">
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Filtro Por Roles</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                <i class="fas fa-filter text-xs"></i>
+              </span>
+              <input 
+                formControlName="nombreRol" 
+                type="text" 
+                class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
+                placeholder="Ej: Administrador, Operario...">
+            </div>
+          </div>
+
+          <div class="flex items-end space-x-2 self-end md:self-auto">
+            <button 
+              type="button"
+              (click)="limpiarFiltros()" 
+              class="inline-flex items-center space-x-1.5 bg-white border border-gray-300 hover:bg-slate-100 text-slate-700 font-semibold text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+              <i class="fas fa-broom text-slate-400"></i>
+              <span>Limpiar</span>
+            </button>
+            
+            <button 
+              type="button"
+              (click)="filtroRol()" 
+              class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-5 py-2 rounded-lg shadow-sm transition-colors duration-150">
+              <span>Filtrar</span>
+            </button>
+          </div>
+
         </div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Usuario</th>
-                        <th>Email</th>
-                        <th>Tipo</th>
-                        <th>ROL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let e of usuariosFiltrados">
-                        <td>{{e.usuario}}</td>
-                        <td>{{e.email}}</td>
-                        <td>{{e.tipoPersona}}</td>
-                        <td>{{e.nombreRol}}</td>
-                        <td>
-                            <button class="btn btn-primary" (click)="editarCliente(modalEdit, e)">
-                                <i class="fas fa-edit"></i> Actualizar
-                            </button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger mr-4">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-100">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Usuario</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Email</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Tipo Persona</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Rol Asignado</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let e of usuariosFiltrados" class="hover:bg-slate-50/70 transition-colors duration-150">
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">
+                <div class="flex items-center space-x-2">
+                  <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs uppercase">
+                    {{ e.usuario.substring(0, 2) }}
+                  </div>
+                  <span>{{ e.usuario }}</span>
+                </div>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">{{ e.email }}</td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ e.tipoPersona }}</td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 tracking-wide uppercase">
+                  {{ e.nombreRol }}
+                </span>
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1.5">
+                <button 
+                  (click)="editarCliente(modalEdit, e)" 
+                  class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1.5 rounded shadow-sm transition-colors" 
+                  title="Actualizar Usuario">
+                  <i class="fas fa-edit"></i>
+                  <span>Editar</span>
+                </button>
+                
+                <button 
+                  type="button" 
+                  class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1.5 rounded shadow-sm transition-colors" 
+                  title="Eliminar Usuario">
+                  <i class="fas fa-trash"></i>
+                  <span>Eliminar</span>
+                </button>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
+  </div>
 </div>
 
 <ng-template #modalEdit>
-    <app-mant-usuario-regi-actua
-        [title]="titleModal"
-        [accion]="accionModal"
-        [usuario]="usuarioSelect"
-        (closeModalEmmit)="getCloseModalEmmit($event)">
-    </app-mant-usuario-regi-actua>
+  <app-mant-usuario-regi-actua
+    [title]="titleModal"
+    [accion]="accionModal"
+    [usuario]="usuarioSelect"
+    (closeModalEmmit)="getCloseModalEmmit($event)">
+  </app-mant-usuario-regi-actua>
 </ng-template>

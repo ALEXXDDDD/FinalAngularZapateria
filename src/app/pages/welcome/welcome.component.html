@@ -1,17 +1,11 @@
-
-    
-
-    <app-welcome-header></app-welcome-header>
-    <app-welcome-body></app-welcome-body>
-      <app-chat-pages></app-chat-pages>
+<app-welcome-header></app-welcome-header>
+<app-welcome-body></app-welcome-body>
+<!-- <app-chat-pages></app-chat-pages> -->
 <ng-template #modalEdit>
     <app-listar-detalle
     [title]="titleModal"
     [Producto]="productoSelect"
-    [accion]="accionModal"
-  (closeModalEmmit)="getCloseModalEmmit($event)"
-    >
-
+    [accion]="accionModal">
     </app-listar-detalle>
 </ng-template>  
 

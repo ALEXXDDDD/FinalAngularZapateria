@@ -7,6 +7,7 @@ import { ResponseProducto } from 'src/app/modules/matenimiento/models/producto/p
   providedIn: 'root'
 })
 export class CarritoService {
+  private totalKey = 'totalPrecios';
   listaProducto : CarritoItem[]=[]
   listaProductosSubject: BehaviorSubject<CarritoItem[]>= 
   new BehaviorSubject<CarritoItem[]>([])
@@ -112,4 +113,9 @@ export class CarritoService {
   {
     return this.listaProductosSubject.asObservable()
   }
+  obtenerTotal(): number {
+    const total = sessionStorage.getItem(this.totalKey);
+    return total ? parseFloat(total) : 0;
+  }
+
 }

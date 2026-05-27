@@ -6,5 +6,6 @@ export class RequestProducto {
     stock: number = 0;
     estadoProducto: boolean = false;
     idUnidad: number = 0;
+    nombreUnidad :string=""
     fotografia: string = "";
 }

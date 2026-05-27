@@ -36,7 +36,7 @@ export class MantMaterialRegisterComponent implements OnInit {
         nombreMaterial: [null,Validators.required],
         nombreUnidad: [null,Validators.required],
         stock: [null,Validators.required],
-        descripcionMaterial: [null,Validators.required],
+        descripMaterial: [null,Validators.required],
         marca: [null,Validators.required],
         estado: [null,Validators.required]
       }

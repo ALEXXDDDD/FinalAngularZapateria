@@ -4,6 +4,7 @@ import { ResponseProveedor } from '../../../models/proveedor/responseProveedor.m
 import { ProveedorService } from '../../../service/proveedor/proveedor.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AcciontConstants } from 'src/app/constants/general.constans';
+import { ComprobanteProveedorService } from 'src/app/services/comprobanteProveedor/comprobante-proveedor.service';
 
 @Component({
   selector: 'app-mant-list-proveedor',
@@ -12,6 +13,7 @@ import { AcciontConstants } from 'src/app/constants/general.constans';
 })
 export class MantListProveedorComponent implements OnInit {
   responseProveedor:ResponseProveedor[]=[]
+  responseVWProveedor:ResponseVWProveedor[]=[]
   proveedorEnviar : ResponseVWProveedor = new ResponseVWProveedor ()
   modalRef?: BsModalRef;
   titleModal : string = ""
@@ -19,6 +21,7 @@ export class MantListProveedorComponent implements OnInit {
   constructor (
     private _proveedorService : ProveedorService,
     private modalService: BsModalService,
+    private _comprobanteProveedor:ComprobanteProveedorService
   )
   {
 
@@ -26,6 +29,7 @@ export class MantListProveedorComponent implements OnInit {
   
   ngOnInit(): void {
     this.listarProveedores()
+    this.listarProveedoresPedidos()
   }
   listarProveedores()
   {
@@ -40,9 +44,34 @@ export class MantListProveedorComponent implements OnInit {
       complete: ()=>{}
     })
   }
+  getCloseModalEmmit(res:boolean)
+  {
+    this.modalRef?.hide()
+    if(res)
+    {
+      this.listarProveedores()
+    }
+  }
+  listarProveedoresPedidos()
+  {
+    this._comprobanteProveedor.getAllProveedorPedido().subscribe(
+      {
+        next:(data:ResponseVWProveedor[])=>{this.responseVWProveedor=data},
+        error:()=>{},
+        complete:()=>{}
+      }
+    )
+  }
   crearProveedor(template : TemplateRef<any>)
   {
-      this.titleModal = "Nuevo Proveedor"
+      this.titleModal = "Nuevo Pedido Proveedor"
+      this.accionModal = AcciontConstants.crear
+      this.proveedorEnviar = new ResponseVWProveedor()
+      this.openModal (template)
+  }
+  crearRegistroCantidad(template : TemplateRef<any>)
+  {
+      this.titleModal = "Nuevo resgistro de Cantidad"
       this.accionModal = AcciontConstants.crear
       this.proveedorEnviar = new ResponseVWProveedor()
       this.openModal (template)

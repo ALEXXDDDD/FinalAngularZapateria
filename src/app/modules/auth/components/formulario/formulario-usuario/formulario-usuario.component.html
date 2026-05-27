@@ -13,14 +13,17 @@
                 <span>Telefono</span>
             </label>
         </div>  
-                
         <label>
-            <input required="" placeholder="" type="email" class="input">
+            <input required="" placeholder="" type="email" class="input" formControlName="usuario1">
+            <span>Usuario</span>
+        </label>     
+        <label>
+            <input required="" placeholder="" type="email" class="input" formControlName="email">
             <span>Email</span>
         </label> 
             
         <label>
-            <input required="" placeholder="" type="password" class="input">
+            <input required="" placeholder="" formControlName="password" type="password" class="input">
             <span>Password</span>
         </label>
         <label>
@@ -44,9 +47,9 @@
             <input required="" formControlName="numeroDocumento" class="input">
             <span>Numero Documento</span>
         </label>
-        <button class="submit">Submit</button>
+        <button class="submit" (click)="guardar()">Submit</button>
         <p class="signin">Already have an acount ? <a href="#">Signin</a> </p>
-        <div class="button-pag" >
+        <!-- <div class="button-pag" >
             <button type="button"  class="btn btn-primary ">
             Iniciar Sesion con Facebook
             <i class="fab fa-facebook-f"></i>
@@ -57,7 +60,8 @@
             <i class="fab fa-google"></i>
             </button>
                 
-        </div> 
+        </div>  -->
+       
     </form>
     <img src="http://aa.somee.com/imagen_pagina/MODELOS-[Recuperado]2.gif" alt="">
 </div> 

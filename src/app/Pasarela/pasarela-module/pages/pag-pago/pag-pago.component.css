@@ -117,3 +117,19 @@ body {
   margin: 10px 0 0;
   font-size: 14px;
 }
+.btn-whatsapp {
+  display: flex;
+  align-items: center;
+  background-color: #25d366;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btn-whatsapp img {
+  width: 24px;
+  margin-right: 10px;
+}

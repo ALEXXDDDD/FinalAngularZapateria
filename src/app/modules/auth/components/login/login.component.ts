@@ -8,6 +8,7 @@ import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
 import { LoadStateEnum } from 'src/app/modules/matenimiento/models/core/utils/load-enum';
 import { AuthGoogleService } from 'src/app/services/google/auth-goggle-service.service';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,6 +17,7 @@ import { AuthGoogleService } from 'src/app/services/google/auth-goggle-service.s
 export class LoginComponent implements OnInit { 
   frmLoadSt = LoadStateEnum.None;
   loadStateEnum = LoadStateEnum;
+
   loginForm : FormGroup
   loginRequest : RequestLogin = new RequestLogin()
  
@@ -60,6 +62,7 @@ export class LoginComponent implements OnInit {
     //     console.error('No se encontró el fragmento en la URL');
     //   }
     // });
+
   }
   save(name: string, lastName: string) {
     this.frmLoadSt = LoadStateEnum.Loading;
@@ -84,7 +87,7 @@ export class LoginComponent implements OnInit {
           console.log(data) 
           // routeamos al dahboard
           //Alamcenamos el token Valores Del Usuario Ingresadp
-          if(data.success)
+          if(data.success)  
           {
             alert_sucess("Iniciaste Sesion Correctamente")
             // debugger;
@@ -147,33 +150,75 @@ export class LoginComponent implements OnInit {
     )
 
   }
+  // private initializeGoogleSignIn(): void {
+  //   (window as any).onload = () => {
+  //     (window as any).google.accounts.id.initialize({
+  //       client_id: "818272992678-0n17gkh83hg7vh176r94rrigdcuqql8i.apps.googleusercontent.com",
+  //       callback: this.handleCredentialResponse.bind(this)
+  //     });
+
+  //     (window as any).google.accounts.id.renderButton(
+  //       document.getElementById("buttonDiv"),
+  //       { theme: "outline", size: "large" }  // atributos de personalización
+  //     );
+
+  //     (window as any).google.accounts.id.prompt(); // también muestra el diálogo de One Tap
+  //   };
+  // }
+
+  // private handleCredentialResponse(response: any): void {
+  //   console.log("Encoded JWT ID token: " + response.credential);
+  //   // Aquí puedes manejar el token JWT como necesites
+  // }
+  // signInWithGoogle(): void {
+  //   this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {
+  //     this.user = user;
+  //     console.log(user);
+  //   }).catch(error => {
+  //     console.error('Error en la autenticación con Google:', error);
+  //   });
+  // }
+
+  // signInWithFacebook(): void {
+  //   this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then(user => {
+  //     this.user = user;
+  //     console.log(user);
+  //   }).catch(error => {
+  //     console.error('Error en la autenticación con Facebook:', error);
+  //   });
+  // }
+
+  // signOut(): void {
+  //   this.authService.signOut().then(() => {
+  //     this.user = null;
+  //   }).catch(error => {
+  //     console.error('Error al cerrar sesión:', error);
+  //   });
+  // }
+
   // loginGoogle()
   // {
  
   //   this.oauthService.loginGoogle()
   
-  //   // this.login()
-  //   // this.route.fragment.subscribe(fragment => {
-  //   //   if (fragment) {
-  //   //     const urlParams = new URLSearchParams(fragment);
-  //   //     const idToken = urlParams.get('id_token');
-  //   //     const accessToken = urlParams.get('access_token');
+  private initializeGoogleSignIn(): void {
+    (window as any).onload = () => {
+      (window as any).google.accounts.id.initialize({
+        client_id: "818272992678-cacnetaor3df10ftd9ldih4ft588ajnb.apps.googleusercontent.com", // Reemplaza con tu propio client_id
+        callback: this.handleCredentialResponse.bind(this)
+      });
 
-  //   //     if (idToken) {
-  //   //       // Validar el id_token en el backend
-  //   //       this.oauthService.validateToken(idToken).subscribe(response => {
-  //   //         console.log('Token validado:', response);
-  //   //         // Manejar la lógica después de la validación del token
-  //   //       }, (error: any) => {
-  //   //         console.error('Error al validar el token:', error);
-  //   //       });
-  //   //     } else {
-  //   //       console.error('No se encontró id_token en el fragmento de la URL');
-  //   //     }
-  //   //   } else {
-  //   //     console.error('No se encontró el fragmento en la URL');
-  //   //   }
-  //   // });
+      (window as any).google.accounts.id.renderButton(
+        document.getElementById("buttonDiv"), 
+        { theme: "outline", size: "large", logo_alignment: "center" } // Personalización del botón
+      );
+
+      (window as any).google.accounts.id.prompt(); // Opción para mostrar el diálogo de One Tap
+    };
+  }
+
+  private handleCredentialResponse(response: any): void {
+  }
   
   // }
 }

@@ -36,7 +36,7 @@ export class CrudService<T,Y> implements crudInterface <T,Y> {
     return this._http.put<Y>(this.url_service,request)
   }
   delete(id: number): Observable<number> {
-    return this._http.delete<number>(`${this.url_service}${id}`);
+    return this._http.delete<number>(`${this.url_service}/${id}`);
   }
   genericFilter(request:RequestFilterGeneric):Observable<ResponseFilterGeneric<Y>>
   {

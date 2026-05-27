@@ -1,0 +1,71 @@
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <i class="fas fa-truck text-blue-400"></i>
+          <span>Lista de Proveedores</span>
+        </h2>
+        
+        <button 
+          type="button"
+          (click)="crearProveedor(modalEdit)" 
+          class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150 self-start sm:self-auto"
+          title="Añadir nuevo proveedor">
+          <i class="fas fa-plus text-xs"></i>
+          <span>Nuevo Proveedor</span>
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-100">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider w-1/4">ID Proveedor</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Nombres / Razón Social</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let e of responseWProveedor" class="hover:bg-slate-50/70 transition-colors duration-150">
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500 font-bold">
+                #{{ e.idProvedor }}
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">
+                <div class="flex items-center space-x-3">
+                  <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs uppercase">
+                    {{ e.nombreProveedor.substring(0, 2) }}
+                  </div>
+                  <span>{{ e.nombreProveedor }}</span>
+                </div>
+              </td>
+
+            </tr>
+
+            <tr *ngIf="!responseWProveedor || responseWProveedor.length === 0">
+              <td colspan="2" class="px-6 py-10 text-center text-sm text-slate-400 font-medium">
+                <i class="fas fa-address-book text-2xl block mb-2 text-slate-300"></i>
+                No hay proveedores registrados en el sistema.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #modalEdit>
+  <app-mant-register-proveedor
+    [title]="titleModal"
+    [Proveedor]="proveedorEnviar"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModal($event)"
+  >
+  </app-mant-register-proveedor>
+</ng-template>

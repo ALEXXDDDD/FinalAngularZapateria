@@ -4,6 +4,7 @@ export class ResponseProducto {
     codigoProd: string ="";
     precioUnitario: number= 0 ;
     stock: number= 0;
+    nombreUnidad :string=""
     estadoProducto: boolean = false;
     idUnidad: number= 0;
     fotografia: string = "";

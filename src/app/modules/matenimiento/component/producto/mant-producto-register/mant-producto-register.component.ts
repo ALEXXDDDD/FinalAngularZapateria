@@ -6,6 +6,10 @@ import { ProductoService } from '../../../service/producto/producto.service';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
 import { RequestVProducto } from '../../../models/producto/requestVProducto.model';
+import { ModeloService } from '../../../service/modelo/modelo.service';
+import { ResponseModelo } from '../../../models/modelo/modelo-response.model';
+import { UnidadService } from '../../../service/unidad/unidad.service';
+import { ResponseUnidad } from '../../../models/unidad/p/unidad-response.model';
 
 @Component({
   selector: 'app-mant-producto-register',
@@ -31,19 +35,25 @@ export class MantProductoRegisterComponent implements OnInit {
   myForm : FormGroup
 
   responseProducto : ResponseProducto [] =[]
+  responseModelo : ResponseModelo[]=[]
+  
+  responseUnidad : ResponseUnidad []=[]
   envioProducto : RequestProducto = new RequestProducto()
   envioSelectProducto : RequestProducto = new RequestVProducto()
 
   constructor
   (
     private fb:FormBuilder,
-    private _productoService : ProductoService
+    private _productoService : ProductoService,
+    private _modeloService : ModeloService,
+    private _unidadService:UnidadService
   )
   {
     this.myForm = this.fb.group
     (
       {
-      idProducto: [null,[Validators.required]],
+      idProducto: [{value:0,disabled:true},[Validators.required]],
+      idModelo: [{value:0,disabled:true},[Validators.required]],
       nombreProd:[null,Validators.required],
       codigoProd:[null,Validators.required],
       nombreUnidad:[null,Validators.required],
@@ -53,15 +63,26 @@ export class MantProductoRegisterComponent implements OnInit {
       estadoProducto: [null,Validators.required],
       idUnidad: [null,[Validators.required]],
       fotografia:["null",Validators.required],
-      idModelo: [null,[Validators.required]],
       color:[null,Validators.required],
       categoria:[null,Validators.required],
       talla: [null,Validators.required],
-      material:[null,Validators.required],
       descripcion:[null,Validators.required],
-      idDetalleProducto: [null,[Validators.required]],
+      idDetalleProducto: [{value:0,disabled:true},[Validators.required]],
       }
     )
+  }
+  listarModelos()
+  {
+      this._modeloService.getAll().subscribe(
+        {
+          next:(data:ResponseModelo[])=>{
+            this.responseModelo = data
+            console.log("Modelo",data)
+          },
+          error:()=>{},
+          complete:()=>{}
+        }
+      )
   }
   crearProducto()
   {
@@ -93,6 +114,7 @@ export class MantProductoRegisterComponent implements OnInit {
   }
   guardar()
   {
+    debugger
     this.envioProducto = this.myForm.getRawValue()
     switch(this.accion)
     {
@@ -108,7 +130,16 @@ export class MantProductoRegisterComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.myForm.patchValue(this.producto)
+    this.listarUnidad()
+    this.listarModelos()
   }
-
+  listarUnidad ()
+  {
+    this._unidadService.getAll().subscribe(
+      {
+        next:(data:ResponseUnidad[])=>{this.responseUnidad=data}
+      }
+    )
+  }
 }

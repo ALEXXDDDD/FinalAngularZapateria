@@ -6,6 +6,7 @@ import { ResponseMaterial } from '../../../models/material/material-response.mod
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { ResponseProcedureMaterial } from '../../../models/material/material-responseStore.model';
 import { VistMaterialesAcabadosService } from '../../../service/material/vist-materiales-acabados.service';
+import { Material } from '../../../models/material/material-responseAcabado.model';
 
 @Component({
   selector: 'app-mant-material-list',
@@ -15,6 +16,7 @@ import { VistMaterialesAcabadosService } from '../../../service/material/vist-ma
 export class MantMaterialListComponent implements OnInit {
 
   responseVWMaterial : ResponseVWMaterial [] = []
+  material :Material[]=[]
   response : ResponseMaterial [] = []
   responseMaterialesAcabados : ResponseProcedureMaterial[]=[]
   responseMaterial :ResponseMaterial = new ResponseMaterial()
@@ -22,6 +24,7 @@ export class MantMaterialListComponent implements OnInit {
   modalRef? : BsModalRef
   titleModal : String = ""
   accionModal : number = 0
+  mostrarLista :boolean=false
   constructor (
     private modalService :BsModalService,
     private _materialService : MaterialService,
@@ -37,19 +40,19 @@ export class MantMaterialListComponent implements OnInit {
   }
   listarMaterialesAcabados()
   {
-    this._storeMaterial.getAll().subscribe(
+    this.mostrarLista=false
+    this._materialService.getAllMaterialAcabado().subscribe(
       {
-        next:(data:ResponseProcedureMaterial[])=>{
-          this.responseMaterialesAcabados= data
-          console.log("Materiales Acabados",data)
-        },
+        next:(data:Material[])=>{this.material=data; console.log(data)},
         error:()=>{},
         complete:()=>{}
       }
     )
+   
   }
   listarMateriales ()
   {
+    this.mostrarLista=true
     this._materialService.getAll().subscribe
     (
       {

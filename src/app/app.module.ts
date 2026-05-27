@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,7 +28,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TemplateRoutingModule } from './modules/template/template-routing.module';
 import { SharedModule } from './modules/shared/shared.module';
-import { EnvioDomicilioComponent } from './Ventas/component/vistas/envio-domicilio/envio-domicilio.component';
 import { PerfilListComponent } from './pages/perfil/perfil-list/perfil-list.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { PasarelaModuleModule } from './Pasarela/pasarela-module/pasarela-module.module';
@@ -37,15 +36,19 @@ import { ChatPagesComponent } from './chat-bot/chat-pages/chat-pages.component';
 import { WelcomeBodyComponent } from './pages/welcome/welcome-body/welcome-body/welcome-body.component';
 import { InicioSidebarComponent } from './modules/matenimiento/component/inicio-sidebar/inicio-sidebar.component';
 import { ApiMapsGoogleComponent } from './Ventas/component/maps-google/api-maps-google/api-maps-google.component';
-import { GoogleMapsModule } from '@angular/google-maps';
 import { WelcomeFooterComponent } from './pages/welcome/welcome-footer/welcome-footer/welcome-footer.component';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast'; 
+
+import { GoogleMapsModule } from '@angular/google-maps';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import { EnvioDomicilioComponent } from './Ventas/component/vistas/envio-domicilio/envio-domicilio.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     PruebaComponent,
-    EnvioDomicilioComponent,
     NotFoudComponent,
     VistEmpresaComponent,
     VistContactoComponent,
@@ -61,34 +64,73 @@ import { WelcomeFooterComponent } from './pages/welcome/welcome-footer/welcome-f
     SinPermisoComponent,
     ServiceRolComponent,
     VistaZapatoComponent,
-    EnvioDomicilioComponent,
     PerfilListComponent,
     WelcomeBodyComponent,
     ApiMapsGoogleComponent,
     WelcomeFooterComponent
+   
   ],
   imports: [
     SharedModule,
-  
+    GoogleMapsModule,
     BrowserAnimationsModule,
     BrowserModule,
-    GoogleMapsModule,
     ButtonModule,
+    ToastModule ,
     ModalModule.forRoot(),
     AppRoutingModule,
     /**
      * TODO: PARA USUAR DOBLE BINDING    
      */
     FormsModule,
-    
     DatePipe,
     OAuthModule.forRoot(),
     HttpClientModule,
+    SocialLoginModule
+      
   ],
+
+  schemas:  [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
-    [DatePipe],
-    {provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true} //Configuracion de angular 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass:AuthInterceptor,
+      multi:true
+      
+    
+    
+    } ,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('818272992678-0n17gkh83hg7vh176r94rrigdcuqql8i.apps.googleusercontent.com') // Reemplaza con tu Google Client ID
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('FACEBOOK_APP_ID') // Reemplaza con tu Facebook App ID
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    },
+    MessageService 
+
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent] 
 })
 export class AppModule { }
+function provideFirebaseApp(arg0: () => any): import("@angular/core").Provider | import("@angular/core").EnvironmentProviders {
+  throw new Error('Function not implemented.');
+}
+
+function initializeApp(arg0: { projectId: string; appId: string; storageBucket: string; locationId: string; apiKey: string; authDomain: string; messagingSenderId: string; measurementId: string; }): any {
+  throw new Error('Function not implemented.');
+}
+
+function provideStorage(arg0: () => any): import("@angular/core").Provider | import("@angular/core").EnvironmentProviders {
+  throw new Error('Function not implemented.');
+}
+

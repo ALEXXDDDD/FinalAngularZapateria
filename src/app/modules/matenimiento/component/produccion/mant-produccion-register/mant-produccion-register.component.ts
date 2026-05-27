@@ -14,6 +14,9 @@ import { ResponseProduccion } from '../../../models/Produccion/produccion-respon
 import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
 import { ResponseProducto } from '../../../models/producto/producto-response.model';
 import { ProductoService } from '../../../service/producto/producto.service';
+import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
+import { OrdenService } from '../../../service/orden/orden.service';
+import { ResponseListOrden } from '../../../models/orden/orden-request.model';
 
 @Component({
   selector: 'app-mant-produccion-register',
@@ -38,8 +41,13 @@ export class MantProduccionRegisterComponent implements OnInit {
   ingresoProductoEnvio : RequestVWIngresoProducto = new RequestVWIngresoProducto()
   responseVWMaterial : ResponseVWMaterial [] = []
   response : ResponseMaterial [] = []
+  produccion:ResponseVWProduccion[]=[]
+  responseListOrden : ResponseListOrden[]=[]
+  nombreRol: RequestFiltroNombre = new RequestFiltroNombre();
   responseMaterial :ResponseMaterial = new ResponseMaterial()
   responseUnidad : ResponseUnidad[] = []
+  orden: ResponseListOrden[] = [];
+  responseProduccion : ResponseVWProduccion []=[]
   materialSelect : ResponseVWMaterial = new ResponseVWMaterial ()
   constructor
   (
@@ -47,6 +55,8 @@ export class MantProduccionRegisterComponent implements OnInit {
     private _router : Router,
      private _fb : FormBuilder,
      private _productoService : ProductoService,
+     private _OrdenService: OrdenService,
+     private _produccionService: ProduccionService,
      private _unidadService : UnidadService
   )
   {
@@ -57,7 +67,9 @@ export class MantProduccionRegisterComponent implements OnInit {
         nombreProd: [null,Validators.required] ,
         fechaInicio : [null,Validators.required],
         meta : [null,Validators.required],
+        codigoOrden: [null,Validators.required],
         estadoProduccion : [null,Validators.required],
+        descripcion: [null,Validators.required],
         cantidadFaltante  : [null,Validators.required],
         codigoProduccion : [null,Validators.required] ,
         nombreUnidad: [null,Validators.required] ,
@@ -69,8 +81,46 @@ export class MantProduccionRegisterComponent implements OnInit {
   ngOnInit(): void {
     this.myForm.patchValue(this.responseUnidad)
     this.myForm.patchValue(this.Produccion)
+    this.filtrarOrdenAcIna('Activo')
     this.listarProductos()
+    this.filtrarProduccionAcIna('Activo')
     this.listarUnidad()
+  }
+  filtrarProduccionAcIna(nombre:string)
+  {
+
+
+
+    this.nombreRol.nombre = nombre;
+
+    this._produccionService.genericFiltroProduccionActivo(this.nombreRol).subscribe({
+      next: (data: ResponseVWProduccion[]) => {
+        this.responseProduccion = data; // Actualiza la lista con la respuesta filtrada
+        console.log(data);
+      },
+      error: (error: any) => {
+        console.error('Error al filtrar roles', error);
+      },
+      complete: () => { }
+    });
+  }
+  filtrarOrdenAcIna(nombre:string)
+  {
+
+
+
+    this.nombreRol.nombre = nombre;
+
+    this._OrdenService.genericFiltroOrdenActivo(this.nombreRol).subscribe({
+      next: (data: ResponseListOrden[]) => {
+        this.responseListOrden = data; // Actualiza la lista con la respuesta filtrada
+        console.log("Orden Activo",data);
+      },
+      error: (error: any) => {
+        console.error('Error al filtrar roles', error);
+      },
+      complete: () => { }
+    });
   }
   guardar()
   {

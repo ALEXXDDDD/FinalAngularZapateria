@@ -1,11 +1,14 @@
 export class RequestCredito {
-    idCredito: number=0;
-    montoTotal: number=0 ;
-    montoPagado: number=0 ;
-    montoDeuda: number=0 ;
-    estadoCredito: string ="" ;
-    idCliente: number=0;
-}
+    montoPagado: number= 0 ;
+    montoDeuda: number= 0 ;
+    montoTotal: number= 0 ;
+    idCredito: number= 0;
+    idCliente: number= 0;
+    nombreCliente: string = "" ;
+    codigoOrden: string ="" ;
+    estadoOrden: string ="";
+    fechaOrden: string ="";
+    fechaRequerido: string="" ;
 // export interface RequestCredito {
 //     idCredito: number;
 //     montoTotal: number | null;
@@ -14,3 +17,4 @@ export class RequestCredito {
 //     estadoCredito: string | null;
 //     idCliente: number;
 // }
+}

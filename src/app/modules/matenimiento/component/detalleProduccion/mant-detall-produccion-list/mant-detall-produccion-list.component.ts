@@ -5,12 +5,13 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { ProduccionService } from '../../../service/produccion/produccion.service';
 import { AcciontConstants } from 'src/app/constants/general.constans';
+import { MantDetallProduccionRegisterComponent } from "../mant-detall-produccion-register/mant-detall-produccion-register.component";
 
 @Component({
   selector: 'app-mant-detall-produccion-list',
   templateUrl: './mant-detall-produccion-list.component.html',
-  styleUrls: ['./mant-detall-produccion-list.component.css']
-})
+  styleUrls: ['./mant-detall-produccion-list.component.css'],
+ })
 export class MantDetallProduccionListComponent implements OnInit {
   responseProduccion : ResponseProduccion []=[];
   response: ResponseProduccion = new ResponseProduccion();

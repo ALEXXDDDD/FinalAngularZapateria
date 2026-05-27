@@ -5,6 +5,8 @@ import { ResponseVWMaterial } from '../../models/material/material-responseVW.mo
 import { HttpClient } from '@angular/common/http';
 import { urlConstants } from 'src/app/constants/url.constants';
 import { ResponseMaterial } from '../../models/material/material-response.model';
+import { Observable } from 'rxjs';
+import { Material } from '../../models/material/material-responseAcabado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,4 +18,9 @@ export class MaterialService extends CrudService<RequestVWMaterial,ResponseVWMat
   ) {
     super (http,urlConstants.material)
    }
+   getAllMaterialAcabado():Observable<Material[]>{
+    return this._http.get<Material[]>(`${this.url_service}/sinMaterial`)
+  }
+  
+  
 }

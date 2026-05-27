@@ -1,8 +1,19 @@
-label{
-    margin-left: 40px;
-    font-size: 20px;
+.modal-header h5 {
+    font-size: 1.25rem; /* Tamaño más pequeño */
 }
-input{
-    margin-left: 10px;
-    margin-right: 100px;
+
+.form-label {
+    font-size: 0.875rem; /* Reducir tamaño de etiquetas */
+}
+
+.form-control-sm {
+    font-size: 0.875rem; /* Tamaño pequeño en campos de entrada */
+}
+
+.modal-body {
+    padding: 1rem 1.5rem; /* Reduce padding dentro del modal */
+}
+
+.btn-sm {
+    padding: 0.25rem 0.75rem; /* Botones más pequeños */
 }

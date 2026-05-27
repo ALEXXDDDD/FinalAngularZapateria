@@ -1,17 +1,17 @@
-<div class="chat-icon-container">
-  <img id="chat-icon" src="assets/chat.bot.png" alt="Chat Icon">
-</div>
-
-<div id="chat-container" class="chat-container hidden">
-  <div class="chat-header">
-    <span>Chatbot</span>
-    <button id="close-btn">✖</button>
+<div id="chat-container" class="hidden">
+  <!-- <img src="./../../../../assets/img/Img_Welcome/images.png" alt=""> -->
+  <div id="chat-box">
+    <!-- Mensajes del usuario y del bot se agregarán aquí -->
+    <div *ngIf="loading" class="loading-animation">
+      <!-- Puedes poner aquí un spinner o alguna animación -->
+      <p>Cargando...</p>
+    </div>
+    <div *ngIf="botMessage" class="bot-message">
+      {{ botMessage }}
+    </div>
   </div>
-
-  <div id="chat-box" class="chat-box"></div>
-
-  <div class="chat-input-container">
-    <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
-    <button id="send-btn">Enviar</button>
-  </div>
+  <input id="user-input" type="text" placeholder="Escribe un mensaje..." />
+  <button id="send-btn">Enviar</button>
+  <button id="close-btn">X</button>
 </div>
+<button id="chat-icon">Chat</button>

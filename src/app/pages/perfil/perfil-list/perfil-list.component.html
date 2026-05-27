@@ -12,12 +12,12 @@
               <button class="image-button btn btn-outline-secondary rounded-circle p-0" (click)="triggerFileInput(p)">
                 <img [src]="p.fotografia" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
                 <input type="file" class="file-input d-none" (change)="updateImage($event, p)" />
-                <span class="tooltip-text position-absolute top-100 start-50 translate-middle badge rounded-pill bg-primary">Actualizar imagen</span>
+                <!-- <span class="tooltip-text position-absolute top-100 start-50 translate-middle badge rounded-pill bg-primary">Actualizar imagen</span> -->
               </button>
             </div>
             <div class="profile-details text-center mt-3">
               <h3 class="card-title">{{p.nombrePersona}}</h3>
-              <p class="card-text text-muted">Desarrollador de Software</p>
+              <p class="card-text text-muted">{{p.nombreRol}}</p>
               <p class="card-text"><strong>Email:</strong> {{p.email}}</p>
               <p class="card-text"><strong>Usuario:</strong> {{p.usuario}}</p>
               <p class="card-text"><strong>Ubicación:</strong> {{p.direccion}}</p>

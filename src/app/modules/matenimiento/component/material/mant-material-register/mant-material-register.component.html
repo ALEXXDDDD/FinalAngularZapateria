@@ -42,18 +42,8 @@
         </div>
         <div class="col-12 mt-5">
             <div class="form-group">
-                <label for="" aria-placeholder="">Cantidad Ingresante </label>
-                <input type="text" formControlName="stock" class="form-control" placeholder="Ingrese Descripcion">
-            </div>
-
-            <div *ngIf="myForm.get('desc')?.errors && myForm.touched">
-                <span class="text-danger" *ngIf="myForm.get('desc')?.hasError('required')" >Campo Requerido </span>
-            </div>
-        </div>
-        <div class="col-12 mt-5">
-            <div class="form-group">
                 <label for="" aria-placeholder="">Descripcion</label>
-                <input type="text" formControlName="descripcionMaterial" class="form-control" placeholder="Ingrese Descripcion">
+                <input type="text" formControlName="descripMaterial" class="form-control" placeholder="Ingrese Descripcion">
             </div>
 
             <div *ngIf="myForm.get('descripcionMaterial')?.errors && myForm.touched">
@@ -73,13 +63,26 @@
         <div class="col-12 mt-5">
             <div class="form-group">
                 <label for="" aria-placeholder="">Estado </label>
-                <input type="text" formControlName="estado" class="form-control" placeholder="Ingrese Descripcion">
+                <select formControlName="estado" name="" id="">
+                    <option value="ACTIVO">ACTIVO</option>
+
+
+                </select>
             </div>
 
             <div *ngIf="myForm.get('estado')?.errors && myForm.touched">
                 <span class="text-danger" *ngIf="myForm.get('estado')?.hasError('required')" >Campo Requerido </span>
             </div>
         </div>
+        <div class="col-12 mt-5"></div>
+            <div class="form-group">
+                <label for="" aria-placeholder="">Stock Opcional</label>
+                <input type="text" formControlName="stock" class="form-control" placeholder="stock">
+            </div>
+
+            <div *ngIf="myForm.get('stock')?.errors && myForm.touched">
+                <span class="text-danger" *ngIf="myForm.get('stock')?.hasError('required')" >Campo Requerido </span>
+            </div>
         
         
             <div class="col-6  mt-3">

@@ -1,130 +1,291 @@
-<div class="container-fluid mt-4">
-  <div class="card bg-light mb-3">
-      <div class="card-header">
-          <strong>Órdenes</strong>
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200">
+        <h2 class="text-xl font-extrabold text-white tracking-wide uppercase flex items-center space-x-2">
+          <i class="fas fa-boxes text-blue-400"></i>
+          <span>Panel de Gestión de Órdenes</span>
+        </h2>
       </div>
-      <div class="card-body">
-        <div class="mb-3" [formGroup]="myFormFilter">
-            <label for="orderStatusFilter" class="form-label">Filtrar por Estado</label>
-            <select id="orderStatusFilter" class="form-select" formControlName="nombreRol" (change)="filtroOrdenRetrasados()">
-              <option value="Todos">Todas</option>
+
+      <div class="p-6 space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end border-b border-gray-100 pb-6">
+          <div [formGroup]="myFormFilter" class="lg:col-span-1">
+            <label for="orderStatusFilter" class="block text-xs font-bold text-slate-600 uppercase mb-2">Filtrar por Estado</label>
+            <select id="orderStatusFilter" class="w-full px-3 py-2 bg-slate-50 border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" formControlName="nombreRol" (change)="filtroOrdenRetrasados()">
+              <option value="Todos">Todas las órdenes</option>
               <option value="A Tiempo">A Tiempo</option>
-              <option  value="Retrasadas">Retrasadas</option>
+              <option value="Retrasadas">Retrasadas</option>
             </select>
           </div>
 
-          <!-- Botones de acción -->
-          <div class="d-grid gap-2 mb-3">
-              <button class="btn btn-primary" (click)="crearOrden(modalEdit)">
-                  <i class="fas fa-plus"></i> Agregar Orden
-              </button>
-              <button class="btn btn-primary" (click)="crearOrden(modalEditUnidad)">
-                  <i class="fas fa-plus"></i> Agregar Nueva Unidad
-              </button>
+          <div class="lg:col-span-2 flex flex-col sm:flex-row gap-3 sm:justify-end">
+            <button (click)="crearOrden(modalEdit)" class="inline-flex justify-center items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150">
+              <i class="fas fa-plus"></i>
+              <span>Agregar Orden</span>
+            </button>
+            <button (click)="crearUnidad(modalEditUnidad)" class="inline-flex justify-center items-center space-x-2 bg-slate-700 hover:bg-slate-800 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150">
+              <i class="fas fa-layer-group"></i>
+              <span>Agregar Nueva Unidad</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm" *ngIf="mostrarListaCompleta">
+          <table class="w-full min-w-full divide-y divide-gray-200">
+            <thead class="bg-slate-50">
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Orden</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">F. Requerida</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cliente</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Producto</th>
+                <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Cant.</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Precio U.</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Total</th>
+                <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <ng-container *ngFor="let d of responseOrden">
+                <tr *ngFor="let e of d.ordens" class="hover:bg-blue-50/30 transition-colors duration-150">
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-semibold text-slate-700">{{e.idOrden}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{ formattedFechaOrden(e.fechaOrden)}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{formattedFechaRequerido(e.fechaRequerido)}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm">
+                    <span [class]="e.estadoOrden === 'Retrasadas' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'" class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide">
+                      {{e.estadoOrden}}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{e.nombreCliente}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{e.nombreProd}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-center font-semibold text-slate-800">{{e.cantidad}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600 font-mono">{{e.precioUnitario | currency}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">{{e.montoTotal | currency}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-center text-xs font-medium space-x-1">
+                    <button (click)="editarOrden(modalEdit, e)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
+                      <i class="fas fa-edit"></i> <span>Editar</span>
+                    </button>
+                    <button (click)="eliminarOrden(e.idUsuario)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
+                      <i class="fas fa-trash"></i> <span>Borrar</span>
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm" *ngIf="!mostrarListaCompleta">
+          <table class="w-full min-w-full divide-y divide-gray-200">
+            <thead class="bg-slate-50">
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Orden</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">F. Requerida</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cliente</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Producto</th>
+                <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Cant.</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Precio U.</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Total</th>
+                <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let d of orden" class="hover:bg-rose-50/30 transition-colors duration-150">
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{ formattedFechaOrden(d.fechaOrden)}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{formattedFechaRequerido(d.fechaRequerido)}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm">
+                  <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 uppercase tracking-wide">
+                    {{d.estadoOrden}}
+                  </span>
+                </td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{d.nombreCliente}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{d.nombreProd}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-center font-semibold text-slate-800">{{d.cantidad}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600 font-mono">{{d.precioUnitario | currency}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">{{d.montoTotal | currency}}</td>
+                <td class="px-4 py-3.5 whitespace-nowrap text-center text-xs font-medium space-x-1">
+                  <button (click)="editarOrden(modalEdit, d)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
+                    <i class="fas fa-edit"></i> <span>Editar</span>
+                  </button>
+                  <button (click)="eliminarOrden(d.idUsuario)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
+                    <i class="fas fa-trash"></i> <span>Borrar</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pt-6 border-t border-gray-100">
+          <div class="flex justify-center space-x-4 mb-4">
+            <button class="bg-amber-500 hover:bg-amber-600 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150" (click)="mostrarTabla('conAccion'); filtrarOrdenAcIna('Activo')">
+              Órdenes Activas
+            </button>
+            <button class="bg-slate-700 hover:bg-slate-800 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150" (click)="mostrarTabla('sinAccion'); filtrarOrdenAcIna('Inactivo')">
+              Órdenes Inactivas
+            </button>
           </div>
 
-          <!-- Tabla de órdenes -->
-          <div class="table-responsive" *ngIf="mostrarListaCompleta">
-              <table class="table table-bordered table-striped">
-                  <thead>
-                      <tr>
-                          <th>Fecha de Orden</th>
-                          <th>Fecha Requerida</th>
-                          <th>Estado</th>
-                          <th>Nombre del Cliente</th>
-                          <th>Producto</th>
-                          <th>Cantidad</th>
-                          <th>Precio/Unidad</th>
-                          <th>Total</th>
-                          <th>Acciones</th>
-                      </tr>
-                  </thead>
-                  <tbody *ngFor="let d of responseOrden">
-                      <tr *ngFor="let e of d.ordens">
-                          <td>{{ formattedFechaOrden(e.fechaOrden)}}</td>
-                          <td>{{formattedFechaRequerido(e.fechaRequerido)}}</td>
-                          <td>{{e.estadoOrden}}</td>
-                          <td>{{e.nombreCliente}}</td>
-                          <td>{{e.nombreProd}}</td>
-                          <td>{{e.cantidad}}</td>
-                          <td>{{e.precioUnitario}}</td>
-                          <td>{{e.montoTotal}}</td>
-                          <td>
-                              <button class="btn btn-primary me-1" (click)="editarOrden(modalEdit, e)">
-                                  <i class="fas fa-edit"></i> Actualizar
-                              </button>
-                              <button class="btn btn-primary me-1" >
-                                  <i class="fas fa-download"></i> Descargar Boleta
-                              </button>
-                              <button class="btn btn-danger" (click)="eliminarOrden(e.idUsuario)">
-                                  <i class="fas fa-trash"></i> Eliminar
-                              </button>
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-        <!--Flitro Ordenes Retrasadas -->
-          <div class="table-responsive" *ngIf="!mostrarListaCompleta">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Fecha de Orden</th>
-                        <th>Fecha Requerida</th>
-                        <th>Estado</th>
-                        <th>Nombre del Cliente</th>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio/Unidad</th>
-                        <th>Total</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody *ngFor="let d of orden">
-                    <tr >
-                        <td>{{ formattedFechaOrden(d.fechaOrden)}}</td>
-                        <td>{{formattedFechaRequerido(d.fechaRequerido)}}</td>
-                        <td>{{d.estadoOrden}}</td>
-                        <td>{{d.nombreCliente}}</td>
-                        <td>{{d.nombreProd}}</td>
-                        <td>{{d.cantidad}}</td>
-                        <td>{{d.precioUnitario}}</td>
-                        <td>{{d.montoTotal}}</td>
-                        <td>
-                            <button class="btn btn-primary me-1" (click)="editarOrden(modalEdit, d)">
-                                <i class="fas fa-edit"></i> Actualizar
-                            </button>
-                            <button class="btn btn-primary me-1" >
-                                <i class="fas fa-download"></i> Descargar Boleta
-                            </button>
-                            <button class="btn btn-danger" (click)="eliminarOrden(d.idUsuario)">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
+          <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm" *ngIf="tablaActual === 'conAccion'">
+            <table class="w-full min-w-full divide-y divide-gray-200">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Orden</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">F. Requerida</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cliente</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Total</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Código</th>
+                  <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr *ngFor="let e of orden" class="hover:bg-slate-50 transition-colors duration-150">
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{ formattedFechaOrden(e.fechaOrden)}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{formattedFechaRequerido(e.fechaRequerido)}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm">
+                    <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 uppercase tracking-wide">{{e.estadoOrden}}</span>
+                  </td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{e.nombreCliente}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">{{e.montoTotal | currency}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-mono text-slate-600 font-semibold">{{e.codigoOrden}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-center space-x-1">
+                    <button class="inline-flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded transition-colors"><i class="fas fa-edit"></i> <span>Editar</span></button>
+                    <button class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white text-xs px-2.5 py-1 rounded transition-colors"><i class="fas fa-trash"></i> <span>Borrar</span></button>
+                  </td>
+                </tr>
+              </tbody>
             </table>
+          </div>
+
+          <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm" *ngIf="tablaActual === 'sinAccion'">
+            <table class="w-full min-w-full divide-y divide-gray-200">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Orden</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">F. Requerida</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cliente</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Total</th>
+                  <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Código</th>
+                  <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr *ngFor="let d of orden" class="hover:bg-slate-50 transition-colors duration-150">
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{ formattedFechaOrden(d.fechaOrden)}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{formattedFechaRequerido(d.fechaRequerido)}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm">
+                    <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 uppercase tracking-wide">{{d.estadoOrden}}</span>
+                  </td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{d.nombreCliente}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">{{d.montoTotal | currency}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-mono text-slate-600 font-semibold">{{d.codigoOrden}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-center space-x-1">
+                    <button class="inline-flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded transition-colors"><i class="fas fa-edit"></i> <span>Editar</span></button>
+                    <button class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white text-xs px-2.5 py-1 rounded transition-colors"><i class="fas fa-trash"></i> <span>Borrar</span></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
       </div>
+    </div>
+
+
+    <div *ngIf="mostrarInforme" class="bg-slate-100 p-4 sm:p-8 rounded-xl border border-gray-200 shadow-inner">
+      <div id="informe" class="bg-white p-6 sm:p-10 rounded-xl shadow-lg max-w-4xl mx-auto border border-gray-100 space-y-8">
+        
+        <div class="flex justify-end space-x-2 border-b border-gray-100 pb-4 print:hidden">
+          <button class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs px-4 py-2 rounded-lg transition-colors shadow-sm" (click)="descargarPDF()">
+            <i class="fas fa-download"></i> <span>Descargar PDF</span>
+          </button>
+          <button class="inline-flex items-center space-x-1.5 bg-slate-500 hover:bg-slate-600 text-white font-medium text-xs px-4 py-2 rounded-lg transition-colors shadow-sm" (click)="ocultarInforme()">
+            <i class="fas fa-eye-slash"></i> <span>Ocultar</span>
+          </button>
+        </div>
+
+        <header class="text-center pb-6 border-b-2 border-slate-100">
+          <h1 class="text-3xl font-black text-slate-800 tracking-tight uppercase">Informe de Ventas</h1>
+          <p class="text-md font-bold text-blue-600 mt-1">Zapatería "El Buen Paso"</p>
+          <p class="text-xs text-slate-400 mt-0.5">Fecha de Emisión: {{ fechaActual | date:'dd/MM/yyyy' }}</p>
+        </header>
+
+        <section class="bg-slate-50 p-5 rounded-xl border border-slate-200/60">
+          <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center space-x-1.5">
+            <i class="fas fa-user-tie text-slate-500"></i>
+            <span>Detalles del Cliente</span>
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-600">
+            <div class="space-y-1.5">
+              <p><strong class="text-slate-800">Nombre:</strong> {{ responseVWOrden.nombrePersona }}</p>
+              <p><strong class="text-slate-800">Teléfono:</strong> {{ responseVWOrden.telefono }}</p>
+              <p><strong class="text-slate-800">Email:</strong> {{ responseVWOrden.email }}</p>
+            </div>
+            <div class="space-y-1.5">
+              <p><strong class="text-slate-800">Dirección:</strong> {{ responseVWOrden.direccion }}</p>
+              <p><strong class="text-slate-800">Código Ubigeo:</strong> <span class="font-mono">{{ responseVWOrden.codigoUbigeo }}</span></p>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
+            <i class="fas fa-shopping-basket text-slate-500"></i>
+            <span>Resumen de los Productos</span>
+          </h2>
+          <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+            <table class="w-full text-left border-collapse min-w-full">
+              <thead class="bg-slate-100 border-b border-gray-200">
+                <tr>
+                  <th scope="col" class="px-4 py-3 text-xs font-bold text-slate-600 uppercase">Producto</th>
+                  <th scope="col" class="px-4 py-3 text-xs font-bold text-slate-600 uppercase text-center">Cantidad</th>
+                  <th scope="col" class="px-4 py-3 text-xs font-bold text-slate-600 uppercase">Precio Unitario</th>
+                  <th scope="col" class="px-4 py-3 text-xs font-bold text-slate-600 uppercase">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-100 text-sm text-slate-700">
+                <tr>
+                  <td class="px-4 py-3.5 font-medium text-slate-900">{{ responseVWOrden.nombreProd }}</td>
+                  <td class="px-4 py-3.5 text-center font-semibold text-slate-800">{{ responseVWOrden.cantidad }}</td>
+                  <td class="px-4 py-3.5 font-mono text-slate-600">{{ responseVWOrden.precioUnitario | currency }}</td>
+                  <td class="px-4 py-3.5 font-bold text-slate-900 font-mono">{{ responseVWOrden.montoTotal | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <footer class="text-center pt-8 border-t border-slate-100 text-xs text-slate-400 space-y-1">
+          <p class="font-medium text-slate-500">Gracias por su preferencia en Zapatería "El Buen Paso".</p>
+          <p>Para consultas sobre este informe, contáctenos al <span class="font-semibold text-slate-600">999-999-999</span> o soporte@elbuenpaso.com</p>
+        </footer>
+
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- Modal Templates -->
 <ng-template #modalEdit>
   <app-mant-register-orden
-      [title]="titleModal"
-      [orden]="OrdenSelect"
-      [accion]="accionModal"
-      (closeModalEmmit)="getCloseModalEmmit($event)"
-  >
+    [title]="titleModal"
+    [orden]="OrdenSelect"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)">
   </app-mant-register-orden>
 </ng-template>
+
 <ng-template #modalEditUnidad>
   <app-mant-unidad-resgister
-
-      [unidad]="UnidadSelect"
-      [accion]="accionModal"
-      (closeModalEmmit)="getCloseModalEmmit($event)"
-  >
+    [unidad]="UnidadSelect"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)">
   </app-mant-unidad-resgister>
 </ng-template>

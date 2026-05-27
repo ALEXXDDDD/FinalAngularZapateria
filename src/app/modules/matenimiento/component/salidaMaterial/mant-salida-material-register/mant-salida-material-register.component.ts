@@ -12,6 +12,9 @@ import { ResponseMaterial } from '../../../models/material/material-response.mod
 import { MaterialService } from '../../../service/material/material.service';
 import { ResponseUnidad } from '../../../models/unidad/p/unidad-response.model';
 import { UnidadService } from '../../../service/unidad/unidad.service';
+import { ProduccionService } from '../../../service/produccion/produccion.service';
+import { ResponseVWProduccion } from '../../../models/Produccion/produccion-reponseVW.model';
+import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
 
 @Component({
   selector: 'app-mant-salida-material-register',
@@ -32,8 +35,10 @@ export class MantSalidaMaterialRegisterComponent implements OnInit {
   SalidaMaterialEnvio : RequestVWSalidaMaterial = new RequestVWSalidaMaterial ()
   responseVWMaterial : ResponseVWMaterial [] = []
   response : ResponseMaterial [] = []
+  nombreRol: RequestFiltroNombre = new RequestFiltroNombre();
   responseMaterial :ResponseMaterial = new ResponseMaterial()
   responseUnidad : ResponseUnidad[] = []
+  responseProduccion : ResponseVWProduccion []=[]
   materialSelect : ResponseVWMaterial = new ResponseVWMaterial ()
   constructor
   (
@@ -41,15 +46,18 @@ export class MantSalidaMaterialRegisterComponent implements OnInit {
     private _materialService : MaterialService,
     private _router : Router,
      private _fb : FormBuilder,
+     private _produccionService: ProduccionService,
      private _unidadService : UnidadService
   )
   {
     this.myForm = this._fb.group
     (
       {
-        idProduccion :[null,Validators.required],
-        nombreMaterial :[null,Validators.required],
-        nombreUnidad :[null,Validators.required],
+        nombreMaterial :[null,[Validators.required]],
+        idUnidad:[{value:0,disabled:true},[Validators.required]],
+        idSalidaMaterial:[null,Validators.required],
+        codigoProduccion: [null,Validators.required],
+        stock:[{ value: null, disabled: true }, Validators.required],
         cantidad: [null,Validators.required],
         fechaSalida :[null,Validators.required]
       }
@@ -58,8 +66,12 @@ export class MantSalidaMaterialRegisterComponent implements OnInit {
   ngOnInit(): void {
     this.myForm.patchValue(this.responseUnidad)
     this.myForm.patchValue(this.salidaMaterial)
+    this.filtrarProduccionAcIna('Activo')
     this.listarMateriales()
     this.listarUnidad()
+    this.myForm.get('nombreMaterial')?.valueChanges.subscribe(value => {
+      this.actualizarStock(value);
+    });
   }
   guardar()
   {
@@ -95,6 +107,29 @@ export class MantSalidaMaterialRegisterComponent implements OnInit {
       }
     )
   }
+  estCantidad(): boolean {
+    
+    const cantidadFaltante = this.myForm.get('stock')?.value;
+    return cantidadFaltante === 0;
+  }
+  filtrarProduccionAcIna(nombre:string)
+  {
+
+
+
+    this.nombreRol.nombre = nombre;
+
+    this._produccionService.genericFiltroProduccionActivo(this.nombreRol).subscribe({
+      next: (data: ResponseVWProduccion[]) => {
+        this.responseProduccion = data; // Actualiza la lista con la respuesta filtrada
+        console.log("Codigo de produccion activas",data);
+      },
+      error: (error: any) => {
+        console.error('Error al filtrar roles', error);
+      },
+      complete: () => { }
+    });
+  }
   editarSailda()
   {
     this._salidaMaterialService.update(this.SalidaMaterialEnvio).subscribe
@@ -126,6 +161,13 @@ export class MantSalidaMaterialRegisterComponent implements OnInit {
 
       }
     )
+  }
+  actualizarStock(nombreMaterial: string | null) {
+    const producto = this.responseVWMaterial.find(p => p.nombreMaterial === nombreMaterial);
+    if (producto) {
+      this.myForm.get('stock')?.setValue(producto.stock, { emitEvent: false });
+    }
+
   }
   listarUnidad()
   {

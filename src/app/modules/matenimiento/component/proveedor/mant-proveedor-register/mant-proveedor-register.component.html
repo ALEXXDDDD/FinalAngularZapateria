@@ -1,0 +1,114 @@
+<div class="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Registro de Pedido de Proveedor</h2>
+    
+    <form [formGroup]="myForm">
+      <!-- Nombre del Proveedor -->
+      <div class="mb-4">
+        <label for="providerName" class="block text-sm font-medium text-gray-700">Nombre del Proveedor</label>
+        <select  formControlName="nombreProveedor"  id="categoria" name="categoria" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+            <option value="">Selecciona el Proveedor</option>
+            <option *ngFor="let e of responseWProvedor" value="{{e.nombreProveedor}}">{{e.nombreProveedor}}</option>
+          
+          </select>
+      </div>
+  
+      <!-- Fecha del Pedido -->
+      <div class="mb-4">
+        <label for="orderDate" class="block text-sm font-medium text-gray-700">Fecha del Entrega</label>
+        <input
+          type="date"
+          id="orderDate"
+          formControlName="fechaEntrega"
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="orderDate" class="block text-sm font-medium text-gray-700">Fecha del Pedido</label>
+        <input
+          type="date"
+          id="orderDate"
+          formControlName="fechaPedido"
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="orderDate" class="block text-sm font-medium text-gray-700">Codigo Del Comprobante</label>
+        <input
+          type="text"
+          id="codigoComprobante"
+          formControlName="codigoComprobante"
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="orderDate" class="block text-sm font-medium text-gray-700">Tipo Del Comprobante</label>
+        <select name="" id="" formControlName="tipoComprobante">
+            <option value="RUC">RUC</option>
+        </select>
+      </div>
+  
+      <!-- Cantidad del Pedido -->
+      <div class="mb-4">
+        <label for="orderAmount" class="block text-sm font-medium text-gray-700">Cantidad</label>
+        <input
+          type="number"
+          id="orderAmount"
+          formControlName="cantidadTotal"
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Ingrese la cantidad"
+        />
+      
+      <!-- Producto -->
+      <div class="mb-4">
+        <label for="product" class="block text-sm font-medium text-gray-700">Costo de Transporte</label>
+        <input
+            type="text"
+        id="product"
+        formControlName="costeTransporte"
+        class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+      placeholder="Ingrese el producto"
+        />
+    </div>
+      <!-- Producto -->
+      <div class="mb-4">
+        <label for="product" class="block text-sm font-medium text-gray-700">Sub Total</label>
+        <input
+          type="text"
+          id="product"
+          formControlName="subTotal"
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Ingrese el producto"
+        />
+      </div>
+       <!-- Producto -->
+       <div class="mb-4">
+        <label for="product" class="block text-sm font-medium text-gray-700"> Total</label>
+        <input
+          type="text"
+          id="product"
+          formControlName="montoTotal"
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Ingrese el producto"
+        />
+      </div>
+  
+      <!-- Botones -->
+      <div class="flex justify-end">
+        <button
+          type="reset"
+          class="mr-2 bg-gray-300 text-gray-700 hover:bg-gray-400 font-bold py-2 px-4 rounded"
+        >
+          Cancelar
+        </button>
+        <button
+        (click)="guardar()"
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Registrar Pedido
+        </button>
+      </div>
+ </div>
+ </form>
+  </div>
+  

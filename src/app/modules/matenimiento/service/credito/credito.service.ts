@@ -5,6 +5,9 @@ import { CrudService } from 'src/app/modules/shared/services/crud.service';
 import { HttpClient } from '@angular/common/http';
 import { urlConstants } from 'src/app/constants/url.constants';
 import { RequestCredito } from '../../models/credito/credito-requestCredito.model';
+import { VistCredito } from '../../models/credito/credito-responseVist.model';
+import { Observable } from 'rxjs';
+import { RequestFiltroNombre } from '../../models/requestFiltroNombre.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +19,17 @@ export class CreditoService  extends CrudService<RequestCredito,ResponseVCredito
   ) { 
     super(http,urlConstants.Credito)
   }
+  getAllCredito():Observable<VistCredito[]>{
+    return this._http.get<VistCredito[]>(`${this.url_service}/vistCredito`)
+  }
+  genericCreditoDisponible(request:RequestFiltroNombre):Observable<VistCredito[]>
+   {
+       return this._http.post<VistCredito[]>(`${this.url_service}/filtro-creditoActivo`,request)
+   }
+   getDetalleCredito(idCliente: number): Observable<VistCredito[]> {
+    return this._http.get<VistCredito[]>(`${this.url_service}/${idCliente}`);
+  }
+  
  /*  getAll():Observable<ResponseCredito[]>{
     return this._http.get<ResponseCliente[]>(urlConstants.Cliente)
   }

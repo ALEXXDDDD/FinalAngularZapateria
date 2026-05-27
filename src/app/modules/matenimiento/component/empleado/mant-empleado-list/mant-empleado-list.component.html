@@ -1,77 +1,140 @@
-<form>
-  <div class="card bg-light shadow-sm mb-4">
-    <div class="card-header bg-primary text-white">
-      <i class="fas fa-search mr-2"></i> Búsqueda por Sueldo
-    </div>
-    <div class="card-body" [formGroup]="myFormFilter">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="sueldoMinimo">Sueldo Mínimo</label>
-            <input type="number" class="form-control" formControlName="sueldoMinimo" placeholder="Ingrese el sueldo mínimo">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="sueldoMaximo">Sueldo Máximo</label>
-            <input type="number" class="form-control" formControlName="sueldoMaximo" placeholder="Ingrese el sueldo máximo">
-          </div>
-        </div>
-        <div class="col-md-4 d-flex align-items-end">
-          <button type="button" class="btn btn-primary mr-2" (click)="filtroSueldo()">
-            <i class="fas fa-search mr-1"></i> Buscar
-          </button>
-          <button type="button" class="btn btn-danger" (click)="limpiarFiltros()">
-            <i class="fas fa-broom mr-1"></i> Limpiar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</form>
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
 
-<div class="container-fluid mt-4" *ngIf="mostrarListaCompleta">
-  <div class="card bg-light mb-3">
-    <div class="card-header">
-      <h4 class="mb-0"><strong>Listado De Empleados</strong></h4>
-    </div>
-    <div class="card-body">
-      <div class="d-flex justify-content-between mb-3">
-        <button (click)="crearEmpleado(modalEdit)" class="btn btn-primary">
-          <i class="fas fa-plus"></i> Agregar Empleado
+    <form>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-slate-800 px-6 py-3.5 flex items-center space-x-2 text-white">
+          <i class="fas fa-search"></i>
+          <span class="font-bold text-sm tracking-wide uppercase">Búsqueda por Sueldo</span>
+        </div>
+        
+        <div class="p-6" [formGroup]="myFormFilter">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div>
+              <label for="sueldoMinimo" class="block text-xs font-semibold text-slate-600 uppercase mb-2">Sueldo Mínimo</label>
+              <input type="number" id="sueldoMinimo" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="sueldoMinimo" placeholder="Ingrese el sueldo mínimo">
+            </div>
+
+            <div>
+              <label for="sueldoMaximo" class="block text-xs font-semibold text-slate-600 uppercase mb-2">Sueldo Máximo</label>
+              <input type="number" id="sueldoMaximo" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="sueldoMaximo" placeholder="Ingrese el sueldo máximo">
+            </div>
+
+            <div class="flex space-x-2">
+              <button type="button" (click)="filtroSueldo()" class="flex-1 inline-flex justify-center items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+                <i class="fas fa-search"></i>
+                <span>Buscar</span>
+              </button>
+              <button type="button" (click)="limpiarFiltros()" class="flex-1 inline-flex justify-center items-center space-x-1.5 bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+                <i class="fas fa-broom"></i>
+                <span>Limpiar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden" *ngIf="mostrarListaCompleta">
+      <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Listado De Empleados</h2>
+        <button (click)="crearEmpleado(modalEdit)" class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+          <i class="fas fa-plus"></i>
+          <span>Agregar Empleado</span>
         </button>
       </div>
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-          <thead class="thead-dark">
+      
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-50">
             <tr>
-              <th scope="col">IdEmpleado</th>
-              <th scope="col">Nombre Apellido</th>
-              <th scope="col">Sueldo</th>
-              <th scope="col">Teléfono</th>
-              <th scope="col">Fotografía</th>
-              <th scope="col" class="text-center">Acciones</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">ID</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre Apellido</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Sueldo</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Teléfono</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fotografía</th>
+              <th scope="col" class="px-6 py-3.5 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
-          <tbody *ngFor="let d of responseEmpleado">
-            <tr *ngFor="let e of d.empleado">
-              <td>{{e.idEmpleado}}</td>
-              <td>{{e.nombrePersona}} {{e.apellidoEmp}}</td>
-              <td>{{e.salario | currency}}</td>
-              <td>{{e.telefono}}</td>
-              <td>{{e.usuario1}}</td>
-              <!-- <td>
-                <img [src]="e.fotografiaUrl" alt="Fotografía" class="img-thumbnail" style="max-height: 100px;">
-              </td> -->
-              <td class="text-center">
-                <button (click)="editarEmpleado(modalEdit, e)" class="btn btn-primary btn-sm">
-                  <i class="fas fa-edit"></i> Actualizar
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <ng-container *ngFor="let d of responseEmpleado">
+              <tr *ngFor="let e of d.empleado" class="hover:bg-blue-50/40 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-700">{{e.idEmpleado}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{e.nombrePersona}} {{e.apellidoEmp}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono">{{e.salario | currency}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{e.telefono}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <img src="{{e.imagenEmpleado}}" alt="Empleado" class="w-10 h-10 object-cover rounded-md border border-gray-200 shadow-sm">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1.5">
+                  <button (click)="editarEmpleado(modalEdit, e)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
+                    <i class="fas fa-edit"></i>
+                    <span>Actualizar</span>
+                  </button>
+                  <button (click)="eliminarEmpleado(e.idEmpleado)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
+                    <i class="fas fa-trash"></i>
+                    <span>Eliminar</span>
+                  </button>
+                  <button [routerLink]="['/dashboard/mantenimiento/empleado-area']" class="inline-flex items-center space-x-1 bg-slate-600 hover:bg-slate-700 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
+                    <i class="fas fa-eye"></i>
+                    <span>Ver Área</span>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden" *ngIf="!mostrarListaCompleta">
+      <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 class="text-xl font-extrabold text-slate-800 tracking-tight">Listado De Empleados</h2>
+        <button (click)="crearEmpleado(modalEdit)" class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
+          <i class="fas fa-plus"></i>
+          <span>Agregar Empleado</span>
+        </button>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">ID</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre Apellido</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Sueldo</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Teléfono</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Usuario</th>
+              <th scope="col" class="px-6 py-3.5 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let d of responseWEmpleado" class="hover:bg-blue-50/40 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-700">{{d.idEmpleado}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{d.nombrePersona}} {{d.apellidoEmp}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono">{{d.salario | currency}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{d.telefono}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
+                  {{d.usuario1}}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1.5">
+                <button (click)="editarEmpleado(modalEdit, d)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
+                  <i class="fas fa-edit"></i>
+                  <span>Actualizar</span>
                 </button>
-                <button (click)="eliminarEmpleado(e.idEmpleado)" class="btn btn-danger btn-sm">
-                  <i class="fas fa-trash"></i> Eliminar
+                <button (click)="eliminarEmpleado(d.idEmpleado)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
+                  <i class="fas fa-trash"></i>
+                  <span>Eliminar</span>
                 </button>
-                <button class="btn btn-secondary btn-sm" [routerLink]="['/dashboard/mantenimiento/empleado-area']">
-                  <i class="fas fa-plus"></i> Ver Área
+                <button [routerLink]="['/dashboard/mantenimiento/empleado-area']" class="inline-flex items-center space-x-1 bg-slate-600 hover:bg-slate-700 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
+                  <i class="fas fa-eye"></i>
+                  <span>Ver Área</span>
                 </button>
               </td>
             </tr>
@@ -79,57 +142,7 @@
         </table>
       </div>
     </div>
-  </div>
-</div>
-<div class="container-fluid mt-4" *ngIf="!mostrarListaCompleta">
-  <div class="card bg-light mb-3">
-    <div class="card-header">
-      <h4 class="mb-0"><strong>Listado De Empleados</strong></h4>
-    </div>
-    <div class="card-body">
-      <div class="d-flex justify-content-between mb-3">
-        <button (click)="crearEmpleado(modalEdit)" class="btn btn-primary">
-          <i class="fas fa-plus"></i> Agregar Empleado
-        </button>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">IdEmpleado</th>
-              <th scope="col">Nombre Apellido</th>
-              <th scope="col">Sueldo</th>
-              <th scope="col">Teléfono</th>
-              <th scope="col">Fotografía</th>
-              <th scope="col" class="text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody >
-            <tr *ngFor="let d of responseWEmpleado">
-              <td>{{d.idEmpleado}}</td>
-              <td>{{d.nombrePersona}} {{d.apellidoEmp}}</td>
-              <td>{{d.salario | currency}}</td>
-              <td>{{d.telefono}}</td>
-              <td>{{d.usuario1}}</td>
-              <!-- <td>
-                <img [src]="e.fotografiaUrl" alt="Fotografía" class="img-thumbnail" style="max-height: 100px;">
-              </td> -->
-              <td class="text-center">
-                <button (click)="editarEmpleado(modalEdit, d)" class="btn btn-primary btn-sm">
-                  <i class="fas fa-edit"></i> Actualizar
-                </button>
-                <button (click)="eliminarEmpleado(d.idEmpleado)" class="btn btn-danger btn-sm">
-                  <i class="fas fa-trash"></i> Eliminar
-                </button>
-                <button class="btn btn-secondary btn-sm" [routerLink]="['/dashboard/mantenimiento/empleado-area']">
-                  <i class="fas fa-plus"></i> Ver Área
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+
   </div>
 </div>
 

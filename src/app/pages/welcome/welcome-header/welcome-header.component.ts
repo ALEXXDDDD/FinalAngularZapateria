@@ -8,9 +8,6 @@ import { Component, OnInit } from '@angular/core';
 export class WelcomeHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.rellenarMenu()
-
-
-
   }
 
 

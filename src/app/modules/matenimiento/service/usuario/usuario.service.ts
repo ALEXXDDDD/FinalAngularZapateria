@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Input, Output } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { urlConstants } from 'src/app/constants/url.constants';
-import { RequestVWUsuario } from 'src/app/models/request-vwUsuario-model';
+import { RequestUsuario, RequestVWUsuario } from 'src/app/models/request-vwUsuario-model';
 
 import { CrudService } from 'src/app/modules/shared/services/crud.service';
 
@@ -11,6 +11,7 @@ import { CorreoVerifApi } from '../../models/usuario/usuarioApiCorreo.model';
 import { ResponseUsuario } from '../../models/usuario/responseUsuario.models';
 import { UsuarioSesionStore } from '../../models/usuario/responseSesionStore.model';
 import { RequestFiltroNombre } from '../../models/requestFiltroNombre.model';
+import { ResponseLogin } from 'src/app/models/login-response.models';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,10 @@ export class UsuarioService extends CrudService<RequestVWUsuario,ResponseUsuario
   {
       return this._http.post<ResponseVUsuario[]>(`${this.url_service}/Filtro-nombreRol`,request)
   }
-  
+  loginRegister(request:RequestVWUsuario):Observable<ResponseLogin>
+  {
+      return this._http.post<ResponseLogin>(`${this.url_service}/login-register`,request)
+  }
+
  
 }

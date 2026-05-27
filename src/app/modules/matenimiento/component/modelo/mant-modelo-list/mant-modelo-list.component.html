@@ -1,113 +1,88 @@
-<h1>Modelos</h1>
-<div class="d-grid gap-2">
-      
-  <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Unidad de Cantidad</a>
-  <ul class="dropdown-menu">
-    
-    <li><a class="dropdown-item" href="#scrollspyHeading4" [routerLink]="['/dasboard/mantenimiento/producto']">Ver</a></li>
-      <li><a class="dropdown-item" href="#scrollspyHeading4">Productos-Modelo</a></li>
-      <li><hr class="dropdown-divider"></li>
-  </ul>
-  <a class="btn btn-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">   Modelo</a>
-  <ul class="dropdown-menu">
-    
-    <li><a class="dropdown-item" [routerLink]="['/dasboard/mantenimiento/modelo']" href="#scrollspyHeading4">Ver</a></li>
-      <li><a class="dropdown-item" href="#scrollspyHeading4">Producto-Modelo </a></li>
-      <li><hr class="dropdown-divider"></li>
-  </ul>
-  
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6">
 
-</div>
-    
-    <div class="container text-center">
-      <div class="row">
-        <div class="container text-center">
-          <div class="row">
-            <div class="col" id="containerProd">
-              
-              Modelos Populares
-              <div class="prd">
-                <ul >Zapato Color Negro</ul>
-    
-              </div>
-              
-            </div> 
-            
-            <tbody class="col" id="containerProd">
-              Modelos 
-              <div class="prd" *ngFor="let mod of responseModelo">
-                <ul>{{mod.nombreModelo}}</ul>  
-         
-              </div>
-              
-            <tr>   </tr> 
-            </tbody>
-            <div class="col" id="containerProd">
-              Modelos Menos Populares
-              <div class="prd">
-                <ul >Zapato Color Negro</ul>
-            
-              </div>
-              
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="container text-center">
-      <div class="row">
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+      
+      <div class="bg-slate-800 px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 class="text-md font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+          <i class="fas fa-cubes text-blue-400"></i>
+          <span>Modelos de Producto</span>
+        </h2>
         
-        </div> 
-        
-    
-     
-    
-       
-<table class="table">
-    
-    <thead>
-      <tr>
-        <tr>
-          <th scope="col" >IdEmpleado</th>
-          <th scope="col">Nombre del Modelos </th>
-          <th scope="col">Codigo del MOdelo</th>
-          <th scope="col">Breve Descripcion </th>
-        <th>
-        
-        <button (click)="crearModelo(modalEdit)"  class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i>
+        <button 
+          type="button"
+          (click)="crearModelo(modalEdit)" 
+          class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150 self-start sm:self-auto">
+          <i class="fas fa-plus text-xs"></i>
+          <span>Crear Modelo</span>
         </button>
-      </tr>
-    </thead>
-   
-      <tbody >
-        <tr  *ngFor="let mod of responseModelo">
-         
-          <td>{{mod.idModelo}}</td>
-          <td>{{mod.nombreModelo}}</td>
-          <td>{{mod.codigoModelo}}</td>
-          <td>{{mod.descripcionModelo}}</td>
+      </div>
 
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-full divide-y divide-gray-200">
+          <thead class="bg-slate-100">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">ID Modelo</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Nombre del Modelo</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Código</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Descripción</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let mod of responseModelo" class="hover:bg-slate-50/70 transition-colors duration-150">
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500 font-bold">
+                #{{ mod.idModelo }}
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">
+                {{ mod.nombreModelo }}
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 text-slate-700 border border-gray-200 uppercase tracking-wide">
+                  {{ mod.codigoModelo }}
+                </span>
+              </td>
+              
+              <td class="px-6 py-4 text-sm text-slate-600 max-w-xs truncate" [title]="mod.descripModelo">
+                {{ mod.descripModelo || 'Sin descripción' }}
+              </td>
+              
+              <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium">
+                <button 
+                  type="button"
+                  (click)="editaModelo(modalEdit, mod)" 
+                  class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded shadow-sm transition-colors"
+                  title="Editar Modelo">
+                  <i class="fas fa-edit"></i>
+                  <span>Editar</span>
+                </button>
+              </td>
 
-            <button (click)="editaModelo(modalEdit,mod)" class="btn btn-primary mr-4">
-                <i class="fas fa-edit"></i>
-            </button>
-            <button (click)="eliminarModelo(mod.idModelo)" type="button" class="btn btn-danger mr-4">
-                <i class="fas fa-trash"></i>
-            </button>
-        </tr>
-      </tbody>    
-      
-      
-    
-  </table>
-  
-    <ng-template #modalEdit>
-      <app-mant-modelo-resgister 
-      [title]="titleModal"
-      [modelo]="selectModelo"
-      [accion]="accionModal"
-      (closeModalEmmit)="getCloseModalEmmit($event)"
-      >
-      </app-mant-modelo-resgister>
-    </ng-template>
+            </tr>
+            
+            <tr *ngIf="!responseModelo || responseModelo.length === 0">
+              <td colspan="5" class="px-6 py-10 text-center text-sm text-slate-400 font-medium">
+                <i class="fas fa-box-open text-2xl block mb-2 text-slate-300"></i>
+                No hay modelos de productos registrados actualmente.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+    </div>
+  </div>
+</div>
+
+<ng-template #modalEdit>
+  <app-mant-modelo-resgister 
+    [title]="titleModal"
+    [modelo]="selectModelo"
+    [accion]="accionModal"
+    (closeModalEmmit)="getCloseModalEmmit($event)">
+  </app-mant-modelo-resgister>
+</ng-template>

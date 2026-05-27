@@ -7,6 +7,8 @@ import { urlConstants } from 'src/app/constants/url.constants';
 import { RequestVWIngresoProducto } from '../../models/ingresoProducto/requestVWIngresoProducto.model';
 import { ResponseVProduccion } from '../../models/Produccion/responseProduccion.model';
 import { Observable } from 'rxjs';
+import { RequestFiltroNombre } from '../../models/requestFiltroNombre.model';
+import { ResponseVWProduccion } from '../../models/Produccion/produccion-reponseVW.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +24,9 @@ export class ProduccionService  extends CrudService<RequestVWProduccion,Response
    GetProduccion():Observable<ResponseVProduccion[]>
    {
        return this._http.get<ResponseVProduccion[]>(`${this.url_service}/SinAcciones`)
+   }
+   genericFiltroProduccionActivo(request:RequestFiltroNombre):Observable<ResponseVWProduccion[]>
+   {
+       return this._http.post<ResponseVWProduccion[]>(`${this.url_service}/filtro-activos`,request)
    }
 }

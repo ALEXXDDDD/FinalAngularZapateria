@@ -59,9 +59,10 @@ export class MantSalidaMaterialListComponent implements OnInit{
     this.openModal(template)
 
   }
-  editarSalidaMaterial(template:TemplateRef<any>,SalidaMaterial:RequestVWSalidaMaterial)
+  editarSalidaMaterial(template:TemplateRef<any>,SalidaMaterial:ResponseListSalidaMaterial)
   {
-    this.title=" Salida"
+    this.title=" Editar Saluda "
+    debugger
     this.envioSalidaMaterial = SalidaMaterial
     this.accionModal = AcciontConstants.editar
     this.openModal(template)

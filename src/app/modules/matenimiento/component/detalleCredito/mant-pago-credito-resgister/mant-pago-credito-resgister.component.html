@@ -1,0 +1,70 @@
+
+<div class="modal-body" >
+    <form action="" [formGroup]="myForm">
+        <div class="row">
+           
+            <div class="modal-header bg-primary text-white">
+                <h4 class="modal-title">{{title}}</h4>
+                <button type="button" class="btn-close close" aria-label="Close"></button>
+              </div>
+               
+            </div>
+              <div class="modal-body">
+                <form [formGroup]="myForm">
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="idCredito">Id Crédito</label>
+                        <input type="text" class="form-control" id="idCredito" formControlName="idCredito" placeholder="Ingrese el ID">
+                      </div>
+                    </div>
+              
+                    <div class="col-md-4" >
+                      <div class="form-group">
+                        <label for="nombreCliente">Nombre del Cliente</label>
+                        <select formControlName="nombreCliente" class="form-select" id="nombreCliente" >
+                          <option *ngFor="let d of responseVistCredito" [value]="d.nombreCliente"  >{{d.nombreCliente}}</option>
+                        </select>
+                      </div>
+                    </div>
+              
+                    <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="codigoOrden">Codigo Orden </label>
+                          <select class="form-select" id="codigoOrden" formControlName="codigoOrden">
+                            <option *ngFor="let d of orden" [value]="d.codigoOrden" >{{d.codigoOrden}}  </option>
+                          </select>
+                        </div>
+                      </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="montoAmortizacion">Monto Amortizacion</label>
+                        <input type="number" class="form-control" id="montoAmortizacion" formControlName="montoPagado" (click)="removeZero('montoPagado')">
+                      </div>
+                    </div>
+              
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="montoDeuda">Monto Deuda</label>
+                        <input type="number" class="form-control" id="montoDeuda" formControlName="montoDeuda" (click)="removeZero('montoDeuda')">
+                      </div>
+                    </div>
+              
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="estadoCredito">Fecha</label>
+                        <input formControlName="fechaAmortizacion" type="date" >
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="modal-footer mt-4">
+                    <button type="button" class="btn btn-primary" (click)="guardar()">Guardar</button>
+                    <button type="button" class="btn btn-danger">Cancelar</button>
+                  </div>
+                </form>
+              </div>
+              
+          
+
+

@@ -111,6 +111,7 @@ export class MantRolListComponent implements OnInit {
   eliminarRol(id: number) {
     let result = confirm("¿Estás seguro de eliminar?");
     if (result) {
+      debugger
       this._rolService.delete(id).subscribe({
         next: () => {
           alert("Eliminado exitosamente");

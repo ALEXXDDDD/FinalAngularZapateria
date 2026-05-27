@@ -1,7 +1,7 @@
 import { PerfilListComponent } from "../pages/perfil/perfil-list/perfil-list.component"
 
 
- export const dominio = "https://zapateriaback.somee.com/"
+export const dominio = "https://localhost:7282/"
 /* export const dominio = "https://localhost:7282/"  */
 // export const dominio = "https://zapateriaback.somee.com/"
 /**
@@ -11,7 +11,7 @@ import { PerfilListComponent } from "../pages/perfil/perfil-list/perfil-list.com
 
 //  export const dominio = "https://zapateriaback.somee.com/
 
-export const urlConstants ={
+export const    urlConstants ={
     rol: dominio+'api/Rol',
     producto:dominio+'api/Producto',
     responseProductoStore:dominio+'api/ProductoStore',
@@ -44,7 +44,8 @@ export const urlConstants ={
     traerProductosAcabados :dominio+"api/VIstaModeloProducto",
     traerPerfil :dominio+"api/VIstaModeloProducto",
     traerVista:dominio+"api/VIstaModeloProducto",
-
+    comprobanteProveedor:dominio+"api/ComprobanteProvedor",
+    comprobanteDetalle:dominio+"api/ComprobanteDetalle"
 
 
 }

@@ -1,49 +1,48 @@
-<div class="modal-header">
-    <h4 class="modal-title pull-left">{{title}}</h4>
-    <button type="button" class="btn-close close pull-rigth">
-        <span class="visually-hidden">&times;</span>
-    </button>
-</div>
-<div class="modal-body" >
-    <form action="" [formGroup]="myForm">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group" >
-                    <label for="">Id Credito</label>
-                    <input type="text" class="form-control" name="" id="idDetalleCredito" formControlName="idDetalleCredito">
-                  
-                </div>
-            </div>
-           
-            <div class="col-4" *ngFor="let ma of responseOrden">
-                <label for="">Codigo del Orden</label>
-                <select *ngFor="let d of ma.ordens" name="" id=""  class="form-select" formControlName="codigoOrden">
-                    <option value="{{d.codigoOrden}}"  >{{d.codigoOrden}}</option>
-                </select>
-            </div>
-            <div class="col-4" >
-                <label for="">Monto de Pago </label>
-                <div class="form-group" >
-                    <input type="number" class="form-control" formControlName="montoAmortizacion">
-                </div>
-            </div>
-            <div class="col-4">
-                <label for="">Fecha de Pago </label>
-                <div class="form-group" >
-                    <input type="date" class="form-control" formControlName="fechaAmortizacion">
-                </div>
-            </div>
-           
-            
-        </div>
-       
-            <button type="button" class="btn btn-primary btn-sm" (click)="guardar()">
-                GUARDAR
-            </button>
-            <button type="button" class="btn btn-danger btn-sm" >
-                Cancelar
-            </button>
-        
-    </form>
+<p class="text-muted">Listar Detalle de Producto</p>
+<h2 class="text-primary">{{ title }}</h2>
+
+<div  class="d-flex justify-content-center align-items-center vh-100">
+    <h1 class="text-secondary">Buscando algo que leer...</h1>
+    <table class="min-w-full divide-y divide-gray-300 bg-white rounded-lg shadow-md">
+      <thead class="bg-blue-100">
+        <tr>
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Deuda</th>
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Nombre del Cliente</th>
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Pago</th>
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Fecha de Amortizo</th>
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Cuanto me Amortizo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of responseVistCredito" class="bg-white hover:bg-gray-100">
+          <td class="px-6 py-4 text-lg text-gray-900 font-medium">{{c.montoDeuda}}</td>
+          <td class="px-6 py-4 text-lg text-gray-900 font-medium">{{c.nombreCliente}}</td>
+          <td class="px-6 py-4 text-lg text-gray-900 font-medium">{{c.montoPagado}}</td>
+          <td class="px-6 py-4 text-lg text-gray-900 font-medium">{{c.fechaAmortizacion}}</td>
+          <td class="px-6 py-4 text-lg text-gray-900 font-medium">{{c.montoAmortizacion}}</td>
+          <td class="px-6 py-4 text-lg text-gray-900 font-medium">{{c.estadoCredito}}</td>
+          <td class="px-6 py-4">
+           >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
 </div>
 
+<body>
+    <div class="container my-5">
+        <div class="row" >
+                <div class="image-container text-center mb-4">
+                    <img  alt="Producto" class="img-fluid rounded shadow">
+                </div>
+            </div>
+            <div class="col-md-6">
+                
+                    
+                    <button [routerLink]="''" class="btn btn-primary mt-3" (click)="cerrarModal(true)">Volver</button>
+                </div>
+            </div>
+     
+  
+</body>

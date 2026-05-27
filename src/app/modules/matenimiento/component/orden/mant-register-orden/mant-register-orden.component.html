@@ -12,12 +12,12 @@
             </option>
         </select>
     </div>
-
+    
     <div class="mb-3">
         <label for="estadoSelect" class="form-label">Estado</label>
         <select id="estadoSelect" [value]="orden.estadoOrden" class="form-select" formControlName="estadoOrden" >
-            <option value="Activo">Activo</option>
-            <option value="Inactivo">Inactivo</option>
+            <option value="ACTIVO">ACTIVO</option>
+            <option value="INACTIVO">INACTIVO</option>
         </select>
     </div>
 
@@ -29,19 +29,22 @@
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="fechaOrden" class="form-label">Fecha</label>
-            <input type="date" id="fechaOrden" class="form-control" formControlName="fechaOrden">
+            <input type="date" id="fechaOrden" class="form-control" formControlName="fechaOrden"  [value]="orden.fechaOrden"> 
         </div>
         <div class="col-md-6 mb-3">
-            <label for="fechaRequerida" class="form-label">Fecha Requerida</label>
-            <input type="date" id="fechaRequerida" class="form-control" formControlName="fechaRequerido">
+            <label for="fechaRequerido" class="form-label">Fecha Requerida</label>
+            <input type="date" id="fechaRequerido" class="form-control" formControlName="fechaRequerido"  [value]="orden.fechaRequerido" >
         </div>
     </div>
     <div class="col-md-6 mb-3">
        
         <label for="unidadSelect" class="form-label mt-2">Unidad</label>
         <select id="unidadSelect" class="form-select" formControlName="nombreUnidad">
-            <option *ngFor="let listUnidad of responseUnidad" [value]="listUnidad.nombreUnidad">
+            <!--<option *ngFor="let listUnidad of responseUnidad" [value]="listUnidad.nombreUnidad">
                 {{listUnidad.nombreUnidad}}
+            </option>-->
+            <option value="Pares" class="form-select"> 
+                PARES
             </option>
         </select>
     </div>
@@ -54,17 +57,22 @@
             </option>
         </select>
     </div>
-
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="stock">Stock Disponible</label>
+            <input type="number" class="form-control" id="stock" formControlName="stock" readonly>
+        </div>
+    </div>
     <div class="mb-3">
         <button type="button" class="btn btn-secondary" >
             <i class="fas fa-plus"></i> Agregar Más Producto
         </button>
     </div>
-    <label for="cantidad" class="form-label">Cantidad</label>
+    <label for="cantidad" class="form-label">Cantidad Por Pares</label>
     <input type="number" id="cantidad" class="form-control" formControlName="cantidad" placeholder="Cantidad">
     <div class="row">
         <div class="col-md-6 mb-3">
-            <label for="precioUnitario" class="form-label">Precio por Unidad</label>
+            <label for="precioUnitario" class="form-label">Precio por Par</label>
             <input type="number" id="precioUnitario" class="form-control" formControlName="precioUnitario" placeholder="Precio Unitario" readonly>
         </div>
         
@@ -79,8 +87,10 @@
         <button type="button" class="btn btn-danger me-2" (click)="cerrarModal(false)">
             CANCELAR
         </button>
-        <button type="button" class="btn btn-primary" (click)="guardar()">
+        <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="estCantidad()">
             GUARDAR
         </button>
     </div>
 </form>
+
+
