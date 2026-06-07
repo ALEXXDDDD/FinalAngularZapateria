@@ -1,29 +1,42 @@
- <!-- HEADER -->
- <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark" id="headerAdmin">
+<nav class="h-14 bg-slate-900 text-white flex items-center justify-between px-4 border-b border-slate-800 shadow-md select-none">
     
+  <div class="flex items-center space-x-3">
+    <button 
+            type="button"
+            class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors focus:outline-none" 
+            id="sidebarToggle">
+      <i class="fas fa-bars text-lg"></i>
+    </button>
     
-    <!-- BOTON BARRA LATERAL-->
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-    <!-- BUSCADOR-->
-    <!-- Navbar Brand-->
-    
-    
-    <a class="navbar-brand ps-3" href="index.html">ZAPATERIA D'LOPEZ</a>
-    <button class="btn btn-danger" routerLink="">Pagina Principal</button>
-    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-        <div class="input-group">
-            <input class="form-control" type="text" placeholder="Buscar " aria-label="Busca" aria-describedby="btnNavbarSearch" />
-            <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-        </div>
+    <a routerLink="/dashboard/mantenimiento/inicioSidebar" class="text-md font-black tracking-wider uppercase text-slate-100 hover:text-white transition-colors">
+      Zapatería D'Lopez
+    </a>
+
+    <button routerLink="/" class="hidden sm:inline-flex bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-3 py-1.5 rounded-md shadow-sm transition-colors">
+      Página Principal
+    </button>
+  </div>
+
+  <div class="flex items-center space-x-4">
+    <form class="hidden md:block">
+      <div class="relative flex items-center">
+        <input class="bg-slate-800 text-slate-200 placeholder-slate-500 pl-4 pr-10 py-1.5 rounded-lg text-xs border border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-64 transition-all" 
+               type="text" 
+               placeholder="Buscar en el sistema..." />
+        <button class="absolute right-0 top-0 bottom-0 px-3 text-slate-400 hover:text-blue-400 transition-colors" 
+                id="btnNavbarSearch" 
+                type="button">
+          <i class="fas fa-search text-xs"></i>
+        </button>
+      </div>
     </form>
-    <!-- Login-->
-    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-        <li class="nav-item dropdown">
-            <a class="" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>                    
-        </li>
-        <label for="" style="color: white;">Mi Cuenta</label>
-    </ul>
+
+    <div class="flex items-center space-x-2 bg-slate-950/40 px-3 py-1.5 rounded-lg border border-slate-800/60 cursor-pointer hover:bg-slate-950/70 transition-colors">
+      <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700 text-blue-400">
+        <i class="fas fa-user text-xs"></i>
+      </div>
+      <span class="text-xs font-semibold text-slate-300 hidden sm:inline">Mi Cuenta</span>
+    </div>
+  </div>
     
 </nav>
-
-<!--ENDHEADER-->

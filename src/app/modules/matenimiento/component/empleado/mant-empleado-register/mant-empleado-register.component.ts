@@ -49,7 +49,7 @@ export class MantEmpleadoRegisterComponent implements OnInit{
         idUsuario: [{value:idUsuario},[Validators.required]],
         tipoPersona:[null,[Validators.required]] ,
         usuario1:[null,[Validators.required]] ,
-        password:[null,[Validators.required]] ,
+        password:[null,[Validators.required, Validators.minLength(9)]] ,
         email:[null,[Validators.required]] ,
         estado:[1,[Validators.required]] ,
         tipoDocumento:[null,[Validators.required]] ,
@@ -80,8 +80,19 @@ export class MantEmpleadoRegisterComponent implements OnInit{
        this.myForm.get('password')?.disable()
        
      }
+    else {
+    // Si es creación, escuchamos los cambios del documento para clonarlo en usuario1
+      this.escucharCambiosDocumento();
+       this.myForm.get('usuario1')?.disable()
+    }
+     
   }
- 
+ escucharCambiosDocumento(): void {
+  this.myForm.get('numeroDocumento')?.valueChanges.subscribe(valor => {
+    // Usamos emitEvent: false para evitar bucles o disparos innecesarios de validaciones
+    this.myForm.get('usuario1')?.setValue(valor, { emitEvent: false });
+  });
+}
   /**
    * TODO: CRUD Guardar los datos a la base de datos
    */
@@ -164,6 +175,7 @@ export class MantEmpleadoRegisterComponent implements OnInit{
           this.myForm.get("nombrePersona")?.setValue(data.nombres)
           this.myForm.get("apellidoEmp")?.setValue(data.apellidoPaterno  + "  " + data.apellidoMaterno)
           
+
         },
         error:(error)=>{
             alert("nO ESNTRA AQUI")

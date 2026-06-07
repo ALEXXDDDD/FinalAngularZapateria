@@ -1,103 +1,139 @@
-<div id="layoutSidenav_nav" class="w-64 h-full bg-gray-800 text-white flex flex-col">
-  <div class="flex items-center justify-center h-20 border-b border-gray-700">
-    <img src="./../../../assets/img/Img_Welcome/images.png" alt="Logo" class="h-12 w-12">
+<div id="layoutSidenav_nav" class="w-64 h-screen bg-slate-900 text-slate-200 flex flex-col shadow-xl select-none">
+  
+  <div class="flex items-center justify-center h-20 border-b border-slate-800 bg-slate-950/40">
+    <img src="./../../../assets/img/Img_Welcome/images.png" alt="Logo" class="h-12 w-12 object-contain filter drop-shadow">
   </div>
-  <li><a href="dasboard/mantenimiento/inicioSidebar" class="block py-2">Inicio</a></li>
-  <ul class="flex-1 overflow-y-auto">
-    <li class="border-b border-gray-700">
-      <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(0)">
-        Administracion
-        <span class="float-right">
-          <i class="fas fa-angle-down"></i>
-        </span>
+  
+  <ul class="flex-1 overflow-y-auto divide-y divide-slate-800/60 font-medium text-sm">
+    
+    <li>
+      <a 
+         routerLinkActive="bg-blue-600 text-white" href="dasboard/inicioSidebar"
+         class="flex items-center space-x-3 px-4 py-3.5 hover:bg-slate-800/70 hover:text-white transition-colors duration-150">
+        <i class="fas fa-home text-slate-400 w-5 text-center"></i>
+        <span>Inicio</span>
+      </a>
+    </li>
+
+    <li>
+      <button (click)="toggleDropdown(0)" 
+              class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-slate-800/70 hover:text-white transition-colors duration-150 focus:outline-none"
+              [class.bg-slate-800]="dropdowns[0]">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-user-shield text-slate-400 w-5 text-center"></i>
+          <span>Administración</span>
+        </div>
+        <i class="fas fa-angle-down text-xs text-slate-500 transition-transform duration-200" [class.rotate-180]="dropdowns[0]"></i>
       </button>
 
-      <ul [class.hidden]="!dropdowns[0]" class="pl-8 bg-gray-700">
-        <li><a href="dasboard/mantenimiento/rol" class="block py-2">Roles</a></li>
-        <li><a href="dasboard/mantenimiento/empleado" class="block py-2">Empleados</a></li>
-        <li><a href="dasboard/mantenimiento/usuario" class="block py-2">Usuarios</a></li>
+      <ul [class.hidden]="!dropdowns[0]" class="bg-slate-950/40 divide-y divide-slate-800/30 font-normal">
+        <li><a href="dasboard/mantenimiento/rol" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Roles</a></li>
+        <li><a href="dasboard/mantenimiento/empleado" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Empleados</a></li>
+        <li><a href="dasboard/mantenimiento/usuario" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Usuarios</a></li>
       </ul>
     </li>
-    <li class="border-b border-gray-700">
-      <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(1)">
-        Venta
-        <span class="float-right">
-          <i class="fas fa-angle-down"></i>
-        </span>
+
+    <li>
+      <button (click)="toggleDropdown(1)" 
+              class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-slate-800/70 hover:text-white transition-colors duration-150 focus:outline-none"
+              [class.bg-slate-800]="dropdowns[1]">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-cash-register text-slate-400 w-5 text-center"></i>
+          <span>Venta</span>
+        </div>
+        <i class="fas fa-angle-down text-xs text-slate-500 transition-transform duration-200" [class.rotate-180]="dropdowns[1]"></i>
       </button>
-      <ul [class.hidden]="!dropdowns[1]" class="pl-8 bg-gray-700">
-        <li><a href="dasboard/mantenimiento/cliente" class="block py-2">Clientes</a></li>
-        <li><a href="dasboard/mantenimiento/orden" class="block py-2">Ordenes</a></li>
-        <li><a href="dasboard/mantenimiento/produccion" class="block py-2">Produccion</a></li>
+
+      <ul [class.hidden]="!dropdowns[1]" class="bg-slate-950/40 divide-y divide-slate-800/30 font-normal">
+        <li><a href="dasboard/mantenimiento/cliente" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Clientes</a></li>
+        <li><a href="dasboard/mantenimiento/orden" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Órdenes</a></li>
+        <li><a href="dasboard/mantenimiento/produccion" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Producción de Venta</a></li>
       </ul>
     </li>
-    <!-- Repite para las demás secciones -->
-    <!-- Producción -->
-    <li class="border-b border-gray-700">
-      <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(2)">
-        Producción
-        <span class="float-right">
-          <i class="fas fa-angle-down"></i>
-        </span>
+
+    <li>
+      <button (click)="toggleDropdown(2)" 
+              class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-slate-800/70 hover:text-white transition-colors duration-150 focus:outline-none"
+              [class.bg-slate-800]="dropdowns[2]">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-hammer text-slate-400 w-5 text-center"></i>
+          <span>Producción</span>
+        </div>
+        <i class="fas fa-angle-down text-xs text-slate-500 transition-transform duration-200" [class.rotate-180]="dropdowns[2]"></i>
       </button>
-      <ul [class.hidden]="!dropdowns[2]" class="pl-8 bg-gray-700">
-        <li><a href="dasboard/mantenimiento/producto" class="block py-2">Productos</a></li>
-        <li><a href="dasboard/mantenimiento/modelo" class="block py-2">Modelos de Zapatos</a></li>
+
+      <ul [class.hidden]="!dropdowns[2]" class="bg-slate-950/40 divide-y divide-slate-800/30 font-normal">
+        <li><a href="dasboard/mantenimiento/producto" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Productos</a></li>
+        <li><a href="dasboard/mantenimiento/modelo" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Modelos de Zapatos</a></li>
       </ul>
     </li>
-    <!-- Créditos -->
-    <li class="border-b border-gray-700">
-      <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(3)">
-        Créditos
-        <span class="float-right">
-          <i class="fas fa-angle-down"></i>
-        </span>
+
+    <li>
+      <button (click)="toggleDropdown(3)" 
+              class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-slate-800/70 hover:text-white transition-colors duration-150 focus:outline-none"
+              [class.bg-slate-800]="dropdowns[3]">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-credit-card text-slate-400 w-5 text-center"></i>
+          <span>Créditos</span>
+        </div>
+        <i class="fas fa-angle-down text-xs text-slate-500 transition-transform duration-200" [class.rotate-180]="dropdowns[3]"></i>
       </button>
-      <ul [class.hidden]="!dropdowns[3]" class="pl-8 bg-gray-700">
-        <li><a href="dasboard/mantenimiento/credito" class="block py-2">Créditos Disponibles</a></li>
-        <!-- <li><a href="#" class="block py-2">Informe de Crédito</a></li> -->
+
+      <ul [class.hidden]="!dropdowns[3]" class="bg-slate-950/40 divide-y divide-slate-800/30 font-normal">
+        <li><a href="dasboard/mantenimiento/credito" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Créditos Disponibles</a></li>
       </ul>
     </li>
-    <!-- Materiales -->
-    <li class="border-b border-gray-700">
-      <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(4)">
-        Materiales
-        <span class="float-right">
-          <i class="fas fa-angle-down"></i>
-        </span>
+
+    <li>
+      <button (click)="toggleDropdown(4)" 
+              class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-slate-800/70 hover:text-white transition-colors duration-150 focus:outline-none"
+              [class.bg-slate-800]="dropdowns[4]">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-boxes text-slate-400 w-5 text-center"></i>
+          <span>Materiales</span>
+        </div>
+        <i class="fas fa-angle-down text-xs text-slate-500 transition-transform duration-200" [class.rotate-180]="dropdowns[4]"></i>
       </button>
-      <ul [class.hidden]="!dropdowns[4]" class="pl-8 bg-gray-700">
-        <li><a href="dasboard/mantenimiento/salidaMaterial" class="block py-2">Salida Materiales</a></li>
-        <li><a href="dasboard/mantenimiento/material" class="block py-2">Materiales</a></li>
+
+      <ul [class.hidden]="!dropdowns[4]" class="bg-slate-950/40 divide-y divide-slate-800/30 font-normal">
+        <li><a href="dasboard/mantenimiento/salidaMaterial" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Salida Materiales</a></li>
+        <li><a href="dasboard/mantenimiento/material" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Inventario Materiales</a></li>
       </ul>
     </li>
-    <!-- Informes -->
-    <li class="border-b border-gray-700">
-      <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(5)">
-        Informes
-        <span class="float-right">
-          <i class="fas fa-angle-down"></i>
-        </span>
+
+    <li>
+      <button (click)="toggleDropdown(5)" 
+              class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-slate-800/70 hover:text-white transition-colors duration-150 focus:outline-none"
+              [class.bg-slate-800]="dropdowns[5]">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-chart-bar text-slate-400 w-5 text-center"></i>
+          <span>Informes</span>
+        </div>
+        <i class="fas fa-angle-down text-xs text-slate-500 transition-transform duration-200" [class.rotate-180]="dropdowns[5]"></i>
       </button>
-      <ul [class.hidden]="!dropdowns[5]" class="pl-8 bg-gray-700">
-        <li><a href="dasboard/mantenimiento/informeVentas" class="block py-2">Informe de Ventas</a></li>
-        <!-- <li><a href="#" class="block py-2">Informe de Productos</a></li>
-        <li><a href="#" class="block py-2">Informe de Materiales</a></li> -->
+
+      <ul [class.hidden]="!dropdowns[5]" class="bg-slate-950/40 divide-y divide-slate-800/30 font-normal">
+        <li><a href="dasboard/mantenimiento/informeVentas" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Informe de Ventas</a></li>
       </ul>
     </li>
-    <!-- Informes -->
-    <li class="border-b border-gray-700">
-      <button class="w-full text-left px-4 py-3 focus:outline-none focus:bg-gray-700" (click)="toggleDropdown(6)">
-        Proveedor
-        <span class="float-right">
-          <i class="fas fa-angle-down"></i>
-        </span>
+
+    <li>
+      <button (click)="toggleDropdown(6)" 
+              class="w-full flex items-center justify-between px-4 py-3.5 hover:bg-slate-800/70 hover:text-white transition-colors duration-150 focus:outline-none"
+              [class.bg-slate-800]="dropdowns[6]">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-truck text-slate-400 w-5 text-center"></i>
+          <span>Proveedor</span>
+        </div>
+        <i class="fas fa-angle-down text-xs text-slate-500 transition-transform duration-200" [class.rotate-180]="dropdowns[6]"></i>
       </button>
-      <ul [class.hidden]="!dropdowns[6]" class="pl-8 bg-gray-700">
-        <li><a href="dasboard/mantenimiento/proveedorlist" class="block py-2">Proveedor</a></li>
-        <li><a href="dasboard/mantenimiento/proveedor" class="block py-2">Pedidos Proveedores</a></li>
-        <li><a href="#" class="block py-2">Comprobante Proveedor</a></li>
+
+      <ul [class.hidden]="!dropdowns[6]" class="bg-slate-950/40 divide-y divide-slate-800/30 font-normal">
+        <li><a href="dasboard/mantenimiento/proveedorlist" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Directorio Proveedores</a></li>
+        <li><a href="dasboard/mantenimiento/proveedor" routerLinkActive="text-blue-400 font-semibold" class="block pl-12 py-2.5 hover:text-white transition-colors">Pedidos Proveedores</a></li>
+        <li><a href="#" class="block pl-12 py-2.5 hover:text-white transition-colors">Comprobante Proveedor</a></li>
       </ul>
     </li>
+
   </ul>
 </div>

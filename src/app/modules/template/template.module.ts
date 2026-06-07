@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { RouterModule } from '@angular/router';
 import { TemplateRoutingModule } from './template-routing.module';
 import { TemplateComponent } from './component/template/template.component';
 import { TemplateHeaderComponent } from './component/template-header/template-header.component';
@@ -19,6 +19,7 @@ import { SharedModule } from 'primeng/api';
   imports: [
     CommonModule,
     SharedModule,
+    RouterModule,
     TemplateRoutingModule
   ]
 })

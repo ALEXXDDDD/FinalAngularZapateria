@@ -77,7 +77,7 @@ export class TemplateSidebarComponent implements OnInit {
               
             ]
       break;
-      case "Area de Ventas":
+      case "Vendedor":
         this.meny =[
         {
           name:"Produccion", target:"TargetMantenimiento",

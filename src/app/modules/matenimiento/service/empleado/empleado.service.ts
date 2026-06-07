@@ -8,6 +8,7 @@ import { CrudService } from 'src/app/modules/shared/services/crud.service';
 import { ResponseVWEmpleado } from '../../models/empleado/empleadoVW-response.model';
 import { empleadoApiPeru } from '../../models/empleado/empleadoApisPero.model';
 import { RequestFiltroSueldo } from '../../models/empleado/request-flitroSueldo.model';
+import { RequestFiltroNombre } from '../../models/requestFiltroNombre.model';
 
 
 @Injectable({
@@ -30,6 +31,10 @@ export class EmpleadoService extends CrudService<RequestVWEmpleado,ResponseEmple
    {
        return this._http.post<ResponseVWEmpleado[]>(`${this.url_service}/filtro-sueldo`,request)
    }
+   genericFiltrol(request:RequestFiltroNombre):Observable<ResponseVWEmpleado[]>
+  {
+         return this._http.post<ResponseVWEmpleado[]>(`${this.url_service}/Filtro-nombreRol`,request)
+  }
    /* getAll():Observable<ResponseEmpleado[]>
    {
     return this._http.get<ResponseEmpleado[]>(urlConstants.Empleado)

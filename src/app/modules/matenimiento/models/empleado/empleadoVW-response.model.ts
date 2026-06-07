@@ -1,6 +1,7 @@
 export class ResponseVWEmpleado {
     idEmpleado: number= 0;// public int IdEmpleado { get; set; }
     apellidoEmp: string ="";
+    nombreRol: string = "";
     salario: number= 0;
     nombrePersona: string="";
     usuario1:string="";

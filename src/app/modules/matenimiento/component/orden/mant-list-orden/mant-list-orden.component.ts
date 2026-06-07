@@ -84,11 +84,7 @@ export class MantListOrdenComponent implements OnInit {
   }
   filtrarOrdenAcIna(nombre:string)
   {
-
-
-
     this.nombreRol.nombre = nombre;
-
     this._OrdenService.genericFiltroOrdenActivo(this.nombreRol).subscribe({
       next: (data: ResponseListOrden[]) => {
         this.orden = data; // Actualiza la lista con la respuesta filtrada

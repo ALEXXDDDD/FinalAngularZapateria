@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -86,6 +87,7 @@ import { EnvioDomicilioComponent } from './Ventas/component/vistas/envio-domicil
     DatePipe,
     OAuthModule.forRoot(),
     HttpClientModule,
+    RouterModule,
     SocialLoginModule
       
   ],
