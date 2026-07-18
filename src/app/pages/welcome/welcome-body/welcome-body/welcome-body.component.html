@@ -94,8 +94,17 @@
         <div class="mx-auto bg-info mb-5 rounded" style="width: 60px; height: 4px;"></div>
         
         <p-toast></p-toast>
+
+        <div *ngIf="frmLoadSt === loadStateEnum.Loading" class="text-center py-5">
+            <app-loading-widget [state]="frmLoadSt"></app-loading-widget>
+        </div>
+
+        <div *ngIf="frmLoadSt === loadStateEnum.Error" class="text-center py-5 text-white">
+            <h4>No se pudieron cargar los productos</h4>
+            <p>Intenta nuevamente más tarde.</p>
+        </div>
         
-        <div class="row g-4">
+        <div *ngIf="frmLoadSt === loadStateEnum.Success" class="row g-4">
             <div class="col-sm-6 col-md-6 col-lg-4" *ngFor="let mod of responseProducto">
                 <div class="card h-100 border-0 shadow-lg bg-white text-dark rounded-4 overflow-hidden transition-card">
                     <div class="position-relative">
@@ -107,13 +116,16 @@
                     <div class="card-body d-flex flex-column justify-content-between p-4">
                         <div>
                             <h5 class="card-title fw-bold text-dark mb-3">{{mod.nombreProd}}</h5>
+                            <p class="mb-0 small fw-semibold" [class.text-danger]="mod.stock === 0" [class.text-success]="mod.stock > 0">
+                                Stock: {{ mod.stock }}
+                            </p>
                         </div>
                         <div class="d-grid gap-2 mt-3">
-                            <button class="btn btn-outline-secondary btn-sm rounded-pill py-2" (click)="monstrarDetalle(modalEdit, mod, mod.idProducto)">
-                                <i class="fas fa-eye me-2"></i>Ver Detalle
+                            <button class="btn btn-outline-secondary btn-sm rounded-pill py-2" [disabled]="!tieneStock(mod)" (click)="monstrarDetalle(modalEdit, mod, mod.idProducto)">
+                                <i class="fas fa-eye me-2"></i>{{ tieneStock(mod) ? 'Ver Detalle' : 'Sin stock' }}
                             </button>
-                            <button class="btn btn-dark btn-sm rounded-pill py-2" (click)="addProducto(mod)">
-                                <i class="fas fa-shopping-cart me-2"></i>Agregar al carrito
+                            <button class="btn btn-dark btn-sm rounded-pill py-2" [disabled]="!tieneStock(mod)" (click)="addProducto(mod)">
+                                <i class="fas fa-shopping-cart me-2"></i>{{ tieneStock(mod) ? 'Agregar al carrito' : 'Sin stock' }}
                             </button>
                         </div>
                     </div>

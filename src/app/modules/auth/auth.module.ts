@@ -11,6 +11,7 @@ import { FormularioUsuarioComponent } from './components/formulario/formulario-u
 import { FormularioRecupClaveComponent } from './components/formulario/formulario-recup-clave/formulario-recup-clave.component';
 import { LoadingWidgetComponent } from './components/widgets/loading-widget/loading-widget.component';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
+import { ToastModule } from 'primeng/toast';
 
 
 
@@ -45,7 +46,8 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig } f
   imports: [
     CommonModule,
     AuthRoutingModule,
-    SharedModule
+    SharedModule,
+    ToastModule
     /**
      * TODO: PARA USUAR DOBLE BINDING    
      */

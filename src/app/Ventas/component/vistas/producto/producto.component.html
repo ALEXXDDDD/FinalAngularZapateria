@@ -57,16 +57,21 @@
                     </div>
                     
                     <div class="card-body d-flex flex-column justify-content-between p-4">
-                        <h5 class="card-title fw-bold text-dark text-truncate mb-3" [title]="mod.nombreProd">
-                            {{mod.nombreProd}}
-                        </h5>
+                        <div>
+                            <h5 class="card-title fw-bold text-dark text-truncate mb-3" [title]="mod.nombreProd">
+                                {{mod.nombreProd}}
+                            </h5>
+                            <p class="mb-0 small fw-semibold" [class.text-danger]="mod.stock === 0" [class.text-success]="mod.stock > 0">
+                                Stock: {{ mod.stock }}
+                            </p>
+                        </div>
                         
                         <div class="d-grid gap-2 mt-2">
-                            <button class="btn btn-outline-secondary btn-sm rounded-pill py-2 fw-semibold" (click)="monstrarDetalle(modalEdit, mod, mod.idProducto)">
-                                <i class="fas fa-info-circle me-1"></i> Ver Detalle
+                            <button class="btn btn-outline-secondary btn-sm rounded-pill py-2 fw-semibold" [disabled]="!tieneStock(mod)" (click)="monstrarDetalle(modalEdit, mod, mod.idProducto)">
+                                <i class="fas fa-info-circle me-1"></i> {{ tieneStock(mod) ? 'Ver Detalle' : 'Sin stock' }}
                             </button>
-                            <button class="btn btn-dark btn-sm rounded-pill py-2 fw-semibold" (click)="addProducto(mod)">
-                                <i class="fas fa-shopping-cart me-1"></i> Agregar al carrito
+                            <button class="btn btn-dark btn-sm rounded-pill py-2 fw-semibold" [disabled]="!tieneStock(mod)" (click)="addProducto(mod)">
+                                <i class="fas fa-shopping-cart me-1"></i> {{ tieneStock(mod) ? 'Agregar al carrito' : 'Sin stock' }}
                             </button>
                         </div>
                     </div>

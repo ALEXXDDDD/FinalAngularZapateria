@@ -1,134 +1,290 @@
-/* From Uiverse.io by Yaya12085 */ 
-.form {
-    display: flex;
+/* Estructura general (Fondo oscuro) */
+.auth-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 auto 16px;
+  width: 100%;
+  max-width: 760px;
+}
+
+.btn-back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: #0d6efd;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.25);
+}
+
+.auth-toggle-wrapper {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.auth-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  background: #f1f4f9;
+  padding: 6px;
+  border-radius: 999px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.toggle-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #5f6b7a;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+  background: #0d6efd;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.25);
+}
+
+.auth-panel {
+  width: 100%;
+}
+
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: auto;
+  background-color: transparent;
+  padding: 0;
+}
+
+.register-card {
+  background: #ffffff; /* Card claro */
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px; /* Un poco más ancho para el registro */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.register-logo {
+  max-width: 100px;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.register-header h2 {
+  margin: 0;
+  font-weight: 700;
+  color: #333;
+}
+
+.subtitle {
+  color: #777;
+  font-size: 0.9rem;
+  margin-bottom: 25px;
+}
+
+/* Filas del formulario (Responsive) */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .input-group,
+.form-row .select-group {
+  flex: 1;
+}
+
+/* En móvil, las filas se apilan */
+@media (max-width: 500px) {
+  .form-row {
     flex-direction: column;
-    gap: 10px;
-    max-width: 350px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 20px;
-    position: relative;
+    gap: 0;
   }
-  
-  .title {
-    font-size: 28px;
-    color: royalblue;
-    font-weight: 600;
-    letter-spacing: -1px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding-left: 30px;
-  }
-  form{
-    margin-left: 200px;
-    align-content: center;
-  }
-  .title::before,.title::after {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    left: 0px;
-    background-color: royalblue;
-  }
-  
-  .title::before {
-    width: 18px;
-    height: 18px;
-    background-color: royalblue;
-  }
-  
-  .title::after {
-    width: 18px;
-    height: 18px;
-    animation: pulse 1s linear infinite;
-  }
-  
-  .message, .signin {
-    color: rgba(88, 87, 87, 0.822);
-    font-size: 14px;
-  }
-  
-  .signin {
-    text-align: center;
-  }
-  
-  .signin a {
-    color: royalblue;
-  }
-  
-  .signin a:hover {
-    text-decoration: underline royalblue;
-  }
-  
-  .flex {
-    display: flex;
-    width: 80%;
-    gap: 6px;
-  }
-  
-  .form label {
-    position: relative;
-  }
-  
-  .form label .input {
-    width: 100%;
-    padding: 10px 10px 20px 10px;
-    outline: 0;
-    border: 1px solid rgba(105, 105, 105, 0.397);
-    border-radius: 10px;
-  }
-  
-  .form label .input + span {
-    position: absolute;
-    left: 10px;
-    top: 15px;
-    color: grey;
-    font-size: 0.9em;
-    cursor: text;
-    transition: 0.3s ease;
-  }
-  
-  .form label .input:placeholder-shown + span {
-    top: 15px;
-    font-size: 0.9em;
-  }
-  
-  .form label .input:focus + span,.form label .input:valid + span {
-    top: 30px;
-    font-size: 0.7em;
-    font-weight: 600;
-  }
-  
-  .form label .input:valid + span {
-    color: green;
-  }
-  
-  .submit {
-    border: none;
-    outline: none;
-    background-color: royalblue;
-    padding: 10px;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 16px;
-    transform: .3s ease;
-  }
-  
-  .submit:hover {
-    background-color: rgb(56, 90, 194);
-  }
-  
-  @keyframes pulse {
-    from {
-      transform: scale(0.9);
-      opacity: 1;
-    }
-  
-    to {
-      transform: scale(1.8);
-      opacity: 0;
-    }
-  }
+}
+
+/* Inputs Animados (Floating Labels - Estilo Unificado) */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 10px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.input-group label {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  color: #999;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.input-group input:focus ~ label,
+.input-group input:not(:placeholder-shown) ~ label {
+  top: -12px;
+  font-size: 0.8rem;
+  color: #0d6efd; /* Tu color primario (Claro) */
+}
+
+.input-group input:focus {
+  border-bottom-color: #0d6efd;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Campo de Documento con Buscador (Dinamismo) */
+.input-with-action {
+  position: relative;
+}
+
+.input-with-action input {
+  padding-right: 40px; /* Espacio para el icono */
+}
+
+.action-btn {
+  position: absolute;
+  right: 5px;
+  bottom: 8px;
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #eee;
+  color: #0d6efd;
+  transform: scale(1.1);
+}
+
+/* Selects Estilizados (Estilo Oscuro mezclado con claro) */
+.select-group {
+  margin-bottom: 20px;
+}
+
+.select-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.form-select, .select-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-select:focus, .select-group select:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+/* Botón Dinámico Principal (Mismo estilo que Login) */
+.btn-submit {
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #0d6efd; /* Color primario */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #0b5ed7;
+  box-shadow: 0 6px 16px rgba(13, 110, 253, 0.45);
+  transform: scale(1.02);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-submit:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Animación del icono en el botón al hover */
+.icon-slide {
+  transition: transform 0.3s ease;
+}
+
+.btn-submit:hover:not(:disabled) .icon-slide {
+  transform: translateX(5px);
+}
+
+/* Link a Login */
+.login-footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 25px;
+}
+
+.link-login {
+  color: #0d6efd;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 5px;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.link-login:hover {
+  text-decoration: underline;
+}

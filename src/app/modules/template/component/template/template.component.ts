@@ -6,6 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./template.component.css']
 })
 export class TemplateComponent {
+  isSidebarVisible = true;
+
+  toggleSidebar(): void {
+    this.isSidebarVisible = !this.isSidebarVisible;
+  }
 
   listarPedidos()
   {

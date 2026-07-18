@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { AcciontConstants } from 'src/app/constants/general.constans';
@@ -7,6 +8,7 @@ import { CarritoItem } from 'src/app/modules/matenimiento/models/carritoItem/car
 import { RequestActualizacionDireccion } from 'src/app/modules/matenimiento/models/cliente/request-actualizacionUsuario.model';
 import { ResponseUsuario } from 'src/app/modules/matenimiento/models/usuario/responseUsuario.models';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-carrito-compras',
@@ -28,7 +30,7 @@ export class CarritoComprasComponent implements OnInit{
   constructor(
     
     private _carritoService:CarritoService,
-    
+    private router: Router,
     private modalService: BsModalService,
     
   )
@@ -66,6 +68,19 @@ export class CarritoComprasComponent implements OnInit{
   }
   actualizarTotal() {
     this.total = this.carrito.reduce((acc, item) => acc + (item.producto.precioUnitario * item.cantidad), 0);
+  }
+
+  irAPagar(): void {
+    if (!this.carrito || this.carrito.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Carrito vacío',
+        text: 'Agrega productos antes de continuar al pago.'
+      });
+      return;
+    }
+
+    this.router.navigate(['/pasarela']);
   }
  
   eliminarProducto(item: CarritoItem): void {

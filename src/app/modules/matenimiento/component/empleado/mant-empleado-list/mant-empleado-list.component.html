@@ -26,19 +26,23 @@
           </div>
 
           <div class="flex items-end space-x-2 self-end md:self-auto">
+            <div class="min-w-[220px]">
+              <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Rol</label>
+              <select
+                formControlName="nombreRol"
+                (change)="filtroRol()"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                <option value="">Todos los roles</option>
+                <option *ngFor="let rol of roles" [value]="rol.nombreRol">{{ rol.nombreRol }}</option>
+              </select>
+            </div>
+
             <button 
               type="button"
               (click)="limpiarFiltros()" 
               class="inline-flex items-center space-x-1.5 bg-white border border-gray-300 hover:bg-slate-100 text-slate-700 font-semibold text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
               <i class="fas fa-broom text-slate-400"></i>
               <span>Limpiar</span>
-            </button>
-            
-            <button 
-              type="button"
-              (click)="filtroRol()" 
-              class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-5 py-2 rounded-lg shadow-sm transition-colors duration-150">
-              <span>Filtrar</span>
             </button>
           </div>
 
@@ -87,7 +91,6 @@
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre Apellido</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Sueldo</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Teléfono</th>
-              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fotografía</th>
               <th scope="col" class="px-6 py-3.5 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
@@ -97,11 +100,8 @@
               <tr *ngFor="let e of d.empleado" class="hover:bg-blue-50/40 transition-colors duration-150">
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-700">{{e.idEmpleado}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{e.nombrePersona}} {{e.apellidoEmp}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono">{{e.salario | currency}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">{{ e.salario | currency:'PEN':'symbol-narrow':'1.2-2' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{e.telefono}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <img src="{{e.imagenEmpleado}}" alt="Empleado" class="w-10 h-10 object-cover rounded-md border border-gray-200 shadow-sm">
-                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1.5">
                   <button (click)="editarEmpleado(modalEdit, e)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
                     <i class="fas fa-edit"></i>
@@ -110,7 +110,7 @@
                  <!-- <button (click)="eliminarEmpleado(e.idEmpleado)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
                     <i class="fas fa-trash"></i>
                     <span>Eliminar</span> 
-                  </button>-->
+                  </button>-->x
                   <button [routerLink]="['/dashboard/mantenimiento/empleado-area']" class="inline-flex items-center space-x-1 bg-slate-600 hover:bg-slate-700 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
                     <i class="fas fa-eye"></i>
                     <span>Ver Área</span>
@@ -141,30 +141,20 @@
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre Apellido</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Sueldo</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Teléfono</th>
-              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Usuario</th>
               <th scope="col" class="px-6 py-3.5 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
           
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let d of responseWEmpleado" class="hover:bg-blue-50/40 transition-colors duration-150">
+            <tr *ngFor="let d of empleadosFiltrados" class="hover:bg-blue-50/40 transition-colors duration-150">
               <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-700">{{d.idEmpleado}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{d.nombrePersona}} {{d.apellidoEmp}}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono">{{d.salario | currency}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">{{ d.salario | currency:'PEN':'symbol-narrow':'1.2-2' }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{d.telefono}}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
-                  {{d.usuario1}}
-                </span>
-              </td>
               <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1.5">
                 <button (click)="editarEmpleado(modalEdit, d)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
                   <i class="fas fa-edit"></i>
                   <span>Actualizar</span>
-                </button>
-                <button (click)="eliminarEmpleado(d.idEmpleado)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
-                  <i class="fas fa-trash"></i>
-                  <span>Eliminar</span>
                 </button>
                 <button [routerLink]="['/dashboard/mantenimiento/empleado-area']" class="inline-flex items-center space-x-1 bg-slate-600 hover:bg-slate-700 text-white px-2.5 py-1.5 rounded-md shadow-sm transition-colors duration-150">
                   <i class="fas fa-eye"></i>
@@ -176,49 +166,6 @@
         </table>
       </div>
     </div>
-    
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let e of empleadosFiltrados" class="hover:bg-slate-50/70 transition-colors duration-150">
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">
-                <div class="flex items-center space-x-2">
-                  <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs uppercase">
-                    {{ e.nombrePersona.substring(0, 2) }}
-                  </div>
-                  <span>{{ e.nombrePersona }}</span>
-                </div>
-              </td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">{{ e.email }}</td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ e.tipoPersona }}</td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 tracking-wide uppercase">
-                  {{ e.nombreRol }}
-                </span>
-              </td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1.5">
-                <button 
-                  (click)="editarEmpleado(modalEdit, e)" 
-                  class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1.5 rounded shadow-sm transition-colors" 
-                  title="Actualizar Usuario">
-                  <i class="fas fa-edit"></i>
-                  <span>Editar</span>
-                </button>
-                
-                <button 
-                  type="button" 
-                  class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1.5 rounded shadow-sm transition-colors" 
-                  title="Eliminar Usuario">
-                  <i class="fas fa-trash"></i>
-                  <span>Eliminar</span>
-                </button>
-              </td>
-
-            </tr>
-          </tbody>
   
 
 

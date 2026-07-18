@@ -12,9 +12,10 @@ import { LoadingWidgetComponent } from '../auth/components/widgets/loading-widge
 
 @NgModule({
   declarations: [
-
+    LoadingWidgetComponent
   ],
   imports: [
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ModalModule.forRoot(),
@@ -25,7 +26,8 @@ import { LoadingWidgetComponent } from '../auth/components/widgets/loading-widge
     FormsModule,
     ModalModule,
     PaginationModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoadingWidgetComponent
   ]
 })
 export class SharedModule { }

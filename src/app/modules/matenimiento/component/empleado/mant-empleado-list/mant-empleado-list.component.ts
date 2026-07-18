@@ -8,6 +8,8 @@ import { ResponseVWEmpleado } from '../../../models/empleado/empleadoVW-response
 import { RequestFiltroSueldo } from '../../../models/empleado/request-flitroSueldo.model';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
+import { RolService } from '../../../service/rol.service';
+import { ResponseRol } from '../../../models/rol/rol-response.model';
 
 @Component({
   selector: 'app-mant-empleado-list',
@@ -27,12 +29,14 @@ export class MantEmpleadoListComponent implements OnInit {
   titleModal: string = "";
   myFormFilter: FormGroup;
   accionModal: number = 0;
+  roles: ResponseRol[] = [];
 
   constructor(
     private _router: Router,
     private modalService: BsModalService,
     private fb: FormBuilder,
-    private _empleadoService: EmpleadoService
+    private _empleadoService: EmpleadoService,
+    private _rolService: RolService
   ) {
     this.myFormFilter = this.fb.group({
       nombreRol: [""],
@@ -42,42 +46,51 @@ export class MantEmpleadoListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.listarRoles();
     this.listarEmpleado();
-    
   }
   getEmpleadaos(): ResponseVWEmpleado[] {
       return this.responseEmpleado.flatMap(d => d.empleado); // Aplana la estructura de usuarios
     }
-  filtroRol(): void {
-    debugger
-      const valorForm = this.myFormFilter.get('nombreRol')?.value.trim().toLowerCase();
-  
-      if (valorForm === '') {
-        this.mostrarListaCompleta = true;
-        this.empleadosFiltrados = this.getEmpleadaos(); // Vuelve a cargar la lista completa si no hay filtro
-        return;
+  listarRoles(): void {
+    this._rolService.getAll().subscribe({
+      next: (data: ResponseRol[]) => {
+        this.roles = data;
+      },
+      error: (error: any) => {
+        console.error('Error al listar roles', error);
       }
-  
-      this.mostrarListaCompleta = false;
-      this.nombreRol.nombre = valorForm;
-      debugger
-      this._empleadoService.genericFiltrol(this.nombreRol).subscribe({
-        next: (data: ResponseVWEmpleado[]) => {
-          if (!data || data.length === 0) {
-            alert('No se encontraron empleados con ese rol');
-            this.empleadosFiltrados = [];
-            return;
-          }
-          this.empleadosFiltrados = data; // Actualiza la lista con la respuesta filtrada
-          console.log(data);
-        },
-        error: (error: any) => {
-          console.error('Error al filtrar roles', error);
-          alert('Error al filtrar empleados. Intente de nuevo');
-        },
-        complete: () => {}
-      });
+    });
+  }
+
+  filtroRol(): void {
+    const valorForm = String(this.myFormFilter.get('nombreRol')?.value || '').trim().toLowerCase();
+
+    if (valorForm === '') {
+      this.mostrarListaCompleta = true;
+      this.empleadosFiltrados = [];
+      this.listarEmpleado();
+      return;
     }
+
+    this.mostrarListaCompleta = false;
+    this.nombreRol.nombre = valorForm;
+    this._empleadoService.genericFiltrol(this.nombreRol).subscribe({
+      next: (data: ResponseVWEmpleado[]) => {
+        if (!data || data.length === 0) {
+          alert('No se encontraron empleados con ese rol');
+          this.empleadosFiltrados = [];
+          return;
+        }
+        this.empleadosFiltrados = data;
+      },
+      error: (error: any) => {
+        console.error('Error al filtrar roles', error);
+        alert('Error al filtrar empleados. Intente de nuevo');
+      },
+      complete: () => {}
+    });
+  }
   listarEmpleado(): void {
     this._empleadoService.getAll().subscribe({
       next: (data: ResponseEmpleado[]) => {

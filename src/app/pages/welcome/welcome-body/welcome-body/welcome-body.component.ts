@@ -14,6 +14,7 @@ import { ResponseVDetalleProducto } from 'src/app/modules/matenimiento/models/pr
 import { ModeloService } from 'src/app/modules/matenimiento/service/modelo/modelo.service';
 import { ProductoService } from 'src/app/modules/matenimiento/service/producto/producto.service';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
+import { LoadStateEnum } from 'src/app/modules/matenimiento/models/core/utils/load-enum';
 interface City {
   name: string;
   code: string;
@@ -42,6 +43,8 @@ export class WelcomeBodyComponent implements OnInit {
   itemsPerPage:number=1
   request : RequestFilterGeneric = new RequestFilterGeneric()
   myFormFilter:FormGroup
+  frmLoadSt = LoadStateEnum.None;
+  loadStateEnum = LoadStateEnum;
   constructor (
     private _router:Router, 
     private fb:FormBuilder,
@@ -65,7 +68,7 @@ export class WelcomeBodyComponent implements OnInit {
   }
  
   ngOnInit(): void {
-
+    this.frmLoadSt = LoadStateEnum.Loading;
     
     //  this.listarProductos()
      this.filtrar()
@@ -84,6 +87,15 @@ export class WelcomeBodyComponent implements OnInit {
   }
   addProducto(prod:ResponseProducto)
   {
+    if (!this.tieneStock(prod)) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Sin stock',
+        detail: `${prod.nombreProd} no tiene stock disponible.`
+      });
+      return;
+    }
+
     this.messageService.add({ 
       severity: 'success', 
       summary: 'Producto Agregado', 
@@ -94,11 +106,24 @@ export class WelcomeBodyComponent implements OnInit {
   }
   monstrarDetalle(template:TemplateRef<any>,producto:ResponseProducto,id:number)
   {
+    if (!this.tieneStock(producto)) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Sin stock',
+        detail: `${producto.nombreProd} no tiene stock disponible.`
+      });
+      return;
+    }
+
     this.titleModal ="Detalle"
     this.productoSelect = producto
     this.accionModal = AcciontConstants.detalle
     this.openModal(template);
 
+  }
+
+  tieneStock(producto: ResponseProducto): boolean {
+    return (producto?.stock ?? 0) > 0;
   }
   // monstrarDetalleProducto(id:number)
   // {
@@ -166,11 +191,12 @@ export class WelcomeBodyComponent implements OnInit {
         next:(data:ResponseFilterGeneric<ResponseProducto>)=>{
           console.log(data)
           this.responseProducto  = data.lista;
-          this.totalItems = data.totalRegistros
-          
+          this.totalItems = data.totalRegistros;
+          this.frmLoadSt = LoadStateEnum.Success;
         },
         error:(error)=>{
-          console.log(error)
+          console.log(error);
+          this.frmLoadSt = LoadStateEnum.Error;
         },
         complete:(
   

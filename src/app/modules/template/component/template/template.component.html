@@ -1,7 +1,7 @@
-<app-template-header></app-template-header>
+<app-template-header (toggleSidebar)="toggleSidebar()"></app-template-header>
 <div id="layoutSidenav" class="flex h-[calc(100vh-56px)] w-full overflow-hidden bg-slate-100 font-sans antialiased">
   
-  <aside id="layoutSidenav_nav" class="w-64 flex-shrink-0 h-full bg-slate-900 text-slate-300 flex flex-col justify-between border-r border-slate-800 shadow-xl z-10 select-none">
+  <aside id="layoutSidenav_nav" class="w-64 flex-shrink-0 h-full bg-slate-900 text-slate-300 flex flex-col justify-between border-r border-slate-800 shadow-xl z-10 select-none" [class.hidden]="!isSidebarVisible">
     
     <div class="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-800">
       <app-template-sidebar></app-template-sidebar>
@@ -16,15 +16,11 @@
         <span class="truncate">{{ 'Empresa' }}</span>
       </div>
     </div>
-
   </aside>
-
   <div id="layoutSidenav_content" class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-    
     <main class="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
       <router-outlet></router-outlet>
       </main>
-
     <footer class="flex-shrink-0 bg-white border-t border-slate-200">
       <app-template-footer></app-template-footer>
     </footer>

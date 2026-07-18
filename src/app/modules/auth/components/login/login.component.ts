@@ -67,88 +67,82 @@ export class LoginComponent implements OnInit {
   save(name: string, lastName: string) {
     this.frmLoadSt = LoadStateEnum.Loading;
 
-    // envio al servido
-    setTimeout(() => {
-      // guargador correcto
-      alert('Se guardo');
-      this.frmLoadSt = LoadStateEnum.Success;
-    }, 4000);
+    const timeoutId = window.setTimeout(() => {
+      this.frmLoadSt = LoadStateEnum.Error;
+      alert('Tiempo de espera excedido');
+    }, 60000);
+
+    try {
+      // envio al servidor
+      window.setTimeout(() => {
+        clearTimeout(timeoutId);
+        // guardado correcto
+        alert('Se guardo');
+        this.frmLoadSt = LoadStateEnum.Success;
+      }, 4000);
+    } catch (error) {
+      clearTimeout(timeoutId);
+      this.frmLoadSt = LoadStateEnum.Error;
+      alert('Ocurrió un error al guardar');
+    }
   }
 
   login ()
   {
-   
-   /*  console.log(this.loginForm.getRawValue()) */
-    this.loginRequest = this.loginForm.getRawValue()
+    this.frmLoadSt = LoadStateEnum.Loading;
+    this.loginRequest = this.loginForm.getRawValue();
+
     this._authService.login(this.loginRequest).subscribe(
       {
         next: (data:ResponseLogin) => {
-          this._router.navigate(['dasboard/mantenimiento/producto'])
-          console.log(data) 
-          // routeamos al dahboard
-          //Alamcenamos el token Valores Del Usuario Ingresadp
-          if(data.success)  
-          {
-            alert_sucess("Iniciaste Sesion Correctamente")
-            // debugger;
-            if(data.nameRol=="Cliente")
-              {
-                // debugger
-                this._router.navigate([''])
-                sessionStorage.setItem("token", data.token);
-                sessionStorage.setItem("nombrePersona",data.persona.nombrePersona);
-                sessionStorage.setItem("idUsuario",data.vwUsuario
-                .idUsuario.toString());
-                sessionStorage.setItem("usuario",data.vwUsuario.usuario);
-                sessionStorage.setItem("nombreRol",data.nameRol);
-             
-              }
-              if(data.nameRol=="Administador")
-                {
-                  sessionStorage.setItem("token", data.token);
-                  sessionStorage.setItem("nombrePersona",data.persona.nombrePersona);
-                  sessionStorage.setItem("idUsuario",data.vwUsuario
-                  .idUsuario.toString());
-                  sessionStorage.setItem("usuario",data.vwUsuario.usuario);
-                  sessionStorage.setItem("nombreRol",data.nameRol);
-               
-                  this._router.navigate(['dasboard/mantenimiento/producto'])
-                }
-                if(data.nameRol=="Vendedor")
-                  {
-                    // debugger;
-                    sessionStorage.setItem("token", data.token);
-                    sessionStorage.setItem("nombrePersona",data.persona.nombrePersona);
-                    sessionStorage.setItem("idUsuario",data.vwUsuario
-                    .idUsuario.toString());
-                    sessionStorage.setItem("usuario",data.vwUsuario.usuario);
-                    sessionStorage.setItem("nombreRol",data.nameRol);
-                    this._router.navigate(['dasboard'])
-                  }
-            // debugger;
+          console.log(data);
+
+          if(data.success)  {
             sessionStorage.setItem("token", data.token);
-            sessionStorage.setItem("nombrePersona",data.persona.nombrePersona);
-            sessionStorage.setItem("idUsuario",data.vwUsuario
-            .idUsuario.toString());
-            sessionStorage.setItem("usuario",data.vwUsuario.usuario);
-            sessionStorage.setItem("nombreRol",data.nameRol);
-         
-            
+            sessionStorage.setItem("nombrePersona", data.persona.nombrePersona);
+            sessionStorage.setItem("idUsuario", data.vwUsuario.idUsuario.toString());
+            sessionStorage.setItem("usuario", data.vwUsuario.usuario);
+            sessionStorage.setItem("nombreRol", data.nameRol);
+
+            if(data.nameRol === "Cliente") {
+              this._router.navigate(['']);
+            } else if(data.nameRol === "Administador") {
+              this._router.navigate(['dasboard/mantenimiento/producto']);
+            } else if(data.nameRol === "Vendedor") {
+              this._router.navigate(['dasboard']);
+            } else {
+              this._router.navigate(['dasboard']);
+            }
+
+            this.frmLoadSt = LoadStateEnum.Success;
           }
           else{
-            alert_error("No existe tu usuario por favor registrese")
-            this._router.navigate(['register'])
+            this.frmLoadSt = LoadStateEnum.Error;
+            this.loginForm.reset({
+              usuario: '',
+              parteViene: 'Sistema',
+              password: ''
+            });
+            setTimeout(() => {
+              this.frmLoadSt = LoadStateEnum.None;
+            }, 1500);
             return;
           }
         },
         error: (error) => {
-          alert_error("Datos Icorrectos")
-          this._router.navigate(['login'])
+          this.frmLoadSt = LoadStateEnum.Error;
+          this.loginForm.reset({
+            usuario: '',
+            parteViene: 'Sistema',
+            password: ''
+          });
+          setTimeout(() => {
+            this.frmLoadSt = LoadStateEnum.None;
+          }, 1500);
         },
         complete: () => {}
       }
     )
-
   }
   // private initializeGoogleSignIn(): void {
   //   (window as any).onload = () => {

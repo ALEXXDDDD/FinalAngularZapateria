@@ -1,67 +1,139 @@
-<div class="flex">
-    <form class="form" [formGroup]="myForm" >
-        <p class="title">Register </p>
-        <p class="message">Signup now and get full access to our app. </p>
-        <div class="flex">
-            <label>
-                <input required="" placeholder=""  type="password" formControlName="nombrePersona" type="text" class="input">
-                <span>Nombres</span>
-            </label>
+<app-welcome-header></app-welcome-header>
+<p-toast></p-toast>
+<div *ngIf="frmLoadSt === loadStateEnum.None" class="auth-actions">
+  <button type="button" class="btn-back-home" (click)="volverInicio()">
+    <i class="fas fa-arrow-left"></i>
+    <span>Volver al inicio</span>
+  </button>
+</div>
+<div *ngIf="frmLoadSt === loadStateEnum.None" class="auth-toggle-wrapper">
+  <div class="auth-toggle">
+    <button type="button" class="toggle-btn" [class.active]="isLoginView" (click)="mostrarLogin()">
+      Iniciar Sesión
+    </button>
+    <button type="button" class="toggle-btn" [class.active]="!isLoginView" (click)="mostrarRegistro()">
+      Registrarse
+    </button>
+  </div>
 
-            <label>
-                <input required=""  formControlName="telefono" type="text" class="input">
-                <span>Telefono</span>
-            </label>
-        </div>  
-        <label>
-            <input required="" placeholder="" type="email" class="input" formControlName="usuario1">
-            <span>Usuario</span>
-        </label>     
-        <label>
-            <input required="" placeholder="" type="email" class="input" formControlName="email">
-            <span>Email</span>
-        </label> 
-            
-        <label>
-            <input required="" placeholder="" formControlName="password" type="password" minlength="9" class="input">
-            <span>Password</span>
-        </label>
-        <label>
-            <input  formControlName="codigoUbigeo" type="email" class="input">
-            <span>Codigo Ubigeo</span>
-        </label> 
-            
-        <label>
-            <input required="" formControlName="direccion" class="input">
-            <span>Direccion</span>
-        </label>
-        <select name="" id="" class="form-select" formControlName="tipoPersona">
-            <option value="DNI">Natural</option>
-            <option value="CARNET">Juridica</option>
-        </select>
-        <select name="" id="" class="form-select" formControlName="tipoDocumento">
-            <option value="DNI">DNI</option>
-            <option value="CARNET">CARNET</option>
-        </select>
-        <label>
-            <input required="" formControlName="numeroDocumento" class="input">
-            <span>Numero Documento</span>
-        </label>
-        <button class="submit" (click)="guardar()">Submit</button>
-        <p class="signin">Already have an acount ? <a href="#">Signin</a> </p>
-        <!-- <div class="button-pag" >
-            <button type="button"  class="btn btn-primary ">
-            Iniciar Sesion con Facebook
-            <i class="fab fa-facebook-f"></i>
+  <div class="auth-panel" *ngIf="isLoginView">
+    <app-login></app-login>
+  </div>
+
+  <div class="auth-panel" *ngIf="!isLoginView">
+    <div class="register-wrapper">
+      <div class="register-card">
+        
+        <div class="register-header">
+          <div class="img-container">
+            <img src="./../../../assets/img/Img_Welcome/images.png" alt="Logo" class="register-logo">
+          </div>
+          <h2>Crear Cuenta</h2>
+          <p class="subtitle">Regístrate para obtener acceso completo.</p>
+        </div>
+
+        <form [formGroup]="myForm" class="register-form">
+          <div class="input-group full-width input-with-action">
+            <input formControlName="numeroDocumento" type="text" id="numeroDocumento" placeholder=" " required />
+            <label for="numeroDocumento">Número de Documento</label>
+            <span class="focus-border"></span>
+            <button type="button" class="action-btn" title="Validar Documento" (click)="buscarPorDni()" [disabled]="dniBuscado">
+              <i class="fas fa-search"></i>
             </button>
-            <br>     
-        <button type="button" class="btn btn-primary btn-floating mx-1">
-            Iniciar Sesion con Google
-            <i class="fab fa-google"></i>
-            </button>
-                
-        </div>  -->
-       
-    </form>
-    <img src="http://aa.somee.com/imagen_pagina/MODELOS-[Recuperado]2.gif" alt="">
-</div> 
+          </div>
+          <div class="form-row">
+            <div class="input-group">
+              <input formControlName="nombrePersona" type="text" id="nombrePersona" placeholder=" " required />
+              <label for="nombrePersona">Nombres Completos</label>
+              <span class="focus-border"></span>
+            </div>
+
+            <div class="input-group">
+              <input formControlName="telefono" type="text" id="telefono" placeholder=" " required />
+              <label for="telefono">Teléfono</label>
+              <span class="focus-border"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="input-group">
+              <input formControlName="usuario1" type="text" id="usuario1" placeholder=" " required />
+              <label for="usuario1">Nombre de Usuario</label>
+              <span class="focus-border"></span>
+            </div>
+
+            <div class="input-group">
+              <input formControlName="email" type="email" id="email" placeholder=" " required />
+              <label for="email">Correo Electrónico</label>
+              <span class="focus-border"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="input-group">
+              <input formControlName="password" type="password" id="password" placeholder=" " required minlength="9" />
+              <label for="password">Contraseña (min. 9)</label>
+              <span class="focus-border"></span>
+            </div>
+
+            <div class="input-group">
+              <input formControlName="codigoUbigeo" type="text" id="codigoUbigeo" placeholder=" " />
+              <label for="codigoUbigeo">Código Ubigeo</label>
+              <span class="focus-border"></span>
+            </div>
+          </div>
+
+          <div class="input-group full-width">
+            <input formControlName="direccion" type="text" id="direccion" placeholder=" " required />
+            <label for="direccion">Dirección Completa</label>
+            <span class="focus-border"></span>
+          </div>
+
+          <div class="form-row selects-row">
+            <div class="select-group">
+              <label for="tipoPersona">Tipo de Persona</label>
+              <select id="tipoPersona" formControlName="tipoPersona" [disabled]="dniBuscado">
+                <option value="Natural">Natural</option>
+              </select>
+            </div>
+
+            <div class="select-group">
+              <label for="tipoDocumento">Tipo de Doc.</label>
+              <select id="tipoDocumento" formControlName="tipoDocumento">
+                <option value="" disabled selected>Seleccione...</option>
+                <option value="DNI">DNI</option>
+                <option value="CARNET">Carnet Ext.</option>
+              </select>
+            </div>
+          </div>
+
+          
+
+          <button 
+            type="submit" 
+            [disabled]="myForm.invalid" 
+            (click)="guardar()"
+            class="btn-submit">
+            <span>Registrarme</span>
+            <i class="fas fa-user-plus icon-slide"></i>
+          </button>
+
+          <div class="login-footer">
+            <span>¿Ya tienes una cuenta?</span>
+            <button type="button" class="link-login" (click)="mostrarLogin()">Inicia Sesión</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="frmLoadSt === loadStateEnum.Loading || frmLoadSt === loadStateEnum.Error" class="auth-status-screen">
+  <app-loading-widget [state]="frmLoadSt"></app-loading-widget>
+</div>
+
+<div *ngIf="frmLoadSt === loadStateEnum.Success" class="auth-status-screen success-screen">
+  <h2>¡Bienvenido!</h2>
+  <p>{{ welcomeMessage }}</p>
+</div>

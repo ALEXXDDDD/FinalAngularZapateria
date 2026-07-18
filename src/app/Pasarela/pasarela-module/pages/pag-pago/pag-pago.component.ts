@@ -1,51 +1,60 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { environment } from '../../enviorements/enviorements';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
 import { CarritoItem } from 'src/app/modules/matenimiento/models/carritoItem/carritoItem.model';
-import { Observable, of, Subscription } from 'rxjs';
-import { OrdenService } from 'src/app/modules/matenimiento/service/orden/orden.service';
-import { MercadoPagoRequest } from 'src/app/modules/matenimiento/service/orden/mercadoPagoRequest';
-import { MercadoPagoResponse } from 'src/app/modules/matenimiento/service/orden/mercadoPagoResponse';
+import { Subscription } from 'rxjs';
 import { PerfilService } from 'src/app/services/perfil/perfil.service';
 import { ResponsePerfil } from 'src/app/modules/matenimiento/models/perfil/perfil-response.model';
-import { VistaServiceService } from 'src/app/services/Vista/vista-service.service';
-import { VistPerfil } from 'src/app/services/Vista/vistPerfil-model';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import Swal from 'sweetalert2';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Router } from '@angular/router';
+import { OrdenService } from 'src/app/modules/matenimiento/service/orden/orden.service';
 
 declare global {
   interface Window {
-    Stripe?: any;
+    MercadoPago?: any;
   }
 }
-
-
 
 @Component({
   selector: 'app-pag-pago',
   templateUrl: './pag-pago.component.html',
   styleUrls: ['./pag-pago.component.css']
 })
-
 export class PagPagoComponent implements OnInit {
-
   carrito: CarritoItem[] = [];
-  response:ResponsePerfil[]=[]
-  vistPerfil:VistPerfil[]=[]
-  mercadoPagoRequest:MercadoPagoRequest= new MercadoPagoRequest()
-  mercadoPagoResponse:MercadoPagoResponse[]=[]
-  total: number = 0;
-  private subscription: Subscription = new Subscription();
+  response: ResponsePerfil[] = [];
+  total = 0;
+  modalRef?: BsModalRef;
+  editarDireccion = false;
+  accessToken = 'APP_USR-8179075883826310-091208-fc80cedea5bf686dcd6d59e7a1bb9530-1935100815';
+  nombre = '';
+  email = '';
+  direccion = '';
+  cargandoPago = false;
+  private subscription = new Subscription();
 
-  constructor( private _verZapatilService:VistaServiceService,    private _perfilService : PerfilService,private _carritoService: CarritoService,private _ordenService:OrdenService) { }
+  constructor(
+    private _perfilService: PerfilService,
+    private _router: Router,
+    private _carritoService: CarritoService,
+    private modalService: BsModalService,
+    private _ordenService: OrdenService
+  ) {}
 
   ngOnInit(): void {
     this.subscription.add(this._carritoService.listarCarrito().subscribe(carrito => {
       this.carrito = carrito;
       this.total = this.calcularTotal(carrito);
     }));
+
+    this.cargarDatosCliente();
+  }
+  volverInicio(): void {
+    this._router.navigate(['/carrito']);
+  }
+
+  volverTienda(): void {
+    this._router.navigate(['']);
   }
 
   calcularTotal(carrito: CarritoItem[]): number {
@@ -55,67 +64,164 @@ export class PagPagoComponent implements OnInit {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-  descargarPDF() {
-    const informeVenta = document.getElementById("informe-venta");
 
-    if (informeVenta) {
-      html2canvas(informeVenta).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgWidth = 190; // Ajustar al ancho de la página
-        const pageHeight = pdf.internal.pageSize.height;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
+  abrirModalPago(template: TemplateRef<any>): void {
+    this.editarDireccion = false;
+    this.cargarDatosCliente();
+    this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
+  }
 
-        let heightLeft = imgHeight;
-        let position = 0;
+  toggleEditarDireccion(): void {
+    this.editarDireccion = !this.editarDireccion;
+  }
 
-        // Añadir la primera imagen al PDF
-        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+  cargarDatosCliente(): void {
+    const idUsuario = sessionStorage.getItem('idUsuario');
 
-        // Si el contenido excede la altura de la página, añadir páginas adicionales
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
+    this.limpiarDatosFormulario();
+
+    if (!idUsuario) {
+      return;
+    }
+
+    this._perfilService.getDetalle(idUsuario).subscribe({
+      next: (data: ResponsePerfil[]) => {
+        const perfil = data?.[0];
+        if (perfil) {
+          this.nombre = perfil.nombrePersona || '';
+          this.email = perfil.email || '';
+          this.direccion = perfil.direccion || '';
+          this.response = data;
+        } else {
+          this.limpiarDatosFormulario();
         }
+      },
+      error: () => {
+        this.limpiarDatosFormulario();
+        console.warn('No se pudo cargar el perfil del usuario.');
+      }
+    });
+  }
 
-        pdf.save('informe-ventas.pdf');
+  limpiarDatosFormulario(): void {
+    this.nombre = '';
+    this.email = '';
+    this.direccion = '';
+  }
+
+  construirPayloads() {
+    const cliente = {
+      nombre: this.nombre,
+      email: this.email,
+      direccion: this.direccion,
+      idUsuario: sessionStorage.getItem('idUsuario') || null
+    };
+
+    const productos = this.carrito.map(item => ({
+      idProducto: item.producto.idProducto,
+      nombreProducto: item.producto.nombreProd,
+      cantidad: item.cantidad,
+      precioUnitario: item.producto.precioUnitario,
+      subtotal: item.producto.precioUnitario * item.cantidad
+    }));
+
+    return {
+      cliente,
+      productos
+    };
+  }
+
+  async continuarPago(): Promise<void> {
+    if (!this.carrito.length) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Carrito vacío',
+        text: 'Agrega productos antes de continuar con el pago.'
+      });
+      return;
+    }
+
+    if (!this.email || !this.nombre) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Datos incompletos',
+        text: 'Ingresa tu nombre y correo para continuar.'
+      });
+      return;
+    }
+
+    this.cargandoPago = true;
+
+    try {
+      const preferencePayload = {
+        items: this.carrito.map(item => ({
+          title: item.producto.nombreProd,
+          quantity: item.cantidad,
+          unit_price: item.producto.precioUnitario
+        })),
+        payer: {
+          email: this.email,
+          name: this.nombre,
+          surname: this.nombre
+        },
+        back_urls: {
+          success: 'http://localhost:4200/pasarela',
+          failure: 'http://localhost:4200/pasarela',
+          pending: 'http://localhost:4200/pasarela'
+        },
+        payment_methods: {
+          installments: 6
+        }
+      };
+
+      this.modalRef?.hide();
+
+      const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.accessToken}`
+        },
+        body: JSON.stringify(preferencePayload)
+      });
+
+      const preference = await response.json();
+      const checkoutUrl = preference?.init_point || preference?.sandbox_init_point || preference?.response?.init_point || preference?.response?.sandbox_init_point;
+
+      if (!checkoutUrl) {
+        const detail = preference?.message || preference?.error || 'Sin detalle del servidor.';
+        throw new Error(`No se recibió la URL de checkout de Mercado Pago. Detalle: ${detail}`);
+      }
+
+      const payload = this.construirPayloads();
+      console.log('Datos del cliente:', JSON.stringify(payload.cliente));
+      console.log('Productos preparados:', JSON.stringify(payload.productos));
+
+      this.cargandoPago = false;
+      window.location.href = checkoutUrl;
+    } catch (error: any) {
+      this.cargandoPago = false;
+      console.error('Error al crear la preferencia de Mercado Pago', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al procesar el pago',
+        text: error?.message || 'No se pudo iniciar la pasarela de Mercado Pago.'
+      }).then(() => {
+        this._router.navigate(['/pasarela']);
       });
     }
   }
-  generarPreferencia()
-  {
-    let idUsu = sessionStorage.getItem('idUsuario')
-    if(idUsu!=null)
-    {
-      this._perfilService.getDetalle(idUsu).subscribe(
-        {
-          next:(data:ResponsePerfil[])=>
-            {
-              this.response=data 
-              
-              let email = sessionStorage.getItem('email')
-              let nombrePersona = sessionStorage.getItem('nombrePersona')
-              let idUsu = sessionStorage.getItem('idUsuario')
-              // this.mercadoPagoRequest.email= 
-            }
-        }
-      )
-    }
-    
-  }
-  perfilCoregido(request:string)
-  {
-    const body = JSON.stringify(request); //
-    this._verZapatilService.perfil(body).subscribe(
-      {
-        next: (data: VistPerfil[]) => {
-          console.log(data);
-          this.vistPerfil = data;
-        }
-      }
-    );
+
+  mostrarEstadoPago(title: string, text: string): void {
+    Swal.fire({
+      title,
+      text,
+      icon: 'info',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      timer: 2500
+    }).then(() => {
+      this._router.navigate(['/pasarela']);
+    });
   }
 }

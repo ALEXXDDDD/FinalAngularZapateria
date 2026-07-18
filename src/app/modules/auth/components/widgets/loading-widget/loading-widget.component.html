@@ -1,19 +1,20 @@
-<p>loading-widget works!</p>
-<div class="loader">
-    <svg viewBox="0 0 80 80">
-      <circle r="32" cy="40" cx="40" id="test"></circle>
-    </svg>
+<div class="widget-state" [ngSwitch]="state">
+  <div *ngSwitchCase="loadStateEnum.Loading" class="state-card loading">
+    <div class="loader">
+      <svg viewBox="0 0 80 80">
+        <circle r="32" cy="40" cx="40" id="test"></circle>
+      </svg>
+    </div>
+    <p>{{ loadingMessage }}</p>
   </div>
-  
-  <div class="loader triangle">
-    <svg viewBox="0 0 86 80">
-      <polygon points="43 8 79 72 7 72"></polygon>
-    </svg>
+
+  <div *ngSwitchCase="loadStateEnum.Success" class="state-card success">
+    <span class="icon">✓</span>
+    <p>{{ successMessage }}</p>
   </div>
-  
-  <div class="loader">
-    <svg viewBox="0 0 80 80">
-      <rect height="64" width="64" y="8" x="8"></rect>
-    </svg>
+
+  <div *ngSwitchCase="loadStateEnum.Error" class="state-card error">
+    <span class="icon">✕</span>
+    <p>{{ errorMessage }}</p>
   </div>
-  
+</div>

@@ -66,15 +66,27 @@ export class ProductoComponent implements OnInit {
   }
   addProducto(prod:ResponseProducto)
   {
+    if (!this.tieneStock(prod)) {
+      return;
+    }
+
     this._carritoService.addProducto(prod)
   }
   monstrarDetalle(template:TemplateRef<any>,producto:ResponseProducto,id:number)
   {
+    if (!this.tieneStock(producto)) {
+      return;
+    }
+
     this.titleModal ="Detalle"
     this.productoSelect = producto
     this.accionModal = AcciontConstants.detalle
     this.openModal(template);
 
+  }
+
+  tieneStock(producto: ResponseProducto): boolean {
+    return (producto?.stock ?? 0) > 0;
   }
   // monstrarDetalleProducto(id:number)
   // {

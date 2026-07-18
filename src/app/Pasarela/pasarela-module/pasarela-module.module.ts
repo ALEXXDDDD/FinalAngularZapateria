@@ -25,10 +25,8 @@ import { MatenimientoModule } from 'src/app/modules/matenimiento/matenimiento.mo
   ],
   imports: [
     SharedModule,
-    /*
-     * TODO: PARA USUAR DOBLE BINDING    
-     */
     CommonModule,
+    FormsModule,
     PasarelaModuleRoutingModule
   ]
 })

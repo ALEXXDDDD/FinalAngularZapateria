@@ -3,7 +3,19 @@ body {
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
 }
-
+.btn-back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: #0d6efd;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.25);
+}
 .payment-container {
   display: flex;
   justify-content: space-between;
@@ -132,4 +144,10 @@ body {
 .btn-whatsapp img {
   width: 24px;
   margin-right: 10px;
+}
+
+.payment-form-section {
+  margin-top: 1.5rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
 }

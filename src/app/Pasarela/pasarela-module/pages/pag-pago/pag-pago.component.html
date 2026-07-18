@@ -1,63 +1,91 @@
-<div id="informe-venta"  class="resumen-compras p-6 bg-white rounded-lg shadow-lg max-w-4xl mx-auto mt-8">
-  <a class="navbar-brand text-success logo h1 align-self-center" >
-    <img src="./../../../../assets/img/Img_Welcome/images.png" alt="">
-    D'Lopez
-</a>
-  <h2 class="text-2xl font-bold mb-4 text-center">Resumen de Compras</h2>
-  <table  class="table-auto w-full mb-6">
+<button type="button" class="btn-back-home" (click)="volverInicio()">
+  <i class="fas fa-arrow-left"></i>
+  <span>Volver al carrito</span>
+</button>
+<div class="container py-5">
+  <div *ngIf="cargandoPago" class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(0,0,0,0.6); z-index: 1050;">
+    <div class="bg-white rounded p-4 text-center shadow-lg">
+      <div class="spinner-border text-primary mb-3" role="status"></div>
+      <h5 class="mb-2">Procesando pago</h5>
+      <p class="mb-0">Por favor espera un momento...</p>
+    </div>
+  </div>
+  <div id="informe-venta" class="resumen-compras p-6 bg-white rounded-lg shadow-lg max-w-4xl mx-auto mt-8">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <a class="navbar-brand text-success logo h1 align-self-center">
+        <img src="./../../../../assets/img/Img_Welcome/images.png" alt="">
+        D'Lopez
+      </a>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="volverTienda()">
+        Volver a la tienda
+      </button>
+    </div>
+
+    <h2 class="text-2xl font-bold mb-4 text-center">Resumen de Compras</h2>
+    <table class="table-auto w-full mb-6">
       <thead>
-          <tr class="bg-gray-100">
-              <th class="px-4 py-2 text-left text-gray-600">Producto</th>
-              <th class="px-4 py-2 text-left text-gray-600">Cantidad</th>
-              <th class="px-4 py-2 text-left text-gray-600">Precio Unitario</th>
-              <th class="px-4 py-2 text-left text-gray-600">Total</th>
-          </tr>
+        <tr class="bg-gray-100">
+          <th class="px-4 py-2 text-left text-gray-600">Producto</th>
+          <th class="px-4 py-2 text-left text-gray-600">Cantidad</th>
+          <th class="px-4 py-2 text-left text-gray-600">Precio Unitario</th>
+          <th class="px-4 py-2 text-left text-gray-600">Total</th>
+        </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let item of carrito" class="border-t">
-              <td class="px-4 py-2">{{ item.producto.nombreProd }}</td>
-              <td class="px-4 py-2">{{ item.cantidad }}</td>
-              <td class="px-4 py-2">${{ item.producto.precioUnitario.toFixed(2) }}</td>
-              <td class="px-4 py-2">${{ (item.producto.precioUnitario * item.cantidad).toFixed(2) }}</td>
-          </tr>
-
+        <tr *ngFor="let item of carrito" class="border-t">
+          <td class="px-4 py-2">{{ item.producto.nombreProd }}</td>
+          <td class="px-4 py-2">{{ item.cantidad }}</td>
+          <td class="px-4 py-2">S/ {{ item.producto.precioUnitario.toFixed(2) }}</td>
+          <td class="px-4 py-2">S/ {{ (item.producto.precioUnitario * item.cantidad).toFixed(2) }}</td>
+        </tr>
       </tbody>
-  </table>
-  <div class="total text-right">
-      <h3 class="text-xl font-bold">Total: ${{ total.toFixed(2) }}</h3>
+    </table>
+
+    <div class="total text-right">
+      <h3 class="text-xl font-bold">Total: S/ {{ total.toFixed(2) }}</h3>
+    </div>
   </div>
 
+  <div class="payment-container mt-10 text-center">
+    <button type="button" class="btn btn-primary px-4 py-2" (click)="abrirModalPago(modalPago)">
+      Continuar pago
+    </button>
 
+    <div class="mt-4 mx-auto p-3 border rounded-3 bg-light" style="max-width: 420px; text-align: left;">
+      <h5 class="mb-2 text-dark">Pago en efectivo</h5>
+      <p class="mb-0 text-muted">Puedes pagar al recibir tu pedido en efectivo.</p>
+    </div>
+  </div>
 </div>
-<div class="payment-container mt-10">
-  <!-- <h2 class="text-2xl font-bold mb-4 text-center">Compra tu producto</h2> -->
-  <button  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" (click)="descargarPDF()">
-    Descargar PDF
-  </button >
-  <button  class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" routerLink="">
-    volver
-  </button >
-  <!-- <div class="flex justify-center mb-4">
-      <button id="checkout-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          Pagar con Mercado Pago
-      </button>
-  </div> -->
 
-  <div class="flex justify-center mb-6">
-      <a href="https://wa.me/+51930781865?text=Hola,%20necesito%20más%20información%20sobre%20los%20productos" target="_blank" class="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/WhatsApp_icon.png" alt="WhatsApp" class="w-6 h-6 mr-2">
-          Contacto por WhatsApp
-      </a>
+<ng-template #modalPago>
+  <div class="modal-header">
+    <h4 class="modal-title">Datos de pago</h4>
+    <button type="button" class="btn-close" (click)="modalRef?.hide()"></button>
   </div>
-
-  <!-- <div class="payment-methods text-center">
-      <h3 class="text-lg font-semibold mb-4">Métodos de Pago</h3>
-      <div class="flex justify-center space-x-4">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXalPMjNwXaU8xcGbEND634noc-NcdBjIqNiYvPGuuqfHvYUotioI6Sit0zvp2V-Nwcsc" alt="Visa" class="w-12">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="w-12">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/180px-American_Express_logo_%282018%29.svg.png" alt="American Express" class="w-12">
-          <img src="https://www.consumoteca.com/wp-content/uploads/Logo-PayPal-jpg.webp" alt="PayPal" class="w-12">
-          <img src="https://latinanoticias.pe/wp-content/uploads/2023/12/Yape-BCP.jpg" alt="Yape" class="w-12">
+  <div class="modal-body">
+    <form class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Nombre</label>
+        <input type="text" class="w-full border rounded px-3 py-2" [(ngModel)]="nombre" name="nombre" />
       </div>
-  </div> -->
-</div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Correo electrónico</label>
+        <input type="email" class="w-full border rounded px-3 py-2" [(ngModel)]="email" name="email" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Dirección</label>
+        <div class="d-flex gap-2">
+          <input type="text" class="w-full border rounded px-3 py-2" [(ngModel)]="direccion" name="direccion" [disabled]="!editarDireccion" />
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleEditarDireccion()">
+            {{ editarDireccion ? 'Guardar' : 'Cambiar' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modalRef?.hide()">Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="continuarPago()">Continuar pago</button>
+  </div>
+</ng-template>
