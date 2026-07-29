@@ -36,10 +36,52 @@ export class MantProduccionListComponent implements OnInit{
   {
 
   }
-  tablaActual: string = 'conAccion';
+  tablaActual: string = 'sinAccion';
+  produccionExpandidaId: number | null = null;
+  mostrarDetalleProducciones = false;
+  detalleProduccionId: number | null = null;
 
   mostrarTabla(tabla: string) {
     this.tablaActual = tabla;
+    this.produccionExpandidaId = null;
+    this.mostrarDetalleProducciones = false;
+    this.detalleProduccionId = null;
+  }
+
+  toggleOpcionesProduccion(idProduccion: number) {
+    const esMismaFila = this.produccionExpandidaId === idProduccion;
+    this.produccionExpandidaId = esMismaFila ? null : idProduccion;
+    this.detalleProduccionId = esMismaFila ? null : idProduccion;
+    this.mostrarDetalleProducciones = !esMismaFila;
+  }
+
+  mostrarProduccionesDetalle(idProduccion: number) {
+    this.produccionExpandidaId = idProduccion;
+    this.detalleProduccionId = idProduccion;
+    this.mostrarDetalleProducciones = true;
+  }
+
+  getCantidadIngreso(item: any): string {
+    return item?.cantidadIngreso ?? item?.cantidad ?? item?.cantidadProduccion ?? '-';
+  }
+
+  getFechaIngreso(item: any): string {
+    return item?.fechaIngreso ?? item?.fechaRegistro ?? item?.fechaInicio ?? '-';
+  }
+
+  getEmpleado(item: any): string {
+    return item?.empleado?.nombre
+      ?? item?.nombreEmpleado
+      ?? item?.empleadoNombre
+      ?? item?.empleado
+      ?? item?.responsable
+      ?? 'Sin empleado';
+  }
+
+  cerrarDetalleProducciones() {
+    this.mostrarDetalleProducciones = false;
+    this.detalleProduccionId = null;
+    this.produccionExpandidaId = null;
   }
   ngOnInit(): void {
     this.listarProduccion()

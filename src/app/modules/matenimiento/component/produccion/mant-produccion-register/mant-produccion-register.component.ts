@@ -63,7 +63,7 @@ export class MantProduccionRegisterComponent implements OnInit {
     this.myForm = this._fb.group
     (
       {
-        idProduccion: [{value:0,disabled:true},[Validators.required]],
+        idProduccion: [{value:0,disabled:true}],
         nombreProd: [null,Validators.required] ,
         fechaInicio : [null,Validators.required],
         meta : [null,Validators.required],
@@ -71,13 +71,77 @@ export class MantProduccionRegisterComponent implements OnInit {
         estadoProduccion : [null,Validators.required],
         descripcion: [null,Validators.required],
         cantidadFaltante  : [null,Validators.required],
-        codigoProduccion : [null,Validators.required] ,
+        codigoProduccion : [{value:'',disabled:true}] ,
         nombreUnidad: [null,Validators.required] ,
-        idUnidad : [{value:0,disabled:true},[Validators.required]],
+        idUnidad : [{value:0,disabled:true}],
         fechaFin: [null,Validators.required],
+        color: [null,Validators.required],
       }
     )
   }
+  /**
+   * Genera código de producción automáticamente
+   * Formato: PRODUCCION-NOMBRE-PRODUCTO-COLOR-XX
+   * Ej: PRODUCCION-ZAPATO-ROJO-01, PRODUCCION-ZAPATO-ROJO-02, etc.
+   */
+  generarCodigoProduccion() {
+    const nombreProd = this.myForm.get('nombreProd')?.value;
+    const color = this.myForm.get('color')?.value;
+
+    if (nombreProd && color) {
+      // Limpiar nombre y color: convertir a mayúscula y reemplazar espacios
+      const nombreLimpio = nombreProd.toUpperCase().replace(/\s+/g, '-');
+      const colorLimpio = color.toUpperCase().replace(/\s+/g, '-');
+      
+      // Obtener el siguiente número disponible
+      const prefijo = `PRODUCCION-${nombreLimpio}-${colorLimpio}`;
+      const siguienteNumero = this.obtenerSiguienteNumero(prefijo);
+      const numeroFormato = String(siguienteNumero).padStart(2, '0');
+      
+      const codigoGenerado = `${prefijo}-${numeroFormato}`;
+      
+      console.log('Código generado:', codigoGenerado);
+      
+      // Establecer el código sin emitir eventos
+      this.myForm.get('codigoProduccion')?.setValue(codigoGenerado, { emitEvent: false });
+    }
+  }
+
+  /**
+   * Obtiene el siguiente número disponible basado en códigos existentes
+   * Busca códigos que empiecen con el prefijo y encuentra el siguiente número secuencial
+   */
+  obtenerSiguienteNumero(prefijo: string): number {
+    if (!this.responseProduccion || this.responseProduccion.length === 0) {
+      return 1; // Si no hay datos, empezar en 1
+    }
+
+    // Filtrar códigos que empiecen con el prefijo
+    const codigosRelacionados = this.responseProduccion
+      .filter(prod => prod.codigoProduccion && prod.codigoProduccion.startsWith(prefijo))
+      .map(prod => {
+        // Extraer el número del final del código (ej: PRODUCCION-ZAPATO-01 → 01)
+        const partes = prod.codigoProduccion.split('-');
+        const numero = parseInt(partes[partes.length - 1], 10);
+        return isNaN(numero) ? 0 : numero;
+      })
+      .sort((a, b) => a - b);
+
+    // Si no hay códigos relacionados, empezar en 1
+    if (codigosRelacionados.length === 0) {
+      return 1;
+    }
+
+    // Encontrar el siguiente número disponible
+    for (let i = 1; i <= codigosRelacionados.length + 1; i++) {
+      if (!codigosRelacionados.includes(i)) {
+        return i;
+      }
+    }
+
+    return codigosRelacionados[codigosRelacionados.length - 1] + 1;
+  }
+
   ngOnInit(): void {
     this.myForm.patchValue(this.responseUnidad)
     this.myForm.patchValue(this.Produccion)
@@ -85,6 +149,27 @@ export class MantProduccionRegisterComponent implements OnInit {
     this.listarProductos()
     this.filtrarProduccionAcIna('Activo')
     this.listarUnidad()
+
+    // Escuchar cambios de nombreProd para auto-generar código
+    this.myForm.get('nombreProd')?.valueChanges.subscribe(() => {
+      setTimeout(() => {
+        this.generarCodigoProduccion();
+      }, 100);
+    });
+
+    // Escuchar cambios de color para auto-generar código
+    this.myForm.get('color')?.valueChanges.subscribe(() => {
+      setTimeout(() => {
+        this.generarCodigoProduccion();
+      }, 100);
+    });
+
+    // Generar código inicial si ya hay datos (modo edición)
+    if (this.accion !== AcciontConstants.crear && this.Produccion) {
+      setTimeout(() => {
+        this.generarCodigoProduccion();
+      }, 200);
+    }
   }
   filtrarProduccionAcIna(nombre:string)
   {
@@ -125,7 +210,30 @@ export class MantProduccionRegisterComponent implements OnInit {
   guardar()
   {
     debugger;
-    this.ProduccionEnvio=this.myForm.getRawValue()
+    
+
+    // Asegurar que tanto nombreProd como color están seleccionados
+    const nombreProd = this.myForm.get('nombreProd')?.value;
+    const color = this.myForm.get('color')?.value;
+    
+    if (!nombreProd) {
+      alert_error("Por favor selecciona un nombre de producto");
+      return;
+    }
+
+    if (!color) {
+      alert_error("Por favor ingresa el color del producto");
+      return;
+    }
+
+    // Generar código si es nueva producción
+    if (this.accion === AcciontConstants.crear) {
+      this.generarCodigoProduccion();
+    }
+
+    this.ProduccionEnvio = this.myForm.getRawValue()
+    console.log("Código de producción:", this.ProduccionEnvio.codigoProduccion);
+    
     switch(this.accion)
     {
       case AcciontConstants.crear:
@@ -140,6 +248,10 @@ export class MantProduccionRegisterComponent implements OnInit {
   crearProduccion()
   {
     debugger;
+    this.ProduccionEnvio.codigoOrden = "PRODUCCION"
+    this.ProduccionEnvio.estadoProduccion = "Activo"
+    this.ProduccionEnvio.cantidadFaltante = this.ProduccionEnvio.meta
+    console.log("Datos a enviar:", this.ProduccionEnvio);
     this._ProduccionService.create(this.ProduccionEnvio).subscribe(
       {
         next:()=>

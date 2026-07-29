@@ -21,10 +21,10 @@
           </div>
 
           <div class="lg:col-span-2 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button (click)="crearOrden(modalEdit)" class="inline-flex justify-center items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150">
+            <!-- <button (click)="crearOrden(modalEdit)" class="inline-flex justify-center items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150">
               <i class="fas fa-plus"></i>
               <span>Agregar Orden</span>
-            </button>
+            </button> -->
             <button (click)="crearUnidad(modalEditUnidad)" class="inline-flex justify-center items-center space-x-2 bg-slate-700 hover:bg-slate-800 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150">
               <i class="fas fa-layer-group"></i>
               <span>Agregar Nueva Unidad</span>
@@ -151,7 +151,7 @@
                     <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 uppercase tracking-wide">{{e.estadoOrden}}</span>
                   </td>
                   <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{e.nombreCliente}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">{{e.montoTotal | currency}}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">{{e.montoTotal | currency}}</td>
                   <td class="px-4 py-3.5 whitespace-nowrap text-sm font-mono text-slate-600 font-semibold">{{e.codigoOrden}}</td>
                   <td class="px-4 py-3.5 whitespace-nowrap text-center space-x-1">
                     <button class="inline-flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded transition-colors"><i class="fas fa-edit"></i> <span>Editar</span></button>

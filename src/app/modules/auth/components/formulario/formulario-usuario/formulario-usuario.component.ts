@@ -46,6 +46,7 @@ export class FormularioUsuarioComponent implements OnInit {
         idPersona: [{value:0 , disabled:true},[Validators.required]],
         irol: [{value:0 , disabled:true},[Validators.required]],
         nombrePersona: [null,Validators.required],
+        apellidoPersona: [null,Validators.required],
         tipoPersona: ['Natural',Validators.required],
         tipoDocumento: ['DNI',Validators.required],
         numeroDocumento: [null,Validators.required,Validators.minLength(8)],
@@ -90,7 +91,9 @@ export class FormularioUsuarioComponent implements OnInit {
       next: (data: empleadoApiPeru) => {
         if (data?.nombres) {
           this.myForm.get('nombrePersona')?.setValue(data.nombres);
+          this.myForm.get('apellidoPersona')?.setValue(`${data.apellidoPaterno} ${data.apellidoMaterno}`.trim());
           this.myForm.get('nombrePersona')?.disable();
+          this.myForm.get('apellidoPersona')?.disable();
           this.myForm.get('numeroDocumento')?.disable();
           this.myForm.get('tipoPersona')?.setValue('Natural');
           this.myForm.get('tipoPersona')?.disable();
@@ -131,6 +134,7 @@ export class FormularioUsuarioComponent implements OnInit {
     this._usuarioService.loginRegister(this.usuarioEnvio).subscribe(
               {
               next : (data:ResponseLogin) => {
+                debugger
                 if(data.success && data.nameRol=="Cliente")
                   {
                     sessionStorage.setItem("token", data.token);

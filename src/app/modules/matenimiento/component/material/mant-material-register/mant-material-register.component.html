@@ -1,100 +1,135 @@
-<div class="modal-header">
-    <h4 class="modal-title pull-left" >{{title}}</h4>
-    <!-- (click)="modalRef?.hide() -->
-    <button type="button" class="btn-close close pull-right" aria-label="Close" >
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
+<!-- Encabezado del Modal -->
+<div class="modal-header bg-primary text-white py-3">
+  <h5 class="modal-title fw-bold m-0">
+    <i class="fa-solid fa-boxes-packing me-2"></i>{{ title }}
+  </h5>
+  <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="cerrarModal(false)"></button>
+</div>
+
+<!-- Formulario del Modal -->
+<form [formGroup]="myForm" (ngSubmit)="guardar()">
+  <div class="modal-body p-4">
+    <div class="row g-3">
+
+      <!-- ID Material (Solo lectura / Autogenerado) -->
+      <div class="col-md-4">
+        <label for="idMaterial" class="form-label small fw-semibold text-secondary">ID Material</label>
+        <input 
+          id="idMaterial"
+          type="text" 
+          formControlName="idMaterial" 
+          class="form-control bg-light" 
+          placeholder="Autogenerado"
+          readonly>
+      </div>
+
+      <!-- Nombre del Material -->
+      <div class="col-md-8">
+        <label for="nombreMaterial" class="form-label small fw-semibold text-secondary">Nombre del Material</label>
+        <input 
+          id="nombreMaterial"
+          type="text" 
+          formControlName="nombreMaterial" 
+          class="form-control" 
+          placeholder="Ej. Cuero Sintético"
+          [class.is-invalid]="myForm.get('nombreMaterial')?.invalid && myForm.get('nombreMaterial')?.touched">
+        <div *ngIf="myForm.get('nombreMaterial')?.hasError('required') && myForm.get('nombreMaterial')?.touched" class="invalid-feedback">
+          El nombre del material es obligatorio.
+        </div>
+      </div>
+
+      <!-- Unidad de Medida -->
+      <div class="col-md-6">
+        <label for="nombreUnidad" class="form-label small fw-semibold text-secondary">Unidad de Medida</label>
+        <select 
+          id="nombreUnidad"
+          formControlName="nombreUnidad" 
+          class="form-select"
+          [class.is-invalid]="myForm.get('nombreUnidad')?.invalid && myForm.get('nombreUnidad')?.touched">
+          <option value="" disabled selected>Seleccione unidad...</option>
+          <option *ngFor="let listUnidad of responseUnidad" [value]="listUnidad.nombreUnidad">
+            {{ listUnidad.nombreUnidad }}
+          </option>
+        </select>
+        <div *ngIf="myForm.get('nombreUnidad')?.hasError('required') && myForm.get('nombreUnidad')?.touched" class="invalid-feedback">
+          Seleccione una unidad de medida.
+        </div>
+      </div>
+
+      <!-- Marca -->
+      <div class="col-md-6">
+        <label for="marca" class="form-label small fw-semibold text-secondary">Marca</label>
+        <input 
+          id="marca"
+          type="text" 
+          formControlName="marca" 
+          class="form-control" 
+          placeholder="Ej. Nike / Genérico"
+          [class.is-invalid]="myForm.get('marca')?.invalid && myForm.get('marca')?.touched">
+        <div *ngIf="myForm.get('marca')?.hasError('required') && myForm.get('marca')?.touched" class="invalid-feedback">
+          Ingrese la marca del material.
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="col-12">
+        <label for="descripMaterial" class="form-label small fw-semibold text-secondary">Descripción</label>
+        <textarea 
+          id="descripMaterial"
+          formControlName="descripMaterial" 
+          class="form-control" 
+          rows="2"
+          placeholder="Ingrese detalles adicionales del material..."
+          [class.is-invalid]="myForm.get('descripMaterial')?.invalid && myForm.get('descripMaterial')?.touched"></textarea>
+        <div *ngIf="myForm.get('descripMaterial')?.hasError('required') && myForm.get('descripMaterial')?.touched" class="invalid-feedback">
+          La descripción es obligatoria.
+        </div>
+      </div>
+
+      <!-- Estado -->
+      <div class="col-md-6">
+        <label for="estado" class="form-label small fw-semibold text-secondary">Estado</label>
+        <select 
+          id="estado"
+          formControlName="estado" 
+          class="form-select"
+          [class.is-invalid]="myForm.get('estado')?.invalid && myForm.get('estado')?.touched">
+          <option value="ACTIVO">ACTIVO</option>
+          <option value="INACTIVO">INACTIVO</option>
+        </select>
+        <div *ngIf="myForm.get('estado')?.hasError('required') && myForm.get('estado')?.touched" class="invalid-feedback">
+          Seleccione un estado.
+        </div>
+      </div>
+
+      <!-- Stock Opcional -->
+      <div class="col-md-6">
+        <label for="stock" class="form-label small fw-semibold text-secondary">Stock Inicial <span class="text-muted fw-normal">(Opcional)</span></label>
+        <div class="input-group">
+          <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-cubes small"></i></span>
+          <input 
+            id="stock"
+            type="number" 
+            formControlName="stock" 
+            class="form-control" 
+            placeholder="0"
+            [class.is-invalid]="myForm.get('stock')?.invalid && myForm.get('stock')?.touched">
+        </div>
+        <div *ngIf="myForm.get('stock')?.hasError('required') && myForm.get('stock')?.touched" class="invalid-feedback">
+          Ingrese una cantidad de stock válida.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pie del Modal con Acciones -->
+  <div class="modal-footer border-0 pt-0 px-4 pb-3">
+    <button type="button" class="btn btn-outline-secondary px-4 me-2" (click)="cerrarModal(false)">
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary px-4 shadow-sm" [disabled]="myForm.invalid">
+      <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Material
     </button>
   </div>
-  
-  <DIv class="row" >
-    <form action="" [formGroup]="myForm">
-        <div class="col-12 mt-5">
-            <div class="form-group">
-                <label for="" aria-placeholder="Ingrese Nokbre Rol">ID</label>
-                <input type="text" formControlName="idMaterial"  class="form-control" placeholder="id">
-            </div>
-        </div>
-        <div class="col-12 mt-5">
-            <div class="form-group">
-                <label for="" aria-placeholder="Ingrese Nokbre Rol">Material</label>
-                <input type="text" formControlName="nombreMaterial"  class="form-control" placeholder="Ingrese Nombre de Rol">
-            </div>
-
-            <div *ngIf="myForm.get('nombreMaterial')?.errors && myForm.touched">
-                <span class="text-danger" *ngIf="myForm.get('nombreMaterial')?.hasError('required')" >Campo Requerido </span>
-            </div>
-
-        </div>
-        <div class="col-12 mt-5">
-            <div class="form-group" >
-                <label for="">Seleccione En que Unidad esta </label>
-                <br>
-                <select name="" id="" formControlName="nombreUnidad" >
-                    <option value={{listUnidad.nombreUnidad}} *ngFor="let listUnidad of responseUnidad"  formControlName="nombreUnidad">{{listUnidad.nombreUnidad}}</option>
-                    
-                </select>
-               
-            </div>
-
-            <div *ngIf="myForm.get('desc')?.errors && myForm.touched">
-                <span class="text-danger" *ngIf="myForm.get('desc')?.hasError('required')" >Campo Requerido </span>
-            </div>
-        </div>
-        <div class="col-12 mt-5">
-            <div class="form-group">
-                <label for="" aria-placeholder="">Descripcion</label>
-                <input type="text" formControlName="descripMaterial" class="form-control" placeholder="Ingrese Descripcion">
-            </div>
-
-            <div *ngIf="myForm.get('descripcionMaterial')?.errors && myForm.touched">
-                <span class="text-danger" *ngIf="myForm.get('descripcionMaterial')?.hasError('required')" >Campo Requerido </span>
-            </div>
-        </div>
-        <div class="col-12 mt-5">
-            <div class="form-group">
-                <label for="" aria-placeholder="">Marca </label>
-                <input type="text" formControlName="marca" class="form-control" placeholder="Ingrese Descripcion">
-            </div>
-
-            <div *ngIf="myForm.get('marca')?.errors && myForm.touched">
-                <span class="text-danger" *ngIf="myForm.get('marca')?.hasError('required')" >Campo Requerido </span>
-            </div>
-        </div>
-        <div class="col-12 mt-5">
-            <div class="form-group">
-                <label for="" aria-placeholder="">Estado </label>
-                <select formControlName="estado" name="" id="">
-                    <option value="ACTIVO">ACTIVO</option>
-
-
-                </select>
-            </div>
-
-            <div *ngIf="myForm.get('estado')?.errors && myForm.touched">
-                <span class="text-danger" *ngIf="myForm.get('estado')?.hasError('required')" >Campo Requerido </span>
-            </div>
-        </div>
-        <div class="col-12 mt-5"></div>
-            <div class="form-group">
-                <label for="" aria-placeholder="">Stock Opcional</label>
-                <input type="text" formControlName="stock" class="form-control" placeholder="stock">
-            </div>
-
-            <div *ngIf="myForm.get('stock')?.errors && myForm.touched">
-                <span class="text-danger" *ngIf="myForm.get('stock')?.hasError('required')" >Campo Requerido </span>
-            </div>
-        
-        
-            <div class="col-6  mt-3">
-                <button   class="btn btn-primary" (click)="guardar()">
-                                Guardar
-                </button>
-            </div>
-            <div class="col-6 mt-3 ">    
-                <button class="btn btn-danger">
-                    Cancelar
-                </button>
-            </div>
-    </form>
-        
-  </DIv>
+</form>

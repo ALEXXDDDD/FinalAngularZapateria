@@ -10,6 +10,7 @@ import { AcciontConstants } from 'src/app/constants/general.constans';
 import { RequestFiltroNombre } from '../../../models/requestFiltroNombre.model';
 import { RolService } from '../../../service/rol.service';
 import { ResponseRol } from '../../../models/rol/rol-response.model';
+import { MantEmpleadoRegisterComponent } from '../mant-empleado-register/mant-empleado-register.component';
 
 @Component({
   selector: 'app-mant-empleado-list',

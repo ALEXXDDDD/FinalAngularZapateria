@@ -10,7 +10,7 @@
           <div *ngFor="let p of vistPerfil" class="mb-4">
             <div class="profile-image-container position-relative">
               <button class="image-button btn btn-outline-secondary rounded-circle p-0" (click)="triggerFileInput(p)">
-                <img [src]="p.fotografia" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                <img src="https://cdn-icons-png.flaticon.com/512/6326/6326055.png" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
                 <input type="file" class="file-input d-none" (change)="updateImage($event, p)" />
                 <!-- <span class="tooltip-text position-absolute top-100 start-50 translate-middle badge rounded-pill bg-primary">Actualizar imagen</span> -->
               </button>

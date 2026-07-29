@@ -14,6 +14,7 @@ export class RequestVWEmpleado {
     codigoUbigeo: string="" ;
     direccion: string="" ;
     imagenEmpleado: string="ddd" ;
+    nombreRol: string="";
     
 }
 export interface RequestVEmpleado {

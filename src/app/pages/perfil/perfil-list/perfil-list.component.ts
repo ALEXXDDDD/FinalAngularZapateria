@@ -22,6 +22,7 @@ export class PerfilListComponent implements OnInit {
    
     // Agrega más perfiles si es necesario
   ];
+https: any;
 
   triggerFileInput(profile: any): void {
     // Aquí puedes manejar la lógica si necesitas realizar alguna acción adicional cuando se hace clic en la imagen

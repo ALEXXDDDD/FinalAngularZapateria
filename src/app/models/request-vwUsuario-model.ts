@@ -4,9 +4,9 @@ export class RequestVWUsuario {
     idPersona: number = 0;
     irol: number= 0;
     nombrePersona: string = "";
+    apellidoPersona: string = "";
     nombreRol: string = "";
     iRol: number = 0;
-    tipoPersona: string = "";
     tipoDocumento: string = "";
     numeroDocumento: string = "";
     telefono: string = "";
@@ -27,6 +27,7 @@ export interface RequestUsuario {
     estado: boolean;
     irol: number;
     nombrePersona: string;
+    apellidoPersona: string;
     tipoPersona: string;
     tipoDocumento: string;
     numeroDocumento: string;

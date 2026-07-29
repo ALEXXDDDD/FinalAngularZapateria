@@ -14,27 +14,34 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         
         <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Código de Producción</label>
-          <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="codigoProduccion">
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Código de Producción <span class="text-blue-500">(Auto generado)</span></label>
+          <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100" formControlName="codigoProduccion" placeholder="Se genera automáticamente" readonly>
+          <small class="text-gray-500">Formato: PRODUCCION-PRODUCTO-COLOR-XX</small>
         </div>
 
-        <div>
+        <!-- <div>
           <label for="productoSelect" class="block text-xs font-bold text-slate-600 uppercase mb-2">Seleccione la Orden</label>
           <select id="productoSelect" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="codigoOrden">
-            <option value="" disabled selected>Seleccione un producto</option>
+            <option value="" disabled selected>Seleccione ORDEN</option>
             <option *ngFor="let listProducto of responseListOrden" [value]="listProducto.codigoOrden">
               {{ listProducto.codigoOrden }}
             </option>
           </select>
-        </div>
+        </div> -->
 
         <div>
           <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Nombres del Producto</label>
           <select class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="nombreProd">
+            <option value="" disabled selected>Seleccione producto</option>
             <option *ngFor="let ma of responseProducto" [value]="ma.nombreProd">
               {{ ma.nombreProd }}
             </option>
           </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Color <span class="text-red-500">*</span></label>
+          <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" formControlName="color" placeholder="Ej: Rojo, Azul, Negro">
         </div>
 
         <div>

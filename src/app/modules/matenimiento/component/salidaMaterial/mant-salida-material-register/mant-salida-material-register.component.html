@@ -1,70 +1,94 @@
-<div class="modal-header">
-    <h4 class="modal-title">{{title}}</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="cerrarModal(false)">
-        <span aria-hidden="true">&times;</span>
+<!-- Encabezado del Modal -->
+<div class="modal-header bg-primary text-white py-3">
+  <h5 class="modal-title fw-bold m-0">
+    <i class="fa-solid fa-boxes-packing me-2"></i>{{ title }}
+  </h5>
+  <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="cerrarModal(false)"></button>
+</div>
+
+<!-- Formulario del Modal -->
+<form [formGroup]="myForm" (ngSubmit)="guardar()">
+  <div class="modal-body p-4">
+
+    <!-- SECCIÓN 1: Selección de Orden y Material -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-5">
+        <label for="codigoProduccion" class="form-label small fw-semibold text-secondary">
+          Código de Producción
+        </label>
+        <select id="codigoProduccion" class="form-select" formControlName="codigoProduccion">
+          <option value="" disabled selected>Seleccione código...</option>
+          <option *ngFor="let mat of responseProduccion" [value]="mat.codigoProduccion">
+            {{ mat.codigoProduccion }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-7">
+        <label for="nombreMaterial" class="form-label small fw-semibold text-secondary">
+          Material a Retirar
+        </label>
+        <select id="nombreMaterial" class="form-select" formControlName="nombreMaterial">
+          <option value="" disabled selected>Seleccione material...</option>
+          <option *ngFor="let mat of responseVWMaterial" [value]="mat.nombreMaterial">
+            {{ mat.nombreMaterial }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: Métricas de Stock, Cantidad y Fecha -->
+    <div class="card bg-light border-0 p-3 rounded-3">
+      <div class="row g-3">
+        <!-- Stock Disponible (Solo lectura) -->
+        <div class="col-md-4">
+          <label for="stock" class="form-label small fw-semibold text-secondary">Stock Disponible</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white text-success"><i class="fa-solid fa-cubes"></i></span>
+            <input 
+              type="number" 
+              class="form-control bg-white fw-bold text-success border-start-0" 
+              id="stock" 
+              formControlName="stock" 
+              readonly>
+          </div>
+        </div>
+
+        <!-- Cantidad a Retirar -->
+        <div class="col-md-4">
+          <label for="cantidad" class="form-label small fw-semibold text-secondary">Cantidad a Retirar</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="cantidad" 
+            formControlName="cantidad"
+            [max]="myForm.get('stock')?.value"
+            [min]="1"
+            placeholder="0"
+            [class.is-invalid]="myForm.get('cantidad')?.value > myForm.get('stock')?.value || (myForm.get('cantidad')?.invalid && myForm.get('cantidad')?.touched)"
+          >
+          <div *ngIf="myForm.get('cantidad')?.value > myForm.get('stock')?.value" class="invalid-feedback">
+            Excede el stock.
+          </div>
+        </div>
+
+        <!-- Fecha de Salida -->
+        <div class="col-md-4">
+          <label for="fechaSalida" class="form-label small fw-semibold text-secondary">Fecha del Retiro</label>
+          <input type="date" class="form-control" id="fechaSalida" formControlName="fechaSalida">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Pie del Modal (Acciones) -->
+  <div class="modal-footer border-0 pt-0 px-4 pb-3">
+    <button type="button" class="btn btn-outline-secondary px-4 me-2" (click)="cerrarModal(false)">
+      Cancelar
     </button>
-</div>
-
-<div class="modal-body">
-    <form [formGroup]="myForm">
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="idProduccion">Código de Producción Activas</label>
-                    <select id="codigoProduccion" class="form-select" formControlName="codigoProduccion">
-                        <option *ngFor="let mat of responseProduccion" [value]="mat.codigoProduccion">
-                            {{mat.codigoProduccion}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="nombreMaterial">Nombre del Material</label>
-                    <select id="nombreMaterial" class="form-select" formControlName="nombreMaterial">
-                        <option *ngFor="let mat of responseVWMaterial" [value]="mat.nombreMaterial">
-                            {{mat.nombreMaterial}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="stock">Stock Disponible</label>
-                    <input type="number" class="form-control" id="stock" formControlName="stock" readonly>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="cantidad">Cantidad a Retirar</label>
-                    <input 
-                    [max]="myForm.get('stock')?.value"
-                    [min]="1"
-                    
-                    type="number" class="form-control" id="cantidad" formControlName="cantidad">
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="fechaSalida">Fecha del Retiro</label>
-                    <input type="date" class="form-control" id="fechaSalida" formControlName="fechaSalida">
-                </div>
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-primary me-2" [disabled]="estCantidad()" (click)="guardar()">
-                Guardar
-            </button>
-            <button type="button" class="btn btn-danger" (click)="cerrarModal(false)">
-                Cancelar
-            </button>
-        </div>
-    </form>
-</div>
+    <button type="button" class="btn btn-primary px-4 shadow-sm" [disabled]="estCantidad()" (click)="guardar()">
+      <i class="fa-solid fa-floppy-disk me-1"></i> Registrar Retiro
+    </button>
+  </div>
+</form>

@@ -7,5 +7,7 @@ export class ResponseProducto {
     nombreUnidad :string=""
     estadoProducto: boolean = false;
     idUnidad: number= 0;
+    categoria: string= "";
     fotografia: string = "";
+    nombreModelo: string = "";
 }
