@@ -130,10 +130,15 @@ export class MantProduccionListComponent implements OnInit{
     this.openModal(template)
 
   }
-  resgitrarProduccion(template:TemplateRef<any>)
+  resgitrarProduccion(template:TemplateRef<any>, itemProduccion?:any)
   {
     this.title=" Ingreso Producto"
     this.accionModal = AcciontConstants.editar
+    if(itemProduccion)
+    {
+      this.envioProduccion = itemProduccion;
+    }
+    this.accionModal = AcciontConstants.editar;
     this.openModal(template)
   }
   openModal( template : TemplateRef<any>)
