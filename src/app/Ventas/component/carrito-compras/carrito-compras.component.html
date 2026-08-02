@@ -1,27 +1,132 @@
 <app-welcome-header></app-welcome-header>
 
 <div class="cart-container">
-    <h2 class="cart-title">Carrito de Compras</h2>
-    <div class="cart-item" *ngFor="let item of carrito">
-        <img [src]="item.producto.fotografia" alt="{{item.producto.nombreProd}}" class="cart-item-image">
-        <div class="cart-item-details">
-            <h3 class="cart-item-name">{{item.producto.nombreProd}}</h3>
+
+    <!-- TÍTULO -->
+    <h1 class="cart-title">
+        🛒 Carrito de Compras
+    </h1>
+
+    <div class="cart-content">
+
+        <!-- PRODUCTOS -->
+        <div class="cart-products">
+
+            <div class="cart-item" *ngFor="let item of carrito">
+
+                <!-- IMAGEN -->
+                <img
+                    class="cart-item-image"
+                    [src]="item.producto.fotografia"
+                    [alt]="item.producto.nombreProd">
+
+                <!-- INFORMACIÓN -->
+                <div class="cart-item-details">
+
+                    <h2 class="cart-item-name">
+                        {{ item.producto.nombreProd }}
+                    </h2>
+
+                    <p class="cart-item-description">
+                        Producto disponible en stock.
+                    </p>
+
+                    <div class="cart-item-price">
+                        S/. {{ item.producto.precioUnitario }}
+                    </div>
+
+                    <!-- CANTIDAD -->
+                    <div class="cart-item-quantity">
+
+                        <button
+                            class="btn-quantity"
+                            (click)="quitar1(item)">
+                            -
+                        </button>
+
+                        <span class="quantity-number">
+                            {{ item.cantidad }}
+                        </span>
+
+                        <button
+                            class="btn-quantity"
+                            (click)="agregar1(item)">
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- TOTAL -->
+                <div class="cart-item-total">
+
+                    <h4>Subtotal</h4>
+
+                    <div class="cart-item-price">
+                        S/. {{ item.producto.precioUnitario * item.cantidad }}
+                    </div>
+
+                    <br>
+
+                    <button
+                        class="btn-delete"
+                        (click)="eliminarProducto(item)">
+                        🗑 Eliminar
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- SI EL CARRITO ESTÁ VACÍO -->
+            <div *ngIf="carrito.length == 0" style="text-align:center;padding:60px;">
+
+                <img
+                    src="assets/img/Persona.jpg"
+                    width="250"
+                    alt="Carrito lleno">
+
+                  <!-- <h2>No hay productos en el carrito</h2>  -->
+
+                <!-- <p>
+                    Agrega algunos productos para comenzar tu compra.
+                </p> -->
+
+            </div>
+
         </div>
-        <div class="cart-item-quantity">
-            <button class="btn-quantity" (click)="quitar1(item)">&#8722;</button>
-            <span>{{item.cantidad}}</span>
-            <button class="btn-quantity" (click)="agregar1(item)">&#43;</button>
+
+        <!-- RESUMEN -->
+        <div class="cart-summary">
+
+            <h2 class="summary-title">
+                Resumen de Compra
+            </h2>
+
+            <div class="summary-row">
+                <span>Productos</span>
+                <span>{{ carrito.length }}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Envío</span>
+                <span>Gratis</span>
+            </div>
+
+            <div class="summary-row total">
+                <span>Total</span>
+                <span>S/. {{ total }}</span>
+            </div>
+
+            <button
+                class="btn-pay"
+                (click)="irAPagar()">
+                Finalizar Compra
+            </button>
+
         </div>
-        <div class="cart-item-total">
-            <p class="cart-item-price">${{ item.producto.precioUnitario * item.cantidad }}</p>
-        </div>
-        <button class="btn-delete" type="button" (click)="eliminarProducto(item)">Eliminar</button>
+
     </div>
+
 </div>
-
-<div class="cart-actions">
-    <p>Total: ${{ total }}</p>
-    <button class="btn-primary" type="button" (click)="irAPagar()">Pagar</button>
-</div>
-
-

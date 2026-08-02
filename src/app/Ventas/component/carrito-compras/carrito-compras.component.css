@@ -7,7 +7,174 @@ body {
 
 .cart-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto;body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f6fa;
+    margin: 0;
+    padding: 30px;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.cart-container {
+    max-width: 1400px;
+    margin: auto;
+}
+
+/* TITULO */
+.cart-title {
+    text-align: center;
+    font-size: 42px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #222;
+}
+
+/* GRID */
+.cart-content {
+    display: grid;
+    grid-template-columns: 2fr 400px;
+    gap: 30px;
+}
+
+/* PRODUCTOS */
+.cart-products {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* CARD PRODUCTO */
+.cart-item {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    transition: .3s;
+}
+
+.cart-item:hover {
+    transform: translateY(-3px);
+}
+
+/* IMAGEN */
+.cart-item-image {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* DETALLES */
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+}
+
+.cart-item-description {
+    color: #666;
+    margin-top: 5px;
+}
+
+.cart-item-price {
+    color: #007bff;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* CANTIDAD */
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.btn-quantity {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #007bff;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-quantity:hover {
+    background: #0056b3;
+}
+
+/* ELIMINAR */
+.btn-delete {
+    border: none;
+    background: #ff4d4d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-delete:hover {
+    background: #d90000;
+}
+
+/* RESUMEN */
+.cart-summary {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    height: fit-content;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    position: sticky;
+    top: 20px;
+}
+
+.summary-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.total {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.btn-pay {
+    width: 100%;
+    margin-top: 20px;
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-pay:hover {
+    background: #1f7a34;
+}
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
