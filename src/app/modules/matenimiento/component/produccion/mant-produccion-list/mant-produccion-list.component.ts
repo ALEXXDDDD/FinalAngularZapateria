@@ -3,6 +3,8 @@ import { ResponseVWProduccion } from '../../../models/Produccion/produccion-repo
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { RequestVWProduccion } from '../../../models/Produccion/produccion-requestVW.model';
 import { ProduccionService } from '../../../service/produccion/produccion.service';
+import { DetalleProduccionService } from '../../../service/detalleProduccion/detalle-produccion.service';
+import { ResponseDetalleProduccion } from '../../../models/DetalleProduccion/DetalleProduccion-response.model';
 import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { ResponseProduccion } from '../../../models/Produccion/produccion-response.model';
@@ -31,6 +33,7 @@ export class MantProduccionListComponent implements OnInit{
   (
     private _ProduccionService : ProduccionService,
     private _productoService : ProductoService,
+    private _detalleProduccionService : DetalleProduccionService,
     private _modalService : BsModalService
   )
   {
@@ -40,6 +43,8 @@ export class MantProduccionListComponent implements OnInit{
   produccionExpandidaId: number | null = null;
   mostrarDetalleProducciones = false;
   detalleProduccionId: number | null = null;
+  detalleProduccion: ResponseDetalleProduccion[] = [];
+  cargandoDetalleProduccion = false;
 
   mostrarTabla(tabla: string) {
     this.tablaActual = tabla;
@@ -48,17 +53,41 @@ export class MantProduccionListComponent implements OnInit{
     this.detalleProduccionId = null;
   }
 
-  toggleOpcionesProduccion(idProduccion: number) {
+  toggleOpcionesProduccion(idProduccion: number, codigoProduccion?: string) {
     const esMismaFila = this.produccionExpandidaId === idProduccion;
-    this.produccionExpandidaId = esMismaFila ? null : idProduccion;
-    this.detalleProduccionId = esMismaFila ? null : idProduccion;
-    this.mostrarDetalleProducciones = !esMismaFila;
-  }
+    if (esMismaFila) {
+      this.cerrarDetalleProducciones();
+      return;
+    }
 
-  mostrarProduccionesDetalle(idProduccion: number) {
     this.produccionExpandidaId = idProduccion;
     this.detalleProduccionId = idProduccion;
     this.mostrarDetalleProducciones = true;
+    this.detalleProduccion = [];
+
+    if (codigoProduccion) {
+      this.cargarDetalleProduccion(codigoProduccion);
+    }
+  }
+
+  mostrarProduccionesDetalle(idProduccion: number, codigoProduccion: string) {
+    this.toggleOpcionesProduccion(idProduccion, codigoProduccion);
+  }
+
+  private cargarDetalleProduccion(codigoProduccion: string) {
+    this.cargandoDetalleProduccion = true;
+    this._detalleProduccionService.getByCodigoProduccion(codigoProduccion).subscribe({
+      next: (data: ResponseDetalleProduccion[]) => {
+        this.detalleProduccion = data;
+      },
+      error: () => {
+        alert_error('No se pudo cargar el detalle de producción');
+        this.detalleProduccion = [];
+      },
+      complete: () => {
+        this.cargandoDetalleProduccion = false;
+      }
+    });
   }
 
   getCantidadIngreso(item: any): string {

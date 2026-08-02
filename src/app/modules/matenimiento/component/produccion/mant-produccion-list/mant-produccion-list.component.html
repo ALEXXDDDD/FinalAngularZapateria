@@ -98,7 +98,6 @@
         <table class="w-full min-w-full divide-y divide-gray-200">
           <thead class="bg-slate-50">
             <tr>
-              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre Del Producto</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Código De Producción</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cantidad Faltante</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Meta</th>
@@ -111,7 +110,6 @@
           <tbody class="bg-white divide-y divide-gray-200">
             <ng-container *ngFor="let d of responseVProduccion">
               <tr class="hover:bg-slate-50 transition-colors duration-150">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">{{d.nombreProd}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-mono font-bold text-slate-700">{{d.codigoProduccion}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-rose-600">{{d.cantidadFaltante}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">{{d.meta}}</td>
@@ -119,7 +117,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{d.fechaFin}}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
                   <button type="button"
-                          (click)="toggleOpcionesProduccion(d.idProduccion)"
+                          (click)="toggleOpcionesProduccion(d.idProduccion, d.codigoProduccion)"
                           class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors shadow-sm"
                           [attr.aria-expanded]="produccionExpandidaId === d.idProduccion"
                           title="Mostrar opciones">
@@ -130,12 +128,12 @@
               <tr *ngIf="produccionExpandidaId === d.idProduccion">
                 <td colspan="7" class="px-6 py-4 bg-slate-50 border-t border-slate-200">
                   <div class="flex flex-wrap gap-2">
-                    <button type="button"
-                            (click)="mostrarProduccionesDetalle(d.idProduccion)"
+                    <!-- <button type="button"
+                            (click)="mostrarProduccionesDetalle(d.idProduccion, d.codigoProduccion)"
                             class="inline-flex items-center space-x-1.5 bg-slate-700 hover:bg-slate-800 text-white text-sm font-medium px-3 py-2 rounded-lg shadow-sm transition-colors duration-150">
                       <i class="fas fa-eye"></i>
                       <span>Mirar las producciones</span>
-                    </button>
+                    </button> -->
                     <button (click)="resgitrarProduccion(modalEditIngresoProducto, d)" 
                           class="inline-flex items-center space-x-1.5 bg-slate-700 hover:bg-slate-800 text-white font-medium text-sm px-4 py-2 rounded-lg shadow-sm transition-colors duration-150">
                           <i class="fas fa-edit"></i>
@@ -144,20 +142,41 @@
                   </div>
 
                   <div *ngIf="mostrarDetalleProducciones && detalleProduccionId === d.idProduccion" class="mt-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      <div class="rounded-md bg-slate-50 p-2">
-                        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Cantidad que ingresó</p>
-                        <p class="mt-1 text-sm font-semibold text-slate-800">{{ getCantidadIngreso(d) }}</p>
-                      </div>
-                      <div class="rounded-md bg-slate-50 p-2">
-                        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Fecha que ingresó</p>
-                        <p class="mt-1 text-sm font-semibold text-slate-800">{{ getFechaIngreso(d) }}</p>
-                      </div>
-                      <div class="rounded-md bg-slate-50 p-2">
-                        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Empleado</p>
-                        <p class="mt-1 text-sm font-semibold text-slate-800">{{ getEmpleado(d) }}</p>
+                    <p class="text-sm font-semibold text-slate-700 mb-3">Detalle de producción para <span class="font-mono">{{ d.codigoProduccion }}</span></p>
+
+                    <div *ngIf="detalleProduccion.length > 0" class="grid gap-3">
+                      <div *ngFor="let detalle of detalleProduccion" class="rounded-md bg-slate-50 p-3 border border-slate-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Cantidad Producción</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-800">{{ detalle.cantidadProduccion }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Fecha Registro</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-800">{{ detalle.fechaRegistro }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Estado</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-800">{{ detalle.estado }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Fecha Finalizado</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-800">{{ detalle.fechaFinalizado }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Descripción</p>
+                            <p class="mt-1 text-sm text-slate-700">{{ detalle.descripcion }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">ID Detalle Producción</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-800">{{ detalle.idDetalleProduccion }}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
+
+                    <div *ngIf="cargandoDetalleProduccion" class="text-sm text-slate-500">Cargando detalle de producción...</div>
+                    <div *ngIf="!cargandoDetalleProduccion && detalleProduccion.length === 0" class="text-sm text-slate-500">No se encontraron detalles de producción.</div>
                   </div>
                 </td>
               </tr>
