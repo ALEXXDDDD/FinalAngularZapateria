@@ -37,6 +37,7 @@ export class MantProductoListComponent implements OnInit {
   producto : Producto []=[]
   myFormFilter: FormGroup;
   tablaActual: string = 'conAccion';
+  readonly fallbackImage = '/assets/img/img_Template/1.png';
 
   constructor(
     private _router: Router,
@@ -64,31 +65,44 @@ export class MantProductoListComponent implements OnInit {
   mostrarTabla(tabla: string) {
     this.tablaActual = tabla;
   }
+ 
   // Agrega esta función para procesar la imagen de forma segura
   getImagenUrl(fotografia: any): string {
-    if (!fotografia) {
-      return 'assets/images/no-image.png'; // O tu imagen por defecto
-    }
 
-    // Caso A: Si ya viene con el prefijo "data:image" desde el backend
-    if (typeof fotografia === 'string' && fotografia.startsWith('data:image')) {
-      return fotografia;
-    }
+  if (!fotografia) {
+    return this.fallbackImage;
+  }
 
-    // Caso B: Si viene como una cadena Base64 limpia
-    if (typeof fotografia === 'string') {
-      return `data:image/png;base64,${fotografia}`;
-    }
+  let base64 = fotografia.toString().trim();
 
-    // Caso C: Si viene como un Array de Bytes [255, 216, 255...]
-    if (Array.isArray(fotografia)) {
-      const base64String = btoa(
-        new Uint8Array(fotografia).reduce((data, byte) => data + String.fromCharCode(byte), '')
-      );
-      return `data:image/png;base64,${base64String}`;
-    }
+  // Si ya viene lista
+  if (base64.startsWith('data:image')) {
+    return base64;
+  }
 
-    return 'assets/images/no-image.png';
+  // Tu API devuelve /9j...
+  if (base64.startsWith('/9j/')) {
+    base64 = base64.substring(1);
+  }
+
+  // Detectar JPEG
+  if (base64.startsWith('9j/')) {
+    return `data:image/jpeg;base64,${base64}`;
+  }
+
+  // Detectar PNG
+  if (base64.startsWith('iVBOR')) {
+    return `data:image/png;base64,${base64}`;
+  }
+
+  return this.fallbackImage;
+}
+
+  onImageError(event: Event): void {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.src = this.fallbackImage;
+    }
   }
   listarProductosAcabados() {
     this._storeProducto.getAll().subscribe({
@@ -113,15 +127,16 @@ export class MantProductoListComponent implements OnInit {
   }
 
   listarProductos() {
-    this._productoService.getAll().subscribe({
-      next: (data: ResponseProducto[]) => {
-        this.responseProducto = data;
-        console.log("Productos", data);
-      },
-      error: () => {
-        alert("Ocurrió un error");
-      },
-      complete: () => {}
+     this._productoService.getAll().subscribe({
+    next: (data) => {
+
+      this.responseProducto = data;
+
+      console.log("Longitud:", data[0].fotografia.length);
+      console.log(data[0].fotografia.substring(0, 20));
+      console.log(data[0].fotografia.substring(data[0].fotografia.length - 20));
+
+    }
     });
   }
 
@@ -159,6 +174,7 @@ export class MantProductoListComponent implements OnInit {
     this.modalRef?.hide();
     if (res) {
       this.listarProductos();
+      this.filtroProductosAcabados();
     }
   }
 

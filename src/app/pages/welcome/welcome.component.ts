@@ -38,7 +38,6 @@ export class WelcomeComponent implements OnInit  {
   responseModelo : ResponseModelo[]=[]
   requestProducto :RequestProducto= new RequestProducto();
   
-  ProductoSelect : RequestProducto = new RequestProducto()
   responseDetalle : ResponseVDetalleProducto[]=[]
   idProduc=this.requestProducto.idProducto
   totalItems:number =0
@@ -174,7 +173,7 @@ export class WelcomeComponent implements OnInit  {
   crearProducto(template: TemplateRef<any>)
   {
     this.titleModal ="Nuevo Producto"
-    this.ProductoSelect = new ResponseProducto()
+    this.productoSelect = new ResponseProducto()
     this.accionModal = AcciontConstants.crear
     this.openModal(template);
 
@@ -182,7 +181,7 @@ export class WelcomeComponent implements OnInit  {
   editarProducto(template: TemplateRef<any>, Producto:ResponseProducto)
   {
     this.titleModal ="Editar Producto"
-    this.ProductoSelect = Producto
+    this.productoSelect = Producto
     this.accionModal = AcciontConstants.editar
     this.openModal(template);
   }

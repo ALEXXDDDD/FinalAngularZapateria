@@ -50,7 +50,10 @@
             <div class="col-sm-6 col-md-6 col-lg-4" *ngFor="let mod of responseProducto">
                 <div class="card h-100 border-0 shadow-sm bg-white text-dark rounded-4 overflow-hidden transition-card">
                     <div class="position-relative">
-                        <img [src]="mod.fotografia" alt="Imagen de {{mod.nombreProd}}" class="card-img-top" style="height: 280px; object-fit: cover;">
+                        <img
+                [src]="'data:image/jpeg;base64,' + mod.fotografia"
+                width="80"
+                height="80">
                         <span class="position-absolute top-0 end-0 bg-dark text-white fw-bold px-3 py-1 m-3 rounded-pill small shadow">
                             S/. {{mod.precioUnitario}}
                         </span>

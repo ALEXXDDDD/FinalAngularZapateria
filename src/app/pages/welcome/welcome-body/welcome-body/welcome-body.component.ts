@@ -86,21 +86,56 @@ export class WelcomeBodyComponent implements OnInit {
     // this.listarModelos()
   }
   getImagenUrl(fotografia: any): string {
-    if (!fotografia) {
-      return 'assets/images/no-image.png'; // O tu imagen por defecto
+    const fallbackImage = 'assets/img/img_Template/1.png';
+
+    if (!fotografia || fotografia === 'null' || fotografia === 'undefined') {
+      return fallbackImage;
     }
 
-    // Caso A: Si ya viene con el prefijo "data:image" desde el backend
-    if (typeof fotografia === 'string' && fotografia.startsWith('data:image')) {
-      return fotografia;
-    }
-
-    // Caso B: Si viene como una cadena Base64 limpia
     if (typeof fotografia === 'string') {
-      return `data:image/png;base64,${fotografia}`;
+      let valor = fotografia.trim().replace(/^['"]|['"]$/g, '');
+      if (!valor) {
+        return fallbackImage;
+      }
+
+      const cleaned = valor.replace(/\s+/g, '');
+      const isBase64 = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(cleaned);
+      const rawBase64Pattern = /^(?:\/?)(?:9j\/|9J\/|iVBOR|R0lGOD)/;
+
+      if (valor.startsWith('data:image')) {
+        return valor;
+      }
+
+      if (/^https?:\/\//i.test(valor)) {
+        return valor;
+      }
+
+      if (valor.includes('base64,')) {
+        return valor;
+      }
+
+      if (/System\.Byte\[\]|Byte\[\]|System\.String/i.test(valor)) {
+        return fallbackImage;
+      }
+
+      if (rawBase64Pattern.test(valor)) {
+        const payload = cleaned.replace(/^\/+/g, '');
+        const mime = /^(?:\/?)(?:iVBOR|R0lGOD)/.test(valor) ? 'image/png' : 'image/jpeg';
+        return `data:${mime};base64,${payload}`;
+      }
+
+      if (valor.startsWith('/assets') || valor.startsWith('assets/') || valor.startsWith('/img') || valor.startsWith('img/')) {
+        return valor;
+      }
+
+      if (isBase64 && cleaned.length > 20) {
+        const mime = cleaned.startsWith('iVBOR') || cleaned.startsWith('R0lGOD') ? 'image/png' : 'image/jpeg';
+        return `data:${mime};base64,${cleaned}`;
+      }
+
+      return fallbackImage;
     }
 
-    // Caso C: Si viene como un Array de Bytes [255, 216, 255...]
     if (Array.isArray(fotografia)) {
       const base64String = btoa(
         new Uint8Array(fotografia).reduce((data, byte) => data + String.fromCharCode(byte), '')
@@ -108,7 +143,7 @@ export class WelcomeBodyComponent implements OnInit {
       return `data:image/png;base64,${base64String}`;
     }
 
-    return 'assets/images/no-image.png';
+    return fallbackImage;
   }
   addProducto(prod:ResponseProducto)
   {
@@ -162,18 +197,18 @@ export class WelcomeBodyComponent implements OnInit {
   //     }
   //   )
   // }
-  listarProductos()
-  {
-    this._productoService.getAll().subscribe({
-      next: (data:ResponseProducto[])=>{
-        this.responseProducto = data 
-        console.log(data)
-      },
-      error: (error)=>{
-        alert("Ocurrio Un error ")
-      },      
-      complete: ()=>{}
-    })
+  listarProductos() {
+     this._productoService.getAll().subscribe({
+    next: (data) => {
+
+      this.responseProducto = data;
+
+      console.log("Longitud:", data[0].fotografia.length);
+      console.log(data[0].fotografia.substring(0, 20));
+      console.log(data[0].fotografia.substring(data[0].fotografia.length - 20));
+
+    }
+    });
   }
  
   listarModelos()

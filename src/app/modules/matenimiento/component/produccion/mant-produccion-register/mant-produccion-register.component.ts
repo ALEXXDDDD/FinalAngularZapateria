@@ -145,7 +145,7 @@ export class MantProduccionRegisterComponent implements OnInit {
   ngOnInit(): void {
     this.myForm.patchValue(this.responseUnidad)
     this.myForm.patchValue(this.Produccion)
-    this.filtrarOrdenAcIna('Activo')
+    this.filtrarOrdenAcIna('Pendiente')
     this.listarProductos()
     this.filtrarProduccionAcIna('Activo')
     this.listarUnidad()
@@ -199,7 +199,7 @@ export class MantProduccionRegisterComponent implements OnInit {
     this._OrdenService.genericFiltroOrdenActivo(this.nombreRol).subscribe({
       next: (data: ResponseListOrden[]) => {
         this.responseListOrden = data; // Actualiza la lista con la respuesta filtrada
-        console.log("Orden Activo",data);
+        console.log("Orden Pendiente",data);
       },
       error: (error: any) => {
         console.error('Error al filtrar roles', error);

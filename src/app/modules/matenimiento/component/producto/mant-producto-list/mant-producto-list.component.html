@@ -84,10 +84,10 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-700">{{list.stock}} u.</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">S/. {{list.precioUnitario}}</td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <img 
-                  [src]="getImagenUrl(list.fotografia)" 
-                  alt="Producto Acabado" 
-                  class="w-12 h-12 object-cover rounded-lg border border-gray-200 shadow-sm">
+                <img
+                [src]="'data:image/jpeg;base64,' + list.fotografia"
+                width="80"
+                height="80">
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-medium space-x-1">
                 <button (click)="editarProducto(modalEdit, list)" class="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white p-2 rounded shadow-sm transition-colors" title="Editar">
@@ -140,10 +140,10 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">{{list.precioUnitario | currency}}</td>
               <!-- En la segunda tabla -->
               <td class="px-6 py-4 whitespace-nowrap">
-                <img 
-                  [src]="getImagenUrl(list.fotografia)" 
-                  alt="Producto Acabado" 
-                  class="w-12 h-12 object-cover rounded-lg border border-gray-200 shadow-sm">
+                <img
+                [src]="'data:image/jpeg;base64,' + list.fotografia"
+                width="80"
+                height="80">
               </td>
             </tr>
           </tbody>

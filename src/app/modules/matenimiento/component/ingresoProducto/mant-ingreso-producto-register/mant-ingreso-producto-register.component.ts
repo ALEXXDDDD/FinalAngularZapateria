@@ -81,7 +81,7 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
     this.listarProductos();
     this.inicializarDatos();
     this.estCantidad()
-    this.filtrarOrdenAcIna('Activo');
+    this.filtrarOrdenAcIna('Pendiente');
     this.cargarDatosFormulario();
     this.listarEmpleado();
     if(this.produccion)
@@ -118,7 +118,7 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
     this._OrdenService.genericFiltroOrdenActivo(this.nombreRol).subscribe({
       next: (data: ResponseListOrden[]) => {
         this.responseListOrden = data; // Actualiza la lista con la respuesta filtrada
-        console.log("Orden Activo",data);
+        console.log("Orden Pendiente",data);
       },
       error: (error: any) => {
         console.error('Error al filtrar roles', error);

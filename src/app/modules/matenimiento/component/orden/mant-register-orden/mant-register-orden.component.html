@@ -6,70 +6,57 @@
 <form [formGroup]="myForm" class="p-3">
     <div class="mb-3">
         <label for="clienteSelect" class="form-label">Seleccione el Cliente</label>
-        <select id="clienteSelect" class="form-select" formControlName="nombreCliente">
-            <option *ngFor="let clie of responseVwCliente[0]?.clientes" [value]="clie.nombreCliente">
-                {{clie.nombreCliente}}
+        <select id="clienteSelect" class="form-select" formControlName="nombrePersona" (change)="onClienteSelect($event)" [disabled]="accion === AcciontConstants.editar">
+            <option value="" disabled>Seleccione cliente</option>
+            <option *ngFor="let clie of clienteLista" [value]="clie.nombrePersona || clie.nombreCliente">
+                {{clie.nombrePersona || clie.nombreCliente}}
             </option>
         </select>
     </div>
     
     <div class="mb-3">
         <label for="estadoSelect" class="form-label">Estado</label>
-        <select id="estadoSelect" [value]="orden.estadoOrden" class="form-select" formControlName="estadoOrden" >
-            <option value="ACTIVO">ACTIVO</option>
-            <option value="INACTIVO">INACTIVO</option>
+        <select id="estadoSelect" class="form-select" formControlName="estadoOrden">
+            <option value="Pendiente">Pendiente</option>
+            <option value="Entregada">Entregada</option>
+            <option value="Rechazada">Rechazada</option>
         </select>
     </div>
 
     <div class="mb-3">
         <label for="codigoOrden" class="form-label">Código de la Orden</label>
-        <input type="text" id="codigoOrden" class="form-control" formControlName="codigoOrden">
+        <input type="text" id="codigoOrden" class="form-control" formControlName="codigoOrden" [disabled]="true">
     </div>
 
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="fechaOrden" class="form-label">Fecha</label>
-            <input type="date" id="fechaOrden" class="form-control" formControlName="fechaOrden"  [value]="orden.fechaOrden"> 
+            <input type="date" id="fechaOrden" class="form-control" formControlName="fechaOrden" [disabled]="true"> 
         </div>
         <div class="col-md-6 mb-3">
             <label for="fechaRequerido" class="form-label">Fecha Requerida</label>
-            <input type="date" id="fechaRequerido" class="form-control" formControlName="fechaRequerido"  [value]="orden.fechaRequerido" >
+            <input type="date" id="fechaRequerido" class="form-control" formControlName="fechaRequerido">
         </div>
     </div>
     <div class="col-md-6 mb-3">
        
         <label for="unidadSelect" class="form-label mt-2">Unidad</label>
-        <select id="unidadSelect" class="form-select" formControlName="nombreUnidad">
-            <!--<option *ngFor="let listUnidad of responseUnidad" [value]="listUnidad.nombreUnidad">
-                {{listUnidad.nombreUnidad}}
-            </option>-->
-            <option value="Pares" class="form-select"> 
-                PARES
-            </option>
+        <select id="unidadSelect" class="form-select" formControlName="nombreUnidad" [disabled]="true">
+            <option value="Pares">PARES</option>
         </select>
     </div>
     <div class="mb-3">
         <label for="productoSelect" class="form-label">Seleccione el Producto</label>
-        <select id="productoSelect" class="form-select" formControlName="nombreProd">
+        <select id="productoSelect" class="form-select" formControlName="nombreProd" [disabled]="true">
             <option value="" disabled>Seleccione un producto</option>
             <option *ngFor="let listProducto of responseProducto" [value]="listProducto.nombreProd">
                 {{listProducto.nombreProd}}
             </option>
         </select>
     </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="stock">Stock Disponible</label>
-            <input type="number" class="form-control" id="stock" formControlName="stock" readonly>
-        </div>
-    </div>
-    <div class="mb-3">
-        <button type="button" class="btn btn-secondary" >
-            <i class="fas fa-plus"></i> Agregar Más Producto
-        </button>
-    </div>
-    <label for="cantidad" class="form-label">Cantidad Por Pares</label>
-    <input type="number" id="cantidad" class="form-control" formControlName="cantidad" placeholder="Cantidad">
+    
+    <label for="cantidad" class="form-label">Cantidad de Pares</label>
+    <input type="number" id="cantidad" class="form-control" formControlName="cantidad" placeholder="Cantidad de pares" min="1">
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="precioUnitario" class="form-label">Precio por Par</label>

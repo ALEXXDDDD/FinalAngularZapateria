@@ -78,7 +78,7 @@ export class  MantDetalleCreditoRegisterComponent implements OnInit {
 
   ngOnInit(): void {
     debugger
-    this.listarCreditoDisponibles('Activo')
+    this.listarCreditoDisponibles('Pendiente')
     console.log("Titulo =>",this.title);
     console.log("Titulo =>",this.responsListCredito);
     this.myForm.patchValue(this.responsListCredito)

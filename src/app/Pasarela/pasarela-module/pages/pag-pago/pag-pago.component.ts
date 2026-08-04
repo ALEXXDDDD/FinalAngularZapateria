@@ -144,20 +144,20 @@ export class PagPagoComponent implements OnInit {
       return;
     }
 
-    this._perfilService.getDetalle(idUsuario).subscribe({
-      next: (data: ResponsePerfil[]) => {
-        const perfil = data?.[0];
-        if (perfil) {
-          this.nombre = nombreSesion || perfil.nombrePersona || '';
-          this.email = emailSesion || perfil.email || '';
-          this.direccion = direccionSesion || perfil.direccion || '';
-          this.response = data;
-        }
-      },
-      error: () => {
-        console.warn('No se pudo cargar el perfil del usuario.');
-      }
-    });
+    // this._perfilService.getDetalle(idUsuario).subscribe({
+    //   next: (data: ResponsePerfil[]) => {
+    //     const perfil = data?.[0];
+    //     if (perfil) {
+    //       this.nombre = nombreSesion || perfil.nombrePersona || '';
+    //       this.email = emailSesion || perfil.email || '';
+    //       this.direccion = direccionSesion || perfil.direccion || '';
+    //       this.response = data;
+    //     }
+    //   },
+    //   error: () => {
+    //     console.warn('No se pudo cargar el perfil del usuario.');
+    //   }
+    // });
   }
 
   limpiarDatosFormulario(): void {
@@ -218,7 +218,7 @@ export class PagPagoComponent implements OnInit {
     return sessionStorage.getItem('nombrePersona') || this.nombre || 'Cliente';
   }
 
-  private async registrarOrdenesSecuencialmente(estadoOrdenParam: string = 'ACTIVO'): Promise<{ exitosos: number; fallidos: number; errores: string[] }> {
+  private async registrarOrdenesSecuencialmente(estadoOrdenParam: string = 'PENDIENTE'): Promise<{ exitosos: number; fallidos: number; errores: string[] }> {
     const carritoActual = this.obtenerCarritoActual();
     if (!carritoActual.length) {
       return { exitosos: 0, fallidos: 0, errores: [] };

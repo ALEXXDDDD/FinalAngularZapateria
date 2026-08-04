@@ -15,10 +15,11 @@
             <div class="cart-item" *ngFor="let item of carrito">
 
                 <!-- IMAGEN -->
-                <img
-                    class="cart-item-image"
-                    [src]="item.producto.fotografia"
-                    [alt]="item.producto.nombreProd">
+                 <img
+                [src]="'data:image/jpeg;base64,' + item.producto.fotografia"
+                width="80"
+                height="80">
+                
 
                 <!-- INFORMACIÓN -->
                 <div class="cart-item-details">
