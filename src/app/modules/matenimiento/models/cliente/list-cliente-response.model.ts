@@ -7,5 +7,6 @@ export class ResponseVCliente {
     tipoDocumento: string="";
     direccion: string="" ;
     nombreCliente: string="" ;
+    nombrePersona: string="" ;
 }
 

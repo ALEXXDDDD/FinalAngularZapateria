@@ -67,10 +67,10 @@ export class MantPagoCreditoResgisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listarCreditoDisponibles('Activo')
+    this.listarCreditoDisponibles('Pendiente')
     console.log("Titulo =>",this.title);
-    this.listarCreditoDisponibles("ACTIVO")
-  this.filtrarOrdenAcIna("ACTIVO")
+    this.listarCreditoDisponibles('Pendiente')
+  this.filtrarOrdenAcIna('Pendiente')
     this.myForm.patchValue(this.resquestVDetalleCredito)
     this.listarDetalleCredito(this.vistCredito.idCliente)
     debugger

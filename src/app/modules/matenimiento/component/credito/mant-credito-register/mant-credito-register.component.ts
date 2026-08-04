@@ -63,8 +63,8 @@ export class MantCreditoRegisterComponent {
 
   ngOnInit(): void {
     this.listarCliente()
-    this.listarCreditoDisponibles('Activo')
-    this.listarOrdenDisponibles("Activo")
+    this.listarCreditoDisponibles('Pendiente')
+    this.listarOrdenDisponibles('Pendiente')
     console.log("Titulo =>",this.title);
     console.log("Titulo =>",this.responsListCredito);
     this.myForm.patchValue(this.responsListCredito)

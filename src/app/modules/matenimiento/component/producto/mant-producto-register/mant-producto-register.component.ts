@@ -10,6 +10,8 @@ import { ModeloService } from '../../../service/modelo/modelo.service';
 import { ResponseModelo } from '../../../models/modelo/modelo-response.model';
 import { UnidadService } from '../../../service/unidad/unidad.service';
 import { ResponseUnidad } from '../../../models/unidad/p/unidad-response.model';
+import { ResponseDetalleProducto } from '../../../models/producto/producto-responseDetalleProducto.model';
+import { ResponseVDetalleProducto } from '../../../models/producto/producto-responseVDetalle.model';
 
 @Component({
   selector: 'app-mant-producto-register',
@@ -39,7 +41,9 @@ export class MantProductoRegisterComponent implements OnInit {
   responseUnidad : ResponseUnidad []= [] 
   responseUnidadPares : ResponseUnidad []=[];
   envioProducto : RequestProducto = new RequestProducto()
-  envioSelectProducto : RequestProducto = new RequestVProducto()
+  envioSelectProducto : RequestProducto = new RequestProducto()
+  detalleProducto: ResponseVDetalleProducto | null = null;
+  previewImagen: string | null = null;
 
   constructor
   (
@@ -78,15 +82,34 @@ onFileSelected(event: any) {
   if (file) {
     const reader = new FileReader();
     reader.onload = () => {
-      // Obtenemos la cadena base64 limpia (quitando el prefijo data:image/...;)
-      const base64String = (reader.result as string).split(',')[1];
+      const dataUrl = reader.result as string;
+      const mimeType = dataUrl.split(';')[0].split(':')[1] || 'image/png';
+      const base64String = dataUrl.split(',')[1];
+      const normalizedImage = `data:${mimeType};base64,${base64String}`;
+      this.previewImagen = normalizedImage;
       this.myForm.patchValue({
-        fotografia: base64String
+        fotografia: normalizedImage
       });
     };
     reader.readAsDataURL(file);
   }
 }
+
+  private convertirImagenABinary(dataUrl: string): string {
+    if (!dataUrl) {
+      return '';
+    }
+
+    if (typeof dataUrl === 'string' && dataUrl.startsWith('data:image')) {
+      return dataUrl.split(',')[1] || '';
+    }
+
+    if (typeof dataUrl === 'string' && /^[A-Za-z0-9+/=]+$/.test(dataUrl.trim())) {
+      return dataUrl.trim();
+    }
+
+    return '';
+  }
   /**
    * Auto generar código de producto: PRODUCT-CAT-COLOR
    * Ej: PRODUCT-ZAP-ROJO
@@ -119,31 +142,33 @@ onFileSelected(event: any) {
         }
       )
   }
-  crearProducto()
+  crearProducto(payload: RequestProducto)
   {
     const categoria = this.myForm.get('nombreModelo')?.value || '';
-    this.envioProducto.categoria = categoria; // Asignar la categoría al objeto de envío  
-    this.envioProducto.estadoProducto = true; // Forzar estado a true para nuevo producto}
-    this.envioProducto.nombreUnidad ="PARES"
-    this.envioProducto.idUnidad = 0 // Forzar idUnidad a 2 para nuevo producto
-    this._productoService.create(this.envioProducto).subscribe
+    payload.categoria = categoria;
+    payload.estadoProducto = true;
+    payload.nombreUnidad = 'PARES';
+    payload.idUnidad = payload.idUnidad || 0;
+    this._productoService.create(payload).subscribe
     (
       {
         next:() => {
-          alert_sucess("Se ha Actualizado correctamente")
+          alert_sucess("Se ha Actualizado correctamente");
+          this.cerrarModal(true);
         },
         error:() => {},
         complete:() => {}
       }
     )
   }
-  editarProducto()
+  editarProducto(payload: RequestProducto)
   {
-    this._productoService.update(this.envioProducto).subscribe
+    this._productoService.update(payload).subscribe
     (
       {
         next:() => {
-          alert_sucess("Se ha Actualizado correctamente")
+          alert_sucess("Se ha Actualizado correctamente");
+          this.cerrarModal(true);
         },
         error:() => {
           alert_error("No se pudo guardar el producto")
@@ -152,15 +177,141 @@ onFileSelected(event: any) {
       }
     )
   }
+  construirPayloadParaGuardar(): RequestProducto {
+    const formValue = this.myForm.getRawValue();
+    const payload = new RequestProducto();
+
+    const stock = this.accion === AcciontConstants.crear
+      ? 0
+      : (this.normalizarNumero(formValue.stock, this.producto?.stock) ?? 0);
+
+    const precioUnitario = this.normalizarNumero(formValue.precioUnitario, this.producto?.precioUnitario) ?? 0;
+    const idUnidad = this.normalizarNumero(formValue.idUnidad, this.producto?.idUnidad) ?? 0;
+
+    payload.idProducto = this.accion === AcciontConstants.editar ? (this.producto?.idProducto ?? formValue.idProducto ?? 0) : (formValue.idProducto ?? 0);
+    payload.nombreProd = formValue.nombreProd || this.producto?.nombreProd || '';
+    payload.codigoProd = formValue.codigoProd || this.producto?.codigoProd || '';
+    payload.precioUnitario = precioUnitario;
+    payload.nombreModelo = formValue.nombreModelo || this.producto?.nombreModelo || '';
+    payload.stock = stock;
+    payload.estadoProducto = this.accion === AcciontConstants.crear ? true : (this.producto?.estadoProducto ?? formValue.estadoProducto ?? true);
+    payload.idUnidad = idUnidad;
+    payload.nombreUnidad = formValue.nombreUnidad || this.producto?.nombreUnidad || '';
+    payload.categoria = formValue.categoria || formValue.nombreModelo || this.producto?.categoria || this.producto?.nombreModelo || '';
+
+    const fotografiaValue = formValue.fotografia || this.producto?.fotografia || '';
+    payload.fotografia = this.convertirImagenABinary(fotografiaValue);
+
+    const color = this.normalizarTexto(formValue.color, this.detalleProducto?.color);
+    const talla = this.normalizarTexto(formValue.talla, this.detalleProducto?.talla);
+    const descripcion = this.normalizarTexto(formValue.descripcion, this.detalleProducto?.descripcion);
+
+    if (color !== null) {
+      payload.color = color;
+    }
+    if (talla !== null) {
+      payload.talla = talla;
+    }
+    if (descripcion !== null) {
+      payload.descripcion = descripcion;
+    }
+
+    if (this.detalleProducto?.idDetalleProducto) {
+      payload.idDetalleProducto = this.detalleProducto.idDetalleProducto;
+    } else if (formValue.idDetalleProducto) {
+      payload.idDetalleProducto = formValue.idDetalleProducto;
+    }
+
+    return payload;
+  }
+
+  private normalizarNumero(valor: any, fallback: number | undefined): number | null {
+    if (valor === null || valor === undefined || valor === '') {
+      return fallback ?? null;
+    }
+
+    const numero = Number(valor);
+    return Number.isNaN(numero) ? (fallback ?? null) : numero;
+  }
+
+  private normalizarTexto(valor: any, fallback?: string | null): string | null {
+    if (valor === null || valor === undefined || valor === '') {
+      return fallback ?? null;
+    }
+
+    return String(valor).trim();
+  }
+
+  private configurarModoFormulario() {
+    if (this.accion === AcciontConstants.editar) {
+      this.myForm.get('nombreModelo')?.disable({ emitEvent: false });
+      this.myForm.get('talla')?.disable({ emitEvent: false });
+      this.myForm.get('idUnidad')?.disable({ emitEvent: false });
+      this.myForm.get('color')?.disable({ emitEvent: false });
+      this.myForm.get('stock')?.disable({ emitEvent: false });
+      this.myForm.get('descripcion')?.disable({ emitEvent: false });
+      this.previewImagen = this.getImagenUrl(this.producto?.fotografia);
+    } else {
+      this.myForm.get('nombreModelo')?.enable({ emitEvent: false });
+      this.myForm.get('talla')?.enable({ emitEvent: false });
+      this.myForm.get('idUnidad')?.enable({ emitEvent: false });
+      this.myForm.get('descripcion')?.enable({ emitEvent: false });
+      this.previewImagen = null;
+    }
+  }
+
+  getImagenUrl(fotografia: string | null | undefined): string {
+    if (!fotografia) {
+      return 'assets/img/img_Template/no-image.png';
+    }
+
+    if (typeof fotografia === 'string') {
+      let valor = fotografia.trim().replace(/^['"]|['"]$/g, '');
+
+      if (!valor) {
+        return 'assets/img/img_Template/no-image.png';
+      }
+
+      if (valor.startsWith('data:image')) {
+        return valor;
+      }
+
+      if (valor.startsWith('http://') || valor.startsWith('https://')) {
+        return valor;
+      }
+
+      if (valor.includes('base64,')) {
+        return valor;
+      }
+
+      if (valor.startsWith('/9j/') || valor.startsWith('9j/')) {
+        const payload = valor.replace(/^\/+/, '');
+        return `data:image/jpeg;base64,${payload}`;
+      }
+
+      if (valor.startsWith('iVBOR')) {
+        return `data:image/png;base64,${valor}`;
+      }
+
+      if (valor.startsWith('/assets') || valor.startsWith('/img') || valor.startsWith('assets/')) {
+        return valor;
+      }
+
+      const cleaned = valor.replace(/\s+/g, '');
+      if (/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(cleaned) && cleaned.length > 20) {
+        const mime = cleaned.startsWith('iVBOR') ? 'image/png' : 'image/jpeg';
+        return `data:${mime};base64,${cleaned}`;
+      }
+
+      return '/assets/img/img_Template/no-image.png';
+    }
+
+    return 'assets/img/img_Template/no-image.png';
+  }
+
   guardar()
   {
-    
-    
-    // Validar campos requeridos manualmente
-
-
-    // Para editar: validar que stock sea mayor a 0
-    if (this.accion === 2) { // AcciontConstants.editar === 2
+    if (this.accion === 2) {
       const stock = Number(this.myForm.get('stock')?.value);
       if (stock <= 0) {
         alert_error("El stock debe ser mayor a 0 en edición");
@@ -168,21 +319,20 @@ onFileSelected(event: any) {
       }
     }
 
-    // Stock siempre debe ser 0 para nuevo producto
-    if (this.accion === 1) { // AcciontConstants.crear === 1
+    if (this.accion === 1) {
       this.myForm.get('stock')?.setValue(0, { emitEvent: false });
     }
 
-    this.envioProducto = this.myForm.getRawValue()
-    console.log("✅ Datos a enviar:", this.envioProducto);
+    const payload = this.construirPayloadParaGuardar();
+    console.log("✅ Datos a enviar:", payload);
     
     switch(this.accion)
     {
       case AcciontConstants.crear :
-        this.crearProducto()
+        this.crearProducto(payload)
       break;
       case AcciontConstants.editar :
-        this.editarProducto()
+        this.editarProducto(payload)
       break;
       case AcciontConstants.eliminar :
         
@@ -193,13 +343,14 @@ onFileSelected(event: any) {
     this.listarUnidad()
     this.listarModelos()
     
-    // Si es nuevo producto, inicializar stock a 0
     if (this.accion === AcciontConstants.crear) {
       this.myForm.get('stock')?.setValue(0, { emitEvent: false });
     } else {
-      // Si es editar, cargar datos del producto
       this.myForm.patchValue(this.producto);
+      this.cargarDatosDetalleProducto();
     }
+
+    this.configurarModoFormulario();
 
     // Escuchar cambios de categoría para auto generar código
     this.myForm.get('nombreModelo')?.valueChanges.subscribe(() => {
@@ -222,6 +373,37 @@ onFileSelected(event: any) {
 
     //false => No hubo modificacion de la base de datos
   }
+  cargarDatosDetalleProducto() {
+    if (!this.producto?.idProducto) {
+      return;
+    }
+
+    this._productoService.getById(this.producto.idProducto).subscribe({
+      next: (data: ResponseDetalleProducto[]) => {
+        const detalle = data?.[0]?.detalleProducts?.[0];
+        if (!detalle) {
+          return;
+        }
+
+        this.detalleProducto = detalle;
+        this.myForm.patchValue({
+          color: detalle.color || null,
+          categoria: detalle.categoria || null,
+          talla: detalle.talla || null,
+          descripcion: detalle.descripcion || null,
+          idDetalleProducto: detalle.idDetalleProducto || 0,
+          nombreModelo: detalle.categoria || this.producto?.nombreModelo || null,
+          idModelo: detalle.idModelo || null
+        }, { emitEvent: false });
+
+        if (!this.myForm.get('codigoProd')?.value) {
+          this.myForm.get('codigoProd')?.setValue(this.producto.codigoProd || '', { emitEvent: false });
+        }
+      },
+      error: () => {}
+    });
+  }
+
   listarUnidad ()
   {
     this._unidadService.getAll().subscribe(

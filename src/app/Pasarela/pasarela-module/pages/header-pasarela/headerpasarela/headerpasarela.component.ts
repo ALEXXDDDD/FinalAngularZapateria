@@ -38,25 +38,25 @@ export class HeaderpasarelaComponent implements OnInit {
   ngOnInit(): void {
     const idUsu = sessionStorage.getItem('idUsuario');
 
-    if (idUsu) {
-      this.perfilCoregido(idUsu); // Se llama a `perfilCoregido` solo si `idUsu` no es null.
-    } else {
-      console.error('No se encontró el idUsuario en sessionStorage');
-    }
+    // if (idUsu) {
+    //   this.perfilCoregido(idUsu); // Se llama a `perfilCoregido` solo si `idUsu` no es null.
+    // } else {
+    //   console.error('No se encontró el idUsuario en sessionStorage');
+    // }
   
   }
-  perfilCoregido(request:string)
-  {
-    const body = JSON.stringify(request); //
-    this._verZapatilService.perfil(body).subscribe(
-      {
-        next: (data: VistPerfil[]) => {
-          console.log(data);
-          this.vistPerfil = data;
-        }
-      }
-    );
-  }
+  // perfilCoregido(request:string)
+  // {
+  //   const body = JSON.stringify(request); //
+  //   this._verZapatilService.perfil(body).subscribe(
+  //     {
+  //       next: (data: VistPerfil[]) => {
+  //         console.log(data);
+  //         this.vistPerfil = data;
+  //       }
+  //     }
+  //   );
+  // }
  
   realizarEnvio(template: TemplateRef<any>): void {
   this.titleModal = "Nuevo Crédito"; // Ajusta según sea necesario
@@ -68,19 +68,19 @@ export class HeaderpasarelaComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  perfil(): void {
-    const idUsu = sessionStorage.getItem('idUsuario');
-    if (idUsu) {
-      this._perfilService.getDetalle(idUsu).subscribe({
-        next: (data: ResponsePerfil[]) => {
-          this.responsePerfil = data;
-        },
-        error: (err) => {
-          console.error('Error al obtener los detalles del perfil:', err);
-        }
-      });
-    }
-  }
+  // perfil(): void {
+  //   const idUsu = sessionStorage.getItem('idUsuario');
+  //   if (idUsu) {
+  //     this._perfilService.getDetalle(idUsu).subscribe({
+  //       next: (data: ResponsePerfil[]) => {
+  //         this.responsePerfil = data;
+  //       },
+  //       error: (err) => {
+  //         console.error('Error al obtener los detalles del perfil:', err);
+  //       }
+  //     });
+  //   }
+  // }
 
   getCloseModalEmmit(res: boolean): void {
     this.modalRef?.hide();
