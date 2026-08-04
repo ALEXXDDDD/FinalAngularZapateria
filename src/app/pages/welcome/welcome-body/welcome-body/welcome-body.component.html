@@ -109,10 +109,10 @@
                 <div class="card h-100 border-0 shadow-lg bg-white text-dark rounded-4 overflow-hidden transition-card">
                     <div class="position-relative">
                         <td class="px-6 py-4 whitespace-nowrap">
-                <img 
-                  [src]="getImagenUrl(mod.fotografia)" 
-                  alt="Producto Acabado" 
-                  class="w-12 h-12 object-cover rounded-lg border border-gray-200 shadow-sm">
+                <img
+                [src]="'data:image/jpeg;base64,' + mod.fotografia"
+                width="80"
+                height="80">
               </td>
                         <span class="position-absolute top-0 end-0 bg-dark text-white fw-bold px-3 py-1 m-3 rounded-pill small shadow-sm">
                             S/. {{mod.precioUnitario}}
