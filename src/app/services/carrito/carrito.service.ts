@@ -118,4 +118,10 @@ export class CarritoService {
     return total ? parseFloat(total) : 0;
   }
 
+  limpiarCarrito(): void {
+    this.listaProducto = [];
+    this.listaProductosSubject.next(this.listaProducto);
+    localStorage.removeItem('carrito-compras');
+  }
+
 }

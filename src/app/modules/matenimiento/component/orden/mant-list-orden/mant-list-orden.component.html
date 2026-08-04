@@ -36,82 +36,20 @@
           <table class="w-full min-w-full divide-y divide-gray-200">
             <thead class="bg-slate-50">
               <tr>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">ID</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Orden</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">F. Requerida</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cliente</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Producto</th>
-                <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Cant.</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Precio U.</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Total</th>
+                <th *ngFor="let column of getVisibleOrderColumns()" scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">{{ formatColumnName(column) }}</th>
                 <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <ng-container *ngFor="let d of responseOrden">
-                <tr *ngFor="let e of d.ordens" class="hover:bg-blue-50/30 transition-colors duration-150">
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-semibold text-slate-700">{{e.idOrden}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{ formattedFechaOrden(e.fechaOrden)}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{formattedFechaRequerido(e.fechaRequerido)}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm">
-                    <span [class]="e.estadoOrden === 'Retrasadas' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'" class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide">
-                      {{e.estadoOrden}}
-                    </span>
-                  </td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{e.nombreCliente}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{e.nombreProd}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-center font-semibold text-slate-800">{{e.cantidad}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600 font-mono">{{e.precioUnitario | currency}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">{{e.montoTotal | currency}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-center text-xs font-medium space-x-1">
-                    <button (click)="editarOrden(modalEdit, e)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
-                      <i class="fas fa-edit"></i> <span>Editar</span>
-                    </button>
-                    <button (click)="eliminarOrden(e.idUsuario)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
-                      <i class="fas fa-trash"></i> <span>Borrar</span>
-                    </button>
-                  </td>
-                </tr>
-              </ng-container>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm" *ngIf="!mostrarListaCompleta">
-          <table class="w-full min-w-full divide-y divide-gray-200">
-            <thead class="bg-slate-50">
-              <tr>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Orden</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">F. Requerida</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Estado</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Cliente</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Producto</th>
-                <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Cant.</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Precio U.</th>
-                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Total</th>
-                <th scope="col" class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr *ngFor="let d of orden" class="hover:bg-rose-50/30 transition-colors duration-150">
-                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{ formattedFechaOrden(d.fechaOrden)}}</td>
-                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{formattedFechaRequerido(d.fechaRequerido)}}</td>
-                <td class="px-4 py-3.5 whitespace-nowrap text-sm">
-                  <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 uppercase tracking-wide">
-                    {{d.estadoOrden}}
-                  </span>
+              <tr *ngFor="let e of getDisplayedOrders()" class="hover:bg-blue-50/30 transition-colors duration-150">
+                <td *ngFor="let column of getVisibleOrderColumns()" class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">
+                  {{ formatBackendValue(getOrderValue(e, column)) }}
                 </td>
-                <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{d.nombreCliente}}</td>
-                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600">{{d.nombreProd}}</td>
-                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-center font-semibold text-slate-800">{{d.cantidad}}</td>
-                <td class="px-4 py-3.5 whitespace-nowrap text-sm text-slate-600 font-mono">{{d.precioUnitario | currency}}</td>
-                <td class="px-4 py-3.5 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">{{d.montoTotal | currency}}</td>
                 <td class="px-4 py-3.5 whitespace-nowrap text-center text-xs font-medium space-x-1">
-                  <button (click)="editarOrden(modalEdit, d)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
+                  <button (click)="editarOrden(modalEdit, e)" class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
                     <i class="fas fa-edit"></i> <span>Editar</span>
                   </button>
-                  <button (click)="eliminarOrden(d.idUsuario)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
+                  <button (click)="eliminarOrden(e.idUsuario)" class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white px-2 py-1 rounded shadow-sm transition-colors duration-150">
                     <i class="fas fa-trash"></i> <span>Borrar</span>
                   </button>
                 </td>
@@ -120,10 +58,12 @@
           </table>
         </div>
 
+    
+
         <div class="pt-6 border-t border-gray-100">
           <div class="flex justify-center space-x-4 mb-4">
-            <button class="bg-amber-500 hover:bg-amber-600 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150" (click)="mostrarTabla('conAccion'); filtrarOrdenAcIna('Activo')">
-              Órdenes Activas
+            <button class="bg-amber-500 hover:bg-amber-600 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150" (click)="mostrarTabla('conAccion'); filtrarOrdenAcIna('Pendiente')">
+              Órdenes Pendientes
             </button>
             <button class="bg-slate-700 hover:bg-slate-800 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-sm transition-colors duration-150" (click)="mostrarTabla('sinAccion'); filtrarOrdenAcIna('Inactivo')">
               Órdenes Inactivas
@@ -150,13 +90,9 @@
                   <td class="px-4 py-3.5 whitespace-nowrap text-sm">
                     <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 uppercase tracking-wide">{{e.estadoOrden}}</span>
                   </td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{e.nombreCliente}}</td>
+                  <td class="px-4 py-3.5 whitespace-nowrap text-sm font-medium text-slate-900">{{e.nombrePersona}}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">{{e.montoTotal | currency}}</td>
                   <td class="px-4 py-3.5 whitespace-nowrap text-sm font-mono text-slate-600 font-semibold">{{e.codigoOrden}}</td>
-                  <td class="px-4 py-3.5 whitespace-nowrap text-center space-x-1">
-                    <button class="inline-flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded transition-colors"><i class="fas fa-edit"></i> <span>Editar</span></button>
-                    <button class="inline-flex items-center space-x-1 bg-rose-600 hover:bg-rose-700 text-white text-xs px-2.5 py-1 rounded transition-colors"><i class="fas fa-trash"></i> <span>Borrar</span></button>
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -197,7 +133,6 @@
 
       </div>
     </div>
-
 
     <div *ngIf="mostrarInforme" class="bg-slate-100 p-4 sm:p-8 rounded-xl border border-gray-200 shadow-inner">
       <div id="informe" class="bg-white p-6 sm:p-10 rounded-xl shadow-lg max-w-4xl mx-auto border border-gray-100 space-y-8">

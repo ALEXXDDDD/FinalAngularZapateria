@@ -85,6 +85,31 @@ export class WelcomeBodyComponent implements OnInit {
   });
     // this.listarModelos()
   }
+  getImagenUrl(fotografia: any): string {
+    if (!fotografia) {
+      return 'assets/images/no-image.png'; // O tu imagen por defecto
+    }
+
+    // Caso A: Si ya viene con el prefijo "data:image" desde el backend
+    if (typeof fotografia === 'string' && fotografia.startsWith('data:image')) {
+      return fotografia;
+    }
+
+    // Caso B: Si viene como una cadena Base64 limpia
+    if (typeof fotografia === 'string') {
+      return `data:image/png;base64,${fotografia}`;
+    }
+
+    // Caso C: Si viene como un Array de Bytes [255, 216, 255...]
+    if (Array.isArray(fotografia)) {
+      const base64String = btoa(
+        new Uint8Array(fotografia).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+      return `data:image/png;base64,${base64String}`;
+    }
+
+    return 'assets/images/no-image.png';
+  }
   addProducto(prod:ResponseProducto)
   {
     if (!this.tieneStock(prod)) {

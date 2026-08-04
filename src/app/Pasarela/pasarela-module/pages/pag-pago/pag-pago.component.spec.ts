@@ -1,21 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { PagPagoComponent } from './pag-pago.component';
 
 describe('PagPagoComponent', () => {
-  let component: PagPagoComponent;
-  let fixture: ComponentFixture<PagPagoComponent>;
+  it('debe detectar el pago aprobado desde el retorno de Mercado Pago', () => {
+    const component = new PagPagoComponent({} as any, {} as any, {} as any, {} as any, {} as any);
+    const params = new URLSearchParams('collection_id=123456&collection_status=approved&payment_id=123456&status=approved');
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [PagPagoComponent]
-    });
-    fixture = TestBed.createComponent(PagPagoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    const resultado = (component as any).hayPagoExitoso(params);
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(resultado).toBeTrue();
   });
 });
