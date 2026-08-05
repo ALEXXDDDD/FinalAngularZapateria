@@ -1,8 +1,10 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { Subscription } from 'rxjs';
+import { ProductFilterService } from 'src/app/services/product-filter/product-filter.service';
 import { MessageService } from 'primeng/api';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { RequestFilterGeneric } from 'src/app/modules/matenimiento/models/genericFilterRequest.model';
@@ -24,7 +26,7 @@ interface City {
   templateUrl: './welcome-body.component.html',
   styleUrls: ['./welcome-body.component.css']
 })
-export class WelcomeBodyComponent implements OnInit {
+export class WelcomeBodyComponent implements OnInit, OnDestroy {
   cities: City[] | undefined;
   formGroup: FormGroup | undefined;
   modalRef?: BsModalRef;
@@ -33,7 +35,10 @@ export class WelcomeBodyComponent implements OnInit {
   detalleSelect:ResponseVDetalleProducto = new ResponseVDetalleProducto()
   productoSelect : ResponseProducto = new ResponseProducto()
   responseProducto : ResponseProducto []=[]
+  allProducts: ResponseProducto[] = []
+  selectedCategory: string = 'Todos'
   responseModelo : ResponseModelo[]=[]
+  categorySubscription?: Subscription;
   requestProducto :RequestProducto= new RequestProducto();
   
   ProductoSelect : RequestProducto = new RequestProducto()
@@ -53,6 +58,7 @@ export class WelcomeBodyComponent implements OnInit {
     private _productoService : ProductoService,
     private messageService: MessageService,
     private _modeloService : ModeloService,
+    private productFilterService: ProductFilterService,
 
     
 
@@ -69,9 +75,14 @@ export class WelcomeBodyComponent implements OnInit {
  
   ngOnInit(): void {
     this.frmLoadSt = LoadStateEnum.Loading;
+    this.categorySubscription = this.productFilterService.category$.subscribe(category => {
+      this.selectedCategory = category;
+      this.applyCategoryFilter();
+    });
+    this.loadProducts();
     
     //  this.listarProductos()
-     this.filtrar()
+    // this.filtrar()
      this.cities = [
       { name: 'New York', code: 'NY' },
       { name: 'Rome', code: 'RM' },
@@ -224,6 +235,46 @@ export class WelcomeBodyComponent implements OnInit {
         }
       )
   }
+
+  loadProducts() {
+    this._productoService.getAll().subscribe({
+      next: (data) => {
+        this.allProducts = data;
+        if (!this.selectedCategory) {
+          this.selectedCategory = 'Todos';
+        }
+        this.applyCategoryFilter();
+        this.totalItems = this.responseProducto.length;
+        this.frmLoadSt = LoadStateEnum.Success;
+      },
+      error: (error) => {
+        console.error('Error cargando productos', error);
+        this.frmLoadSt = LoadStateEnum.Error;
+      }
+    });
+  }
+
+  applyCategoryFilter() {
+    const category = this.selectedCategory?.trim().toLowerCase() ?? '';
+    if (!category || category === 'todos') {
+      this.responseProducto = [...this.allProducts];
+    } else {
+      const searchKey = category === 'botines' ? 'botin' : category;
+      this.responseProducto = this.allProducts.filter(prod =>
+        prod.nombreProd?.toLowerCase().includes(searchKey)
+      );
+    }
+    this.totalItems = this.responseProducto.length;
+  }
+
+  setCategory(category: string) {
+    this.productFilterService.selectCategory(category);
+  }
+
+  ngOnDestroy(): void {
+    this.categorySubscription?.unsubscribe();
+  }
+
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
@@ -241,6 +292,7 @@ export class WelcomeBodyComponent implements OnInit {
   {
     
     let valuedorm = this.myFormFilter.getRawValue()
+    this.request.filtros = []
   
     this.request.filtros.push({name:"nombreProducto",value: valuedorm.nombreProducto} );
     this.request.filtros.push({name:"descripProducto",value: valuedorm.descripProducto} );

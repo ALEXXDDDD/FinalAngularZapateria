@@ -137,7 +137,7 @@
             <tr *ngFor="let list of producto" class="hover:bg-slate-50/70 transition-colors duration-150">
               <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-900">{{list.nombreProd}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-600">{{list.stock}} u.</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">{{list.precioUnitario | currency}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-600">S/ {{list.precioUnitario }}</td>
               <!-- En la segunda tabla -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <img

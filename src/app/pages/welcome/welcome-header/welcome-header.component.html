@@ -48,28 +48,40 @@
     <div class="container">
         <ul class="navbar-nav nav-pills gap-2 mx-auto">
             <li class="nav-item">
-                <a class="nav-link btn btn-outline-dark px-4 py-2 rounded-pill border-0" 
-                   [routerLink]="['/vistaZapatos']"
-                   routerLinkActive="active bg-dark text-light"
-                   aria-label="Ver Zapatos">
+                <button type="button"
+                    class="nav-link btn px-4 py-2 rounded-pill border-0"
+                    [ngClass]="selectedCategory === 'Zapatos' ? 'btn-dark text-light' : 'btn-outline-dark text-dark'"
+                    aria-label="Ver Zapatos"
+                    (click)="selectCategory('Zapatos')">
                     Zapatos
-                </a>
+                </button>
             </li>
             <li class="nav-item">
-                <a class="nav-link btn btn-outline-dark px-4 py-2 rounded-pill border-0" 
-                   [routerLink]="['/vistaZapatillas']"
-                   routerLinkActive="active bg-dark text-light"
-                   aria-label="Ver Zapatillas">
+                <button type="button"
+                    class="nav-link btn px-4 py-2 rounded-pill border-0"
+                    [ngClass]="selectedCategory === 'Zapatillas' ? 'btn-dark text-light' : 'btn-outline-dark text-dark'"
+                    aria-label="Ver Zapatillas"
+                    (click)="selectCategory('Zapatillas')">
                     Zapatillas
-                </a>
+                </button>
             </li>
             <li class="nav-item">
-                <a class="nav-link btn btn-outline-dark px-4 py-2 rounded-pill border-0" 
-                   [routerLink]="['/lvistaBailarina']"
-                   routerLinkActive="active bg-dark text-light"
-                   aria-label="Ver Bailarinas">
+                <button type="button"
+                    class="nav-link btn px-4 py-2 rounded-pill border-0"
+                    [ngClass]="selectedCategory === 'Botines' ? 'btn-dark text-light' : 'btn-outline-dark text-dark'"
+                    aria-label="Ver Botines"
+                    (click)="selectCategory('Botines')">
+                    Botines
+                </button>
+            </li>
+            <li class="nav-item">
+                <button type="button"
+                    class="nav-link btn px-4 py-2 rounded-pill border-0"
+                    [ngClass]="selectedCategory === 'Bailarinas' ? 'btn-dark text-light' : 'btn-outline-dark text-dark'"
+                    aria-label="Ver Bailarinas"
+                    (click)="selectCategory('Bailarinas')">
                     Bailarinas
-                </a>
+                </button>
             </li>
         </ul>
     </div>

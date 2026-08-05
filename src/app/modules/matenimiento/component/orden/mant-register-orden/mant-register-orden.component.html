@@ -5,13 +5,8 @@
 
 <form [formGroup]="myForm" class="p-3">
     <div class="mb-3">
-        <label for="clienteSelect" class="form-label">Seleccione el Cliente</label>
-        <select id="clienteSelect" class="form-select" formControlName="nombrePersona" (change)="onClienteSelect($event)" [disabled]="accion === AcciontConstants.editar">
-            <option value="" disabled>Seleccione cliente</option>
-            <option *ngFor="let clie of clienteLista" [value]="clie.nombrePersona || clie.nombreCliente">
-                {{clie.nombrePersona || clie.nombreCliente}}
-            </option>
-        </select>
+        <label for="nombrePersona" class="form-label">Nombre del Cliente</label>
+        <input type="text" id="nombrePersona" class="form-control" formControlName="nombrePersona" placeholder="Ingrese el nombre del cliente">
     </div>
     
     <div class="mb-3">
@@ -27,6 +22,11 @@
         <label for="codigoOrden" class="form-label">Código de la Orden</label>
         <input type="text" id="codigoOrden" class="form-control" formControlName="codigoOrden" [disabled]="true">
     </div>
+
+    <!-- <div class="mb-3">
+        <label for="codigoProduccion" class="form-label">Código de Producción</label>
+        <input type="text" id="codigoProduccion" class="form-control" formControlName="codigoProduccion" placeholder="Ingrese el código de producción">
+    </div> -->
 
     <div class="row">
         <div class="col-md-6 mb-3">
@@ -46,13 +46,8 @@
         </select>
     </div>
     <div class="mb-3">
-        <label for="productoSelect" class="form-label">Seleccione el Producto</label>
-        <select id="productoSelect" class="form-select" formControlName="nombreProd" [disabled]="true">
-            <option value="" disabled>Seleccione un producto</option>
-            <option *ngFor="let listProducto of responseProducto" [value]="listProducto.nombreProd">
-                {{listProducto.nombreProd}}
-            </option>
-        </select>
+        <label for="nombreProd" class="form-label">Nombre del Producto</label>
+        <input type="text" id="nombreProd" class="form-control" formControlName="nombreProd" readonly placeholder="Se completará desde el código de producción">
     </div>
     
     <label for="cantidad" class="form-label">Cantidad de Pares</label>

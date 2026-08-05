@@ -1,9 +1,10 @@
 export class RequestVWOrden {
-    idOrden: string = "";
+    idOrden: number = 0;
     nombrePersona: string = "";
     fechaOrden: string = "";
     fechaRequerido: string = "";
     estadoOrden: string = "";
+    codigoProduccion: string = "";
     idProducto: number = 0;
     talla: string = "";
     precioUnitario: number = 0;

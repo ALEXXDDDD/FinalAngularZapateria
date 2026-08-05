@@ -6,7 +6,7 @@ export class ResponseVCliente {
     telefono: string="";
     tipoDocumento: string="";
     direccion: string="" ;
-    nombreCliente: string="" ;
+    apellidoCliente: string="" ;
     nombrePersona: string="" ;
 }
 

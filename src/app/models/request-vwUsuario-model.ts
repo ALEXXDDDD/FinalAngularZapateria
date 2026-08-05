@@ -4,7 +4,7 @@ export class RequestVWUsuario {
     idPersona: number = 0;
     irol: number= 0;
     nombrePersona: string = "";
-    apellidoPersona: string = "";
+    apellidoCliente: string = "";
     nombreRol: string = "";
     iRol: number = 0;
     tipoDocumento: string = "";
@@ -17,21 +17,21 @@ export class RequestVWUsuario {
     email: string = "";
     estado: boolean=false
 }
+
 export interface RequestUsuario {
-    idUsuario: number;
-    idPersona: number;
-    usuario1: string;
-    lugarRegistro: string;
-    password: string;
-    email: string;
-    estado: boolean;
-    irol: number;
-    nombrePersona: string;
-    apellidoPersona: string;
-    tipoPersona: string;
-    tipoDocumento: string;
-    numeroDocumento: string;
-    telefono: string;
-    codigoUbigeo: string | null;
+    idUsuario: number | null;
+    idPersona: number | null;
+    apellidoCliente: string | null;
+    usuario1: string | null;
+    password: string | null;
+    email: string | null;
+    estado: boolean | null;
+    irol: number | null;
+    nombrePersona: string | null;
+    nombreRol: string | null;
+    tipoPersona: string | null;
+    tipoDocumento: string | null;
+    numeroDocumento: string | null;
+    telefono: string | null;
     direccion: string | null;
 }

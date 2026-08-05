@@ -95,6 +95,29 @@
         
         <p-toast></p-toast>
 
+        <div class="d-flex justify-content-center gap-2 mb-4">
+            <button type="button" class="btn rounded-pill px-4 py-2"
+                [ngClass]="selectedCategory === 'Todos' ? 'btn-info text-white' : 'btn-outline-light text-white'"
+                (click)="setCategory('Todos')">
+                Todos
+            </button>
+            <button type="button" class="btn rounded-pill px-4 py-2"
+                [ngClass]="selectedCategory === 'Zapatos' ? 'btn-info text-white' : 'btn-outline-light text-white'"
+                (click)="setCategory('Zapatos')">
+                Zapatos
+            </button>
+            <button type="button" class="btn rounded-pill px-4 py-2"
+                [ngClass]="selectedCategory === 'Zapatillas' ? 'btn-info text-white' : 'btn-outline-light text-white'"
+                (click)="setCategory('Zapatillas')">
+                Zapatillas
+            </button>
+            <button type="button" class="btn rounded-pill px-4 py-2"
+                [ngClass]="selectedCategory === 'Botines' ? 'btn-info text-white' : 'btn-outline-light text-white'"
+                (click)="setCategory('Botines')">
+                Botines
+            </button>
+        </div>
+
         <div *ngIf="frmLoadSt === loadStateEnum.Loading" class="text-center py-5">
             <app-loading-widget [state]="frmLoadSt"></app-loading-widget>
         </div>

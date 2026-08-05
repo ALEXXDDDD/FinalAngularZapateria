@@ -29,18 +29,18 @@
         <table class="w-full min-w-full divide-y divide-gray-200">
           <thead class="bg-slate-50">
             <tr>
-              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre del Cliente</th>
+              <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Apellido del Cliente</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Tipo Doc.</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Teléfono</th>
               <th scope="col" class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Dirección</th>
-              <th scope="col" class="px-6 py-3.5 class text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+              <!-- <th scope="col" class="px-6 py-3.5 class text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th> -->
             </tr>
           </thead>
           
           <tbody class="bg-white divide-y divide-gray-200">
             <ng-container *ngFor="let e of responseVwCliente">
               <tr *ngFor="let d of e.clientes" class="hover:bg-blue-50/40 transition-colors duration-150">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{ d.nombreCliente }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{ d.apellidoCliente }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                     {{ d.tipoDocumento }}
@@ -48,7 +48,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{{ d.telefono }}</td>
                 <td class="px-6 py-4 text-sm text-slate-600 max-w-xs truncate" title="{{ d.direccion }}">{{ d.direccion }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                <!-- <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
                   <button class="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1.5 rounded-md shadow-sm transition-colors duration-150">
                     <i class="fas fa-edit"></i>
                     <span>Editar</span>
@@ -57,7 +57,7 @@
                     <i class="fas fa-trash"></i>
                     <span>Eliminar</span>
                   </button>
-                </td>
+                </td> -->
               </tr>
             </ng-container>
           </tbody>

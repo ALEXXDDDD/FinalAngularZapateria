@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductFilterService } from 'src/app/services/product-filter/product-filter.service';
 
 @Component({
   selector: 'app-welcome-header',
@@ -6,10 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./welcome-header.component.css']
 })
 export class WelcomeHeaderComponent implements OnInit {
+  selectedCategory = 'Todos'
+
+  constructor(private productFilterService: ProductFilterService) {}
+
   ngOnInit(): void {
     this.rellenarMenu()
+    this.productFilterService.category$.subscribe(category => {
+      this.selectedCategory = category;
+    });
   }
 
+  selectCategory(category: string): void {
+    this.productFilterService.selectCategory(category);
+  }
 
   meny:any[]=[]
   rellenarMenu()

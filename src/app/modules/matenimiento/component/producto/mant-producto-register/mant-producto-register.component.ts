@@ -173,7 +173,9 @@ onFileSelected(event: any) {
         error:() => {
           alert_error("No se pudo guardar el producto")
         },
-        complete:() => {}
+        complete:() => {
+          window.location.reload();
+        }
       }
     )
   }
@@ -248,7 +250,7 @@ onFileSelected(event: any) {
       this.myForm.get('talla')?.disable({ emitEvent: false });
       this.myForm.get('idUnidad')?.disable({ emitEvent: false });
       this.myForm.get('color')?.disable({ emitEvent: false });
-      this.myForm.get('stock')?.disable({ emitEvent: false });
+      // this.myForm.get('stock')?.disable({ emitEvent: false });
       this.myForm.get('descripcion')?.disable({ emitEvent: false });
       this.previewImagen = this.getImagenUrl(this.producto?.fotografia);
     } else {

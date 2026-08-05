@@ -5,9 +5,6 @@ import { RequestVWOrden } from '../../../models/orden/orden-responseVWmodel';
 import { OrdenService } from '../../../service/orden/orden.service';
 import { AcciontConstants } from 'src/app/constants/general.constans';
 import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
-import { ClienteService } from '../../../service/cliente/cliente.service';
-import { ResponseVWCliente } from '../../../models/cliente/response-VMCliente.model';
-import { ResponseVCliente } from '../../../models/cliente/list-cliente-response.model';
 import { ProductoService } from '../../../service/producto/producto.service';
 import { ResponseProducto } from '../../../models/producto/producto-response.model';
 import { UnidadService } from '../../../service/unidad/unidad.service';
@@ -33,16 +30,10 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
   responseOrden : ResponseListOrden[] = []
   responseUnidad: ResponseUnidad[] = [];
   fechaActual: Date = new Date();
-  responseVwCliente: ResponseVWCliente[] = [];
-  clienteLista: ResponseVCliente[] = [];
-  selectedClienteNombre: string | null = null;
   envioOrder: RequestVWOrden = new RequestVWOrden();
-  responseVWOrden: ResponseListOrden = new ResponseListOrden();
-  AcciontConstants = AcciontConstants;
 
   constructor(
     private fb: FormBuilder,
-    private _clienteService: ClienteService,
     private _ordenService: OrdenService,
     private datetTipe:DatePipe,
     private _productoService: ProductoService,
@@ -53,6 +44,7 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
     this.myForm = this.fb.group({
       idOrden: [{ value: 0, disabled: true }, [Validators.required]],
       nombreProd: [null, Validators.required],
+      codigoProduccion: [null, Validators.required],
       fechaOrden: [{ value: dataNow, disabled: true }, Validators.required],
       fechaRequerido: [null, Validators.required],
       codigoOrden: [{ value: null, disabled: true }, Validators.required],
@@ -70,13 +62,16 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.patchOrdenValues();
-    this.listarClientes();
     this.listarProductos();
     this.listarUnidad();
 
     // Actualizar precio y monto total al cambiar producto y cantidad
     this.myForm.get('nombreProd')?.valueChanges.subscribe(value => {
       this.actualizarPrecio(value);
+    });
+
+    this.myForm.get('codigoProduccion')?.valueChanges.subscribe(value => {
+      this.actualizarNombreProdDesdeCodigoProduccion(value);
     });
 
     this.myForm.get('cantidad')?.valueChanges.subscribe(() => {
@@ -91,17 +86,6 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
     });
   }
   
-  onClienteSelect(value: any) {
-    const val = typeof value === 'string' ? value : (value?.target as HTMLSelectElement)?.value || null;
-    if (!val) {
-      return;
-    }
-    this.selectedClienteNombre = val;
-    const cliente = this.clienteLista.find(c => (c.nombrePersona || c.nombreCliente) === val);
-    this.myForm.get('nombrePersona')?.setValue(val);
-    this.myForm.get('nombreCliente')?.setValue(cliente?.nombreCliente || val);
-    this.myForm.get('estadoOrden')?.setValue('Pendiente');
-  }
   estCantidad(): boolean {
     const cantidad = this.myForm.get('cantidad')?.value;
     return !cantidad || cantidad <= 0;
@@ -123,43 +107,6 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
     });
   }
 
-  listarClientes() {
-    this._clienteService.getAll().subscribe({
-      next: (data: ResponseVWCliente[]) => {
-        this.responseVwCliente = data;
-        this.clienteLista = data?.[0]?.clientes || [];
-        this.patchNombrePersonaFromOrden();
-      },
-      error: () => {
-        alert_error("Ocurrió un error al cargar los clientes.");
-      }
-    });
-  }
-
-  private patchNombrePersonaFromOrden() {
-    const orderNameCliente = (this.orden.nombrePersona || this.orden.nombreCliente || '').trim();
-    if (!orderNameCliente) {
-      return;
-    }
-    const normalizedOrderName = orderNameCliente.toLowerCase();
-    const cliente = this.clienteLista.find(c => {
-      const nombrePersona = (c.nombrePersona || '').trim().toLowerCase();
-      const nombreCliente = (c.nombreCliente || '').trim().toLowerCase();
-      return nombrePersona === normalizedOrderName || nombreCliente === normalizedOrderName ||
-        nombrePersona.includes(normalizedOrderName) || nombreCliente.includes(normalizedOrderName) ||
-        normalizedOrderName.includes(nombrePersona) || normalizedOrderName.includes(nombreCliente);
-    });
-    if (cliente) {
-      const selectedValue = cliente.nombrePersona || cliente.nombreCliente || orderNameCliente;
-      this.selectedClienteNombre = selectedValue;
-      this.myForm.get('nombrePersona')?.setValue(selectedValue, { emitEvent: false });
-      this.myForm.get('nombreCliente')?.setValue(cliente.nombreCliente || cliente.nombrePersona, { emitEvent: false });
-    } else {
-      this.selectedClienteNombre = orderNameCliente;
-      this.myForm.get('nombrePersona')?.setValue(orderNameCliente, { emitEvent: false });
-      this.myForm.get('nombreCliente')?.setValue(this.orden.nombreCliente || '', { emitEvent: false });
-    }
-  }
 
   actualizarPrecio(nombreProduc: string | null) {
     const producto = this.responseProducto.find(p => p.nombreProd === nombreProduc);
@@ -174,6 +121,19 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
       this.myForm.get('stock')?.setValue(producto.stock, { emitEvent: false });
     }
 
+  }
+
+  private actualizarNombreProdDesdeCodigoProduccion(codigoProduccion: string | null) {
+    if (!codigoProduccion) {
+      return;
+    }
+    const partes = codigoProduccion.split('-').map(part => part.trim()).filter(part => part.length > 0);
+    if (partes.length >= 3 && partes[0].toUpperCase() === 'PRODUCCION') {
+      const nombreExtraido = `${partes[1]} ${partes[2]}`.trim();
+      this.myForm.get('nombreProd')?.setValue(nombreExtraido, { emitEvent: false });
+    } else {
+      this.myForm.get('nombreProd')?.setValue('', { emitEvent: false });
+    }
   }
 
   actualizarMontoTotal() {
@@ -209,10 +169,11 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
   private patchOrdenValues() {
     const ordenForm = {
       ...this.orden,
-      fechaOrden: this.normalizeDate(this.orden.fechaOrden),
+      fechaOrden: this.normalizeDate(this.orden.fechaOrden) || this.normalizeDate(this.fechaActual),
       fechaRequerido: this.normalizeDate(this.orden.fechaRequerido),
       nombrePersona: this.orden.nombrePersona || this.orden.nombreCliente,
       nombreCliente: this.orden.nombreCliente,
+      codigoProduccion: (this.orden as any)?.codigoProduccion || '',
       estadoOrden: this.normalizeEstado(this.orden.estadoOrden),
       nombreProd: this.orden.nombreProd,
       nombreUnidad: 'Pares'
@@ -249,36 +210,55 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
  }
   guardar()
   {
-    debugger
-   
-      this.envioOrder = this.myForm.getRawValue()
-      switch(this.accion)
-      {
-        case AcciontConstants.crear: 
-          this.crearOrden()
-          break;
-        case AcciontConstants.editar: 
+    this.envioOrder = this.myForm.getRawValue();
+    switch(this.accion)
+    {
+      case AcciontConstants.crear: 
+        this.crearOrden()
+        break;
+      case AcciontConstants.editar: 
         this.actualizarOrde()
-          break;
-        case AcciontConstants.eliminar: 
-          break;
-        
-      
-      
-        
-      }
-      console.log(this.myForm.getRawValue())
+        break;
+      case AcciontConstants.eliminar: 
+        break;
     }
-   actualizarOrde()
-   {
-    this._ordenService.update(this.envioOrder).subscribe(
+    console.log(this.myForm.getRawValue())
+  }
+
+  private buildUpdatePayload(): RequestVWOrden {
+    const raw: any = this.myForm.getRawValue();
+    const payload = new RequestVWOrden();
+    payload.idOrden = raw.idOrden || this.orden.idOrden || 0;
+    payload.nombrePersona = raw.nombrePersona || this.orden.nombrePersona || this.orden.nombreCliente || '';
+    payload.fechaOrden = this.normalizeDate(raw.fechaOrden || this.orden.fechaOrden || this.fechaActual) || this.normalizeDate(this.fechaActual) || '';
+    payload.fechaRequerido = this.normalizeDate(raw.fechaRequerido || this.orden.fechaRequerido) || '';
+    payload.estadoOrden = raw.estadoOrden || this.orden.estadoOrden || 'Pendiente';
+    payload.codigoProduccion = raw.codigoProduccion || (this.orden as any)?.codigoProduccion || '';
+    payload.idProducto = raw.idProducto ?? 0;
+    payload.talla = raw.talla || '';
+    payload.precioUnitario = raw.precioUnitario || this.orden.precioUnitario || 0;
+    payload.nombreProd = raw.nombreProd || this.orden.nombreProd || '';
+    payload.codigoOrden = raw.codigoOrden || this.orden.codigoOrden || '';
+    payload.cantidad = raw.cantidad || this.orden.cantidad || 0;
+    payload.idCliente = raw.idCliente || (this.orden as any).idCliente || 0;
+    payload.tipoOrden = raw.tipoOrden ?? (this.orden as any).tipoOrden ?? true;
+    payload.idEmpleado = raw.idEmpleado || (this.orden as any).idEmpleado || Number(sessionStorage.getItem('idEmpleado') || '0');
+    return payload;
+  }
+
+  actualizarOrde()
+  {
+    const requestPayload = this.buildUpdatePayload();
+    this.envioOrder = requestPayload;
+    console.log('RequestVWOrden payload', requestPayload);
+    this._ordenService.update(requestPayload).subscribe(
       {
         next:()=>{alert_sucess("Se actualizo")},
         error:()=>{},
         complete:()=>{}
       }
     )
-   }
+  }
     cerrarModal(res:boolean)
     {
       this.closeModalEmmit.emit(res)
@@ -299,3 +279,4 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
     }
   
 }
+
