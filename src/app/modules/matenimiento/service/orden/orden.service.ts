@@ -34,4 +34,8 @@ export class OrdenService extends CrudService<RequestVWOrden,ResponseOrden> {
    {
     return this._http.post<MercadoPagoResponse[]>(`${this.url_service}mercadoPago`,mercadoRequest)
    }
+
+  ordenesPorUsuario(userId: string): Observable<ResponseListOrden[]> {
+    return this._http.get<ResponseListOrden[]>(`${this.url_service}usuario/${userId}`);
+  }
 }

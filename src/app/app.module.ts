@@ -44,6 +44,7 @@ import { ToastModule } from 'primeng/toast';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { EnvioDomicilioComponent } from './Ventas/component/vistas/envio-domicilio/envio-domicilio.component';
+import { MisPedidosComponent } from './pages/welcome/mis-pedidos/mis-pedidos.component';
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import { EnvioDomicilioComponent } from './Ventas/component/vistas/envio-domicil
     ProductoComponent,
     WelcomeComponent,
     WelcomeHeaderComponent,
+    MisPedidosComponent,
     ChatPagesComponent,
     VistBailarinaComponent,
     VistZapatillaComponent,

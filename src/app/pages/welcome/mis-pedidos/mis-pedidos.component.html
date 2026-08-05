@@ -1,0 +1,64 @@
+<app-welcome-header></app-welcome-header>
+
+<div class="mis-pedidos-page container">
+  <section class="page-header">
+    <div>
+      <h1>Mis Pedidos</h1>
+      <p>Panel con el historial de pedidos de cliente.</p>
+    </div>
+  </section>
+
+  <section class="orders-summary" *ngIf="!loading && !errorMessage">
+    <div class="summary-card">
+      <span class="summary-label">Pedidos totales</span>
+      <strong>{{ orders.length }}</strong>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Total gastado</span>
+      <strong>S/. {{ getTotalSpent().toFixed(2) }}</strong>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Usuario</span>
+      <strong>{{ getUsuarioNombre() }}</strong>
+    </div>
+  </section>
+
+  <section class="orders-content">
+    <div *ngIf="loading" class="message-box">Cargando pedidos...</div>
+    <div *ngIf="errorMessage" class="message-box error">{{ errorMessage }}</div>
+    <div *ngIf="!loading && !orders.length && !errorMessage" class="message-box">No tienes pedidos registrados aún.</div>
+
+    <div class="orders-grid" *ngIf="orders.length > 0">
+      <article class="order-card" *ngFor="let order of orders">
+        <div class="order-card-header">
+          <div>
+            <span class="order-code">{{ order.codigoOrden || ('Pedido #' + order.idOrden) }}</span>
+            <span class="order-status" [ngClass]="getStatusClass(order.estadoOrden)">{{ order.estadoOrden }}</span>
+          </div>
+          <div class="order-date">{{ formatDate(order.fechaOrden) }}</div>
+        </div>
+
+        <div class="order-row">
+          <span>Producto</span>
+          <strong>{{ order.nombreProd || 'Sin datos' }}</strong>
+        </div>
+        <div class="order-row">
+          <span>Cantidad</span>
+          <strong>{{ order.cantidad }}</strong>
+        </div>
+        <div class="order-row">
+          <span>Precio unitario</span>
+          <strong>S/. {{ (order.precioUnitario || 0) | number:'1.2-2' }}</strong>
+        </div>
+        <div class="order-row">
+          <span>Total</span>
+          <strong>S/. {{ getOrderTotal(order) | number:'1.2-2' }}</strong>
+        </div>
+        <div class="order-row">
+          <span>Dirección</span>
+          <strong>{{ order.direccion || 'No registrada' }}</strong>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

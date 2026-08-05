@@ -7,24 +7,24 @@ import { ProductFilterService } from 'src/app/services/product-filter/product-fi
   styleUrls: ['./welcome-header.component.css']
 })
 export class WelcomeHeaderComponent implements OnInit {
-  selectedCategory = 'Todos'
+  public selectedCategory: string = 'Todos';
+  public meny: any[] = [];
 
   constructor(private productFilterService: ProductFilterService) {}
 
   ngOnInit(): void {
-    this.rellenarMenu()
+    this.rellenarMenu();
+    this.selectedCategory = this.productFilterService.selectedCategory;
     this.productFilterService.category$.subscribe(category => {
       this.selectedCategory = category;
     });
   }
 
-  selectCategory(category: string): void {
+  public selectCategory(category: string): void {
     this.productFilterService.selectCategory(category);
   }
 
-  meny:any[]=[]
-  rellenarMenu()
-  {
+  rellenarMenu() {
     
     let rolID = sessionStorage.getItem("rolId")
     let nombreRol = sessionStorage.getItem("nombreRol")
