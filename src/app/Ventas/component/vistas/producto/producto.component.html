@@ -1,8 +1,8 @@
 <div class="container py-5"> 
         <div class="row mb-5 g-4">
         <aside class="col-lg-3 text-center d-flex align-items-center justify-content-center">
-            <div class="position-relative overflow-hidden rounded-4 shadow-lg w-100" style="max-height: 350px;">
-                <img src="./../../../assets/img/Img_Welcome/720X1300-ecco.jpg" alt="Imagen de catálogo" class="img-fluid w-100 h-100" style="object-fit: cover;">
+            <div class="position-relative overflow-hidden rounded-4 shadow-lg w-100 oferta-imagen-contenedor">
+                <img src="assets/img/Img_Welcome/720X1300-ecco.jpg" alt="Ofertas de calzado" class="img-fluid w-100 h-100 oferta-imagen">
             </div>
         </aside>
         
@@ -35,9 +35,10 @@
                 </ul>
                 
                 <div class="text-md-start text-center">
-                    <a href="#productos" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold shadow-sm">
-                        Ver Todos los Productos <i class="fas fa-arrow-down ms-2"></i>
-                    </a>
+                    <button type="button" (click)="verTodosLosProductos()" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold shadow-sm">
+                        {{ mostrarListaCompleta ? 'Mostrar filtro' : 'Ver Todos los Productos' }}
+                        <i [class]="mostrarListaCompleta ? 'fas fa-filter ms-2' : 'fas fa-arrow-down ms-2'"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -50,10 +51,8 @@
             <div class="col-sm-6 col-md-6 col-lg-4" *ngFor="let mod of responseProducto">
                 <div class="card h-100 border-0 shadow-sm bg-white text-dark rounded-4 overflow-hidden transition-card">
                     <div class="position-relative">
-                        <img
-                [src]="'data:image/jpeg;base64,' + mod.fotografia"
-                width="80"
-                height="80">
+                        <img [src]="'data:image/jpeg;base64,' + mod.fotografia" [alt]="mod.nombreProd"
+                            class="w-100 imagen-producto" />
                         <span class="position-absolute top-0 end-0 bg-dark text-white fw-bold px-3 py-1 m-3 rounded-pill small shadow">
                             S/. {{mod.precioUnitario}}
                         </span>
@@ -83,16 +82,13 @@
         </div>
     </div>
 
-    <div class="row mt-5">
-        <div class="col-12 d-flex justify-content-center">
-            <pagination 
-                (pageChanged)="changePage($event)" 
-                [totalItems]="totalItems" 
-                [itemsPerPage]="itemsPerPage" 
-                previousText="&laquo; Anterior" 
-                nextText="Siguiente &raquo;"
-                class="pagination-custom">
-            </pagination>
+    <div *ngIf="!mostrarListaCompleta" class="row mt-5">
+        <div class="col-12 d-flex justify-content-center align-items-center gap-3">
+            <label for="selector-pagina" class="fw-semibold text-dark mb-0">Mostrar página:</label>
+            <select id="selector-pagina" class="form-select w-auto rounded-pill border-info px-4 py-2 shadow-sm"
+                [value]="request.numeroPagina" (change)="seleccionarPagina($any($event.target).value)">
+                <option *ngFor="let pagina of paginas" [value]="pagina">Página {{ pagina }}</option>
+            </select>
         </div>
     </div>
 

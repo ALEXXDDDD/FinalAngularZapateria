@@ -33,7 +33,8 @@ export class ProductoComponent implements OnInit {
   responseDetalle : ResponseVDetalleProducto[]=[]
   idProduc=this.requestProducto.idProducto
   totalItems:number =0
-  itemsPerPage:number=1
+  itemsPerPage:number=3
+  mostrarListaCompleta = false;
   request : RequestFilterGeneric = new RequestFilterGeneric()
   myFormFilter:FormGroup
   constructor (
@@ -87,6 +88,28 @@ export class ProductoComponent implements OnInit {
   tieneStock(producto: ResponseProducto): boolean {
     return (producto?.stock ?? 0) > 0;
   }
+
+  verTodosLosProductos(): void {
+    this.mostrarListaCompleta = !this.mostrarListaCompleta;
+
+    if (this.mostrarListaCompleta) {
+      this.listarProductos();
+      return;
+    }
+
+    this.request.numeroPagina = 1;
+    this.filtrar();
+  }
+
+  get paginas(): number[] {
+    const totalPaginas = Math.max(1, Math.ceil(this.totalItems / this.itemsPerPage));
+    return Array.from({ length: totalPaginas }, (_, indice) => indice + 1);
+  }
+
+  seleccionarPagina(pagina: string): void {
+    this.request.numeroPagina = Number(pagina);
+    this.filtrar();
+  }
   // monstrarDetalleProducto(id:number)
   // {
   //   debugger;
@@ -104,6 +127,7 @@ export class ProductoComponent implements OnInit {
     this._productoService.getAll().subscribe({
       next: (data:ResponseProducto[])=>{
         this.responseProducto = data 
+        this.totalItems = data.length;
         console.log(data)
       },
       error: (error)=>{
@@ -127,7 +151,10 @@ export class ProductoComponent implements OnInit {
       )
   }
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-dialog-centered product-detail-modal',
+      ignoreBackdropClick: false
+    });
   }
 
   getCloseModalEmmit(res:boolean)

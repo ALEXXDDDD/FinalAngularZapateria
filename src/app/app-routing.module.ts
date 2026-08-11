@@ -7,11 +7,9 @@ import { authGuard } from './guard/auth.guard';
 import { ProductoComponent } from './Ventas/component/vistas/producto/producto.component';
 import { VistContactoComponent } from './Ventas/component/vistas/vist-contacto/vist-contacto.component';
 import { VistEmpresaComponent } from './Ventas/component/vistas/vist-empresa/vist-empresa.component';
-import { VistBailarinaComponent } from './Ventas/component/vistas/mod-bailarinas/vist-bailarina/vist-bailarina.component';
-import { VistZapatillaComponent } from './Ventas/component/vistas/vist-zapatilla/vist-zapatilla.component';
 import { CarritoComprasComponent } from './Ventas/component/carrito-compras/carrito-compras.component';
 import { PerfilListComponent } from './pages/perfil/perfil-list/perfil-list.component';
-import { VistaZapatoComponent } from './Ventas/component/vistas/vist-zapato/vista-zapato/vista-zapato.component';
+import { CategoryProductsComponent } from './Ventas/component/vistas/category-products/category-products.component';
 
 const routes: Routes = [
   //Routeo
@@ -36,15 +34,23 @@ const routes: Routes = [
 
   },
   {
-    path:'lvistaBailarina',component:VistBailarinaComponent //Si es vacio dirigite a este componente
+    path:'lvistaBailarina', component: CategoryProductsComponent, data: { category: 'Bailarinas' }
 
   },
   {
-    path:'vistaZapatillas',component:VistZapatillaComponent //Si es vacio dirigite a este componente
+    path:'vistaZapatillas', component: CategoryProductsComponent, data: { category: 'Zapatillas' }
 
   },
   {
-    path:'vistaZapatos',component:VistaZapatoComponent //Si es vacio dirigite a este componente
+    path:'vistaZapatos', component: CategoryProductsComponent, data: { category: 'Zapatos' }
+
+  },
+  {
+    path:'vistaBotines', component: CategoryProductsComponent, data: { category: 'Botines' }
+
+  },
+  {
+    path:'vistaTacones', component: CategoryProductsComponent, data: { category: 'Tacones' }
 
   },
   

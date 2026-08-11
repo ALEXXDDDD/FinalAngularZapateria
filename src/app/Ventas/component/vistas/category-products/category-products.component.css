@@ -1,0 +1,8 @@
+.category-search {
+  max-width: 360px;
+}
+
+.product-image {
+  height: 250px;
+  object-fit: cover;
+}

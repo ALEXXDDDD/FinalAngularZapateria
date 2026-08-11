@@ -8,6 +8,8 @@ import { CarritoItem } from 'src/app/modules/matenimiento/models/carritoItem/car
 import { RequestActualizacionDireccion } from 'src/app/modules/matenimiento/models/cliente/request-actualizacionUsuario.model';
 import { ResponseUsuario } from 'src/app/modules/matenimiento/models/usuario/responseUsuario.models';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
+import { ProductoService } from 'src/app/modules/matenimiento/service/producto/producto.service';
+import { ResponseProducto } from 'src/app/modules/matenimiento/models/producto/producto-response.model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,17 +24,21 @@ export class CarritoComprasComponent implements OnInit{
   total: number = 0;
   // UsuarioSelect :ResponseCliente = new ResponseCliente() // Mandar para el register 
   usuarioSelect :ResponseUsuario = new ResponseUsuario()
+  productoSelect: ResponseProducto = new ResponseProducto();
   direccionSelect:RequestActualizacionDireccion = new RequestActualizacionDireccion
   titleModal : string = ""
   
   accionModal : number = 1
   carrito:CarritoItem[]=[]
+  productosDisponibles: ResponseProducto[] = [];
+  cargandoProductos = false;
+  errorProductos = false;
   constructor(
     
     private _carritoService:CarritoService,
     private router: Router,
     private modalService: BsModalService,
-    
+    private productoService: ProductoService
   )
   {
 
@@ -41,20 +47,15 @@ export class CarritoComprasComponent implements OnInit{
     this.totalPrecios= this._carritoService.sumarPrecios()
     this.cargarCarrito()
     this.actualizarTotal();
-    this._carritoService.listarCarrito().subscribe(
-      {
-        next:(data)=>{ this.carrito=data, console.log("datos",data)} 
-       
-      }
-    )
     this.totalPrecios = this._carritoService.sumarPrecios();
+    this.cargarProductosDisponibles();
    
   }
   cargarCarrito() {
     this.subscriptions.push(
       this._carritoService.listarCarrito().subscribe(data => {
         this.carrito = data;
-        this.total = this._carritoService.obtenerTotal();
+        this.actualizarTotal();
       })
     );
   }
@@ -123,6 +124,59 @@ export class CarritoComprasComponent implements OnInit{
   }
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
+  }
+
+  cargarProductosDisponibles(): void {
+    this.cargandoProductos = true;
+    this.errorProductos = false;
+    this.productoService.getAll().subscribe({
+      next: productos => {
+        this.productosDisponibles = productos || [];
+        this.cargandoProductos = false;
+      },
+      error: () => {
+        this.errorProductos = true;
+        this.cargandoProductos = false;
+      }
+    });
+  }
+
+  agregarProducto(producto: ResponseProducto): void {
+    if ((producto.stock ?? 0) <= 0) {
+      Swal.fire('Sin stock', 'Este producto no está disponible.', 'warning');
+      return;
+    }
+
+    this._carritoService.addProducto(producto);
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: `${producto.nombreProd} se agregó al carrito`,
+      showConfirmButton: false,
+      timer: 1800
+    });
+  }
+
+  verDetalle(template: TemplateRef<any>, producto: ResponseProducto): void {
+    this.productoSelect = producto;
+    this.titleModal = 'Detalle del producto';
+    this.accionModal = AcciontConstants.detalle;
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-dialog-centered product-detail-modal',
+      ignoreBackdropClick: false
+    });
+  }
+
+  getImagenUrl(fotografia: string): string {
+    if (!fotografia) {
+      return 'assets/img/img_Template/1.png';
+    }
+    const imagen = fotografia.trim();
+    if (imagen.startsWith('data:') || /^https?:\/\//i.test(imagen) || imagen.startsWith('assets/') || imagen.startsWith('/assets/')) {
+      return imagen;
+    }
+    return `data:image/jpeg;base64,${imagen.replace(/\s/g, '')}`;
   }
 
 

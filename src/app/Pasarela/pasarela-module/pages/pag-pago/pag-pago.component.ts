@@ -2,13 +2,13 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { CarritoService } from 'src/app/services/carrito/carrito.service';
 import { CarritoItem } from 'src/app/modules/matenimiento/models/carritoItem/carritoItem.model';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { PerfilService } from 'src/app/services/perfil/perfil.service';
-import { ResponsePerfil } from 'src/app/modules/matenimiento/models/perfil/perfil-response.model';
 import Swal from 'sweetalert2';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { OrdenService } from 'src/app/modules/matenimiento/service/orden/orden.service';
 import { RequestVWOrden } from 'src/app/modules/matenimiento/models/orden/orden-responseVWmodel';
+import { PersonaService } from 'src/app/modules/matenimiento/service/persona/persona.service';
+import { ResponsePersona } from 'src/app/modules/matenimiento/models/persona/response-persona.model';
 
 interface RequestVOrdenPayload {
   idOrden: number;
@@ -38,7 +38,9 @@ declare global {
 })
 export class PagPagoComponent implements OnInit {
   carrito: CarritoItem[] = [];
-  response: ResponsePerfil[] = [];
+  cliente?: ResponsePersona;
+  cargandoCliente = false;
+  errorCliente = false;
   total = 0;
   modalRef?: BsModalRef;
   editarDireccion = false;
@@ -52,7 +54,7 @@ export class PagPagoComponent implements OnInit {
   private pagoProcesado = false;
 
   constructor(
-    private _perfilService: PerfilService,
+    private personaService: PersonaService,
     private _router: Router,
     private _carritoService: CarritoService,
     private modalService: BsModalService,
@@ -144,26 +146,30 @@ export class PagPagoComponent implements OnInit {
       return;
     }
 
-    // this._perfilService.getDetalle(idUsuario).subscribe({
-    //   next: (data: ResponsePerfil[]) => {
-    //     const perfil = data?.[0];
-    //     if (perfil) {
-    //       this.nombre = nombreSesion || perfil.nombrePersona || '';
-    //       this.email = emailSesion || perfil.email || '';
-    //       this.direccion = direccionSesion || perfil.direccion || '';
-    //       this.response = data;
-    //     }
-    //   },
-    //   error: () => {
-    //     console.warn('No se pudo cargar el perfil del usuario.');
-    //   }
-    // });
+    this.cargandoCliente = true;
+    this.errorCliente = false;
+    this.personaService.getByUsuarioId(Number(idUsuario)).subscribe({
+      next: persona => {
+        this.cliente = persona;
+        const nombreCompleto = `${persona.nombrePersona || ''} ${persona.apellidoCliente || ''}`.trim();
+        this.nombre = nombreCompleto || nombreSesion;
+        this.email = persona.email || emailSesion;
+        this.direccion = persona.direccion || direccionSesion;
+        this.cargandoCliente = false;
+      },
+      error: () => {
+        this.errorCliente = true;
+        this.cargandoCliente = false;
+        console.warn('No se pudieron cargar los datos del cliente.');
+      }
+    });
   }
 
   limpiarDatosFormulario(): void {
-    this.nombre = sessionStorage.getItem('nombrePersona') || sessionStorage.getItem('nombre') || '';
-    this.email = sessionStorage.getItem('email') || sessionStorage.getItem('correo') || '';
-    this.direccion = sessionStorage.getItem('direccion') || '';
+    const nombreCompleto = `${this.cliente?.nombrePersona || ''} ${this.cliente?.apellidoCliente || ''}`.trim();
+    this.nombre = nombreCompleto || sessionStorage.getItem('nombrePersona') || sessionStorage.getItem('nombre') || '';
+    this.email = this.cliente?.email || sessionStorage.getItem('email') || sessionStorage.getItem('correo') || '';
+    this.direccion = this.cliente?.direccion || sessionStorage.getItem('direccion') || '';
   }
 
   construirPayloads() {

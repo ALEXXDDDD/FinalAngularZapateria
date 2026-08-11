@@ -83,6 +83,15 @@
                     Bailarinas
                 </button>
             </li>
+            <li class="nav-item">
+                <button type="button"
+                    class="nav-link btn px-4 py-2 rounded-pill border-0"
+                    [ngClass]="selectedCategory === 'Tacones' ? 'btn-dark text-light' : 'btn-outline-dark text-dark'"
+                    aria-label="Ver Tacones"
+                    (click)="selectCategory('Tacones')">
+                    Tacones
+                </button>
+            </li>
         </ul>
     </div>
 </nav>

@@ -61,7 +61,7 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
       cantidad: [null, Validators.required],
       cantidadFaltante: [{ value: null, disabled: true }, Validators.required],
       fechaIngreso: [{value:this.obtenerFechaHoy(), disabled: true}, Validators.required],
-      descripcion: [null, Validators.required],
+      descripcion: [null, [Validators.required, Validators.maxLength(50)]],
       codigoProduccion: [null, Validators.required],
       codigoOrden: [null, Validators.required],
       idUnidad: [{ value: 0, disabled: true }, Validators.required],
@@ -106,8 +106,8 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
   })
   }
   ngOnChanges(changes:SimpleChanges): void {
-    if (changes['Produccion'] && changes['Produccion'].currentValue) {
-      this.myForm.patchValue(changes['Produccion'].currentValue);
+    if (changes['produccion'] && changes['produccion'].currentValue) {
+      this.myForm.patchValue(changes['produccion'].currentValue);
       this.cargarDatosFormulario();
     }
   }
@@ -140,14 +140,35 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
   }
   extraerSoloNombreProducto(codigo:string):string
   {
-      if (!codigo) return '';
+    if (!codigo) return '';
 
-    const partes = codigo.split('-');
+    // Los dos listados no siempre construyen el código con la misma cantidad
+    // de segmentos. Se prioriza el nombre real registrado en los productos.
+    const codigoNormalizado = codigo
+      .toLocaleLowerCase()
+      .replace(/[^a-záéíóúüñ0-9]+/gi, ' ')
+      .trim();
+    const productoCoincidente = this.responseProducto
+      .filter(producto => !!producto.nombreProd)
+      .sort((a, b) => b.nombreProd.length - a.nombreProd.length)
+      .find(producto => {
+        const nombreNormalizado = producto.nombreProd
+          .toLocaleLowerCase()
+          .replace(/[^a-záéíóúüñ0-9]+/gi, ' ')
+          .trim();
+        return codigoNormalizado.includes(nombreNormalizado);
+      });
 
-    // Estructura: PRODUCCION - ZAPATOS - NEGROS - NEGRO - 01
+    if (productoCoincidente) {
+      return productoCoincidente.nombreProd;
+    }
+
+    const partes = codigo.split('-').map(parte => parte.trim());
+
+    // Estructura: PRODUCCION-ZAPATOS-NEGROS-COLOR-...
+    // Solo los dos valores siguientes forman el nombre del producto.
     if (partes[0]?.toUpperCase() === 'PRODUCCION' && partes.length >= 3) {
-      // Une 'Zapatos' + ' ' + 'Negros'
-      return `${partes[1]} ${partes[2]}`.trim(); 
+      return `${partes[1]} ${partes[2]}`.trim();
     }
 
     return codigo;
@@ -173,7 +194,8 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
       });
 
       // Extraemos "Zapatos Negros" a partir del código
-      const nombreExtraido = this.extraerSoloNombreProducto(this.produccion.codigoProduccion);
+      const nombreExtraido = this.produccion.nombreProd?.trim()
+        || this.extraerSoloNombreProducto(this.produccion.codigoProduccion);
 
       // Buscamos si existe en el arreglo de productos para tomar su formato de texto exacto
       if (this.responseProducto && this.responseProducto.length > 0) {
@@ -185,6 +207,11 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
           // Asigna "Zapatos Negros" tal cual está en el <option>
           this.myForm.patchValue({ nombreProd: productoEncontrado.nombreProd });
         } else {
+          console.warn('Producto no encontrado en la lista:', {
+            codigoProduccion: this.produccion.codigoProduccion,
+            nombreExtraido,
+            productosDisponibles: this.responseProducto.map(producto => producto.nombreProd)
+          });
           this.myForm.patchValue({ nombreProd: nombreExtraido });
         }
       } else {
@@ -245,7 +272,11 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
   }
 
   guardar(): void {
-    debugger
+    if (this.myForm.invalid) {
+      this.myForm.markAllAsTouched();
+      this.mostrarError('Complete los campos obligatorios antes de guardar.');
+      return;
+    }
     if (this.myForm.get('cantidadFaltante')?.value === 0) {
       // Mostrar un mensaje de error
       this.mostrarError("La cantidad faltante es 0. No se puede proceder.");
@@ -253,6 +284,28 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
     }
     // getRawValue() extrae tanto los campos activos como los que están disabled
     const rawForm = this.myForm.getRawValue();
+    const ordenSeleccionada = this.responseListOrden.find(
+      orden => orden.codigoOrden === rawForm.codigoOrden
+    );
+    const empleadoSeleccionado = this.reponseEmpleado
+      .flatMap(respuesta => respuesta.empleado)
+      .find(empleado =>
+        empleado.nombrePersona === rawForm.nombreEmpleado ||
+        `${empleado.nombrePersona} ${empleado.apellidoEmp}`.trim() === rawForm.nombreEmpleado
+      );
+    const produccionSeleccionada = this.produccion1.find(
+      produccion => produccion.codigoProduccion === rawForm.codigoProduccion
+    ) || (this.produccion?.codigoProduccion === rawForm.codigoProduccion ? this.produccion : null);
+
+    if (!ordenSeleccionada || !empleadoSeleccionado || !produccionSeleccionada) {
+      const datosFaltantes = [
+        !ordenSeleccionada ? 'orden' : '',
+        !empleadoSeleccionado ? 'empleado' : '',
+        !produccionSeleccionada ? 'producción' : ''
+      ].filter(Boolean).join(', ');
+      this.mostrarError(`No se pudo obtener el identificador de: ${datosFaltantes}.`);
+      return;
+    }
 
     // Capturamos la fecha/hora actual en formato ISO para C#
     const fechaActualIso = new Date().toISOString();
@@ -260,13 +313,13 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
     // Objeto exacto que coincide con RequestDetalleProduccion
     const payloadBackend = {
       idDetalleProduccion: rawForm.idDetalleProduccion || 0,
-      idProduccion: rawForm.idProduccion,
+      idProduccion: produccionSeleccionada.idProduccion,
       codigoProduccion: rawForm.codigoProduccion,
-      idOrden: rawForm.idOrden || 0,
-      codigoOrden: rawForm.codigoOrden || '',
+      idOrden: ordenSeleccionada.idOrden,
+      codigoOrden: ordenSeleccionada.codigoOrden,
       
       // Datos del Empleado traído de la lista
-      idEmpleado: rawForm.idEmpleado || 0,
+      idEmpleado: empleadoSeleccionado.idEmpleado,
       nombreEmpleado: rawForm.nombreEmpleado || '',
 
       // Unidad fija: PARES
@@ -286,7 +339,7 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
       nombreProd:rawForm.nombreProd || '',
       // Estado y Observaciones
       estado: 'REGISTRADO',
-      descripcion: rawForm.descripcion || ''
+      descripcion: (rawForm.descripcion || '').trim()
     };
     
     
@@ -314,13 +367,13 @@ export class MantIngresoProductoRegisterComponent implements OnInit {
     });
   }
   crearDetalleProduccion(request: RequestVWDetalleProduccion):void{
-    debugger
     request.nombreEmpleado = this.myForm.get('nombreEmpleado')?.value || request.nombreEmpleado || '';
     this._detalleProduccion.create(request).subscribe({
       next: () => {
         this.cerrarModal(true);
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error al registrar detalle de producción:', error.status, error.error);
         this.mostrarError("No se pudo registrar el detalle de producción.");
       }
     });

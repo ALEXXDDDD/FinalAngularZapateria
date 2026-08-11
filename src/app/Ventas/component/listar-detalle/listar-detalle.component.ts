@@ -41,6 +41,8 @@ export class ListarDetalleComponent {
   frmLoadSt = LoadStateEnum.None;
   loadStateEnum = LoadStateEnum;
   vistDetalle:VistDetalle[]=[]
+  imagenActiva = 0;
+  readonly etiquetasImagen = ['Vista 1', 'Vista 2', 'Vista 3', 'Vista 4'];
   constructor (
     private fb:FormBuilder,
     private  _ProductoService:ProductoService,
@@ -99,6 +101,7 @@ export class ListarDetalleComponent {
         next: (data: VistDetalle[]) => {
           console.log(data);
           this.vistDetalle = data;
+          this.imagenActiva = 0;
         }
       }
     );
@@ -116,6 +119,41 @@ export class ListarDetalleComponent {
   cambiar(){
     
    }
+  /** Combina la foto JPEG principal con las tres vistas que entrega el backend. */
+  imagenesProducto(producto: VistDetalle): string[] {
+    return [producto.fotografia, producto.fotografia2, producto.fotografia3, producto.fotografia4]
+      .filter(Boolean)
+      .map(imagen => this.normalizarImagen(imagen));
+  }
+
+  seleccionarImagen(indice: number): void {
+    this.imagenActiva = indice;
+  }
+
+  imagenAnterior(producto: VistDetalle): void {
+    const total = this.imagenesProducto(producto).length;
+    this.imagenActiva = (this.imagenActiva - 1 + total) % total;
+  }
+
+  imagenSiguiente(producto: VistDetalle): void {
+    const total = this.imagenesProducto(producto).length;
+    this.imagenActiva = (this.imagenActiva + 1) % total;
+  }
+
+  private normalizarImagen(imagen: string): string {
+    const imagenLimpia = imagen.trim();
+    // Igual que en welcome-body: fotografia llega como JPEG en Base64.
+    // /9j/ es el inicio habitual de un JPEG Base64; no es una ruta relativa.
+    if (imagenLimpia.startsWith('data:') || /^https?:\/\//i.test(imagenLimpia)) {
+      return imagenLimpia;
+    }
+
+    if (imagenLimpia.startsWith('/assets') || imagenLimpia.startsWith('assets/')) {
+      return imagenLimpia;
+    }
+
+    return `data:image/jpeg;base64,${imagenLimpia}`;
+  }
   // guardar()
   // {
   //   this.ProductoEnvio = this.myForm.getRawValue()

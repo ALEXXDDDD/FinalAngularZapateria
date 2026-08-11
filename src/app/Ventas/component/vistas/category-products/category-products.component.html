@@ -1,0 +1,73 @@
+<app-welcome-header></app-welcome-header>
+
+<main class="bg-light min-vh-100 py-5">
+  <section class="container">
+    <div class="d-md-flex justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h1 class="display-5 text-dark mb-1">{{ category }}</h1>
+        <p class="text-muted mb-0">Encuentra el modelo que estás buscando.</p>
+      </div>
+      <div class="input-group category-search">
+        <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+        <input type="search" class="form-control" [(ngModel)]="searchTerm" (ngModelChange)="onSearch()"
+          placeholder="Buscar por nombre o modelo" aria-label="Buscar productos" />
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="text-center py-5 text-muted">Cargando productos...</div>
+    <div *ngIf="error" class="alert alert-danger">No se pudieron cargar los productos. Inténtalo nuevamente más tarde.</div>
+
+    <div *ngIf="!loading && !error && pagedProducts.length" class="row g-4">
+      <article class="col-sm-6 col-lg-4" *ngFor="let product of pagedProducts">
+        <div class="card h-100 shadow-sm border-0">
+          <img [src]="getImagenUrl(product.fotografia)" [alt]="product.nombreProd" class="card-img-top product-image" />
+          <div class="card-body d-flex flex-column">
+            <h2 class="h5 card-title">{{ product.nombreProd }}</h2>
+            <p class="text-muted mb-2">{{ product.nombreModelo || category }}</p>
+            <p class="fw-bold fs-5 mb-2">S/. {{ product.precioUnitario }}</p>
+            <p class="small mb-3" [class.text-danger]="product.stock === 0" [class.text-success]="product.stock > 0">
+              {{ product.stock > 0 ? 'Stock disponible: ' + product.stock : 'Sin stock' }}
+            </p>
+            <div class="d-grid gap-2 mt-auto">
+              <button class="btn btn-outline-secondary" (click)="verDetalle(modalDetail, product)">
+                <i class="fas fa-eye me-2"></i>Ver detalle
+              </button>
+              <button class="btn btn-dark" [disabled]="product.stock === 0" (click)="addProducto(product)">
+                Agregar al carrito
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <p *ngIf="!loading && !error && !pagedProducts.length" class="text-center text-muted py-5">
+      No se encontraron productos para esta búsqueda.
+    </p>
+
+    <nav *ngIf="!loading && filteredProducts.length > itemsPerPage" class="d-flex justify-content-center mt-5" aria-label="Paginación de productos">
+      <ul class="pagination mb-0">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="goToPage(currentPage - 1)">Anterior</button>
+        </li>
+        <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+          <button class="page-link" (click)="goToPage(page)">{{ page }}</button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="goToPage(currentPage + 1)">Siguiente</button>
+        </li>
+      </ul>
+    </nav>
+  </section>
+</main>
+
+<app-welcome-footer></app-welcome-footer>
+
+<ng-template #modalDetail>
+  <app-listar-detalle
+    title="Detalle del producto"
+    [Producto]="selectedProduct"
+    [accion]="detailAction"
+    (closeModalEmmit)="cerrarDetalle()">
+  </app-listar-detalle>
+</ng-template>

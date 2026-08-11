@@ -255,3 +255,29 @@ a{
     font-size: 1.2em;
     text-decoration: none;
 }
+
+.oferta-imagen-contenedor {
+    height: 430px;
+    background: #f3f4f6;
+}
+
+.oferta-imagen,
+.imagen-producto {
+    display: block;
+    object-fit: cover;
+}
+
+.imagen-producto {
+    height: 300px;
+    background: #f8fafc;
+}
+
+@media (max-width: 991.98px) {
+    .oferta-imagen-contenedor {
+        height: 320px;
+    }
+
+    .imagen-producto {
+        height: 260px;
+    }
+}

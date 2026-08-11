@@ -17,6 +17,10 @@ export class PersonaService extends CrudService<RequestPersona,ResponsePersona> 
   ) { 
     super(http,urlConstants.persona)
   }
+
+  getByUsuarioId(idUsuario: number): Observable<ResponsePersona> {
+    return this._http.post<ResponsePersona>(`${this.url_service}${idUsuario}`, {});
+  }
  
   /* getAll():Observable<ResponsePersona[]>{
     return this._http.get<ResponsePersona[]>(urlConstants.persona)

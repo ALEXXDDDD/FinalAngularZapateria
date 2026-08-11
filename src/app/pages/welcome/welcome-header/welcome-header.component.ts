@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProductFilterService } from 'src/app/services/product-filter/product-filter.service';
 
 @Component({
@@ -10,7 +11,10 @@ export class WelcomeHeaderComponent implements OnInit {
   public selectedCategory: string = 'Todos';
   public meny: any[] = [];
 
-  constructor(private productFilterService: ProductFilterService) {}
+  constructor(
+    private productFilterService: ProductFilterService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.rellenarMenu();
@@ -22,6 +26,26 @@ export class WelcomeHeaderComponent implements OnInit {
 
   public selectCategory(category: string): void {
     this.productFilterService.selectCategory(category);
+
+    const route = this.getRouteForCategory(category);
+    this.router.navigate([route]);
+  }
+
+  private getRouteForCategory(category: string): string {
+    switch (category.toLowerCase()) {
+      case 'zapatos':
+        return '/vistaZapatos';
+      case 'zapatillas':
+        return '/vistaZapatillas';
+      case 'botines':
+        return '/vistaBotines';
+      case 'bailarinas':
+        return '/lvistaBailarina';
+      case 'tacones':
+        return '/vistaTacones';
+      default:
+        return '/lista_productos';
+    }
   }
 
   rellenarMenu() {

@@ -25,6 +25,7 @@ import { VistContactoComponent } from './Ventas/component/vistas/vist-contacto/v
 import { VistProductoComponent } from './Ventas/component/vistas/vist-producto/vist-producto.component';
 import { VistBailarinaComponent } from './Ventas/component/vistas/mod-bailarinas/vist-bailarina/vist-bailarina.component';
 import { VistaZapatoComponent } from './Ventas/component/vistas/vist-zapato/vista-zapato/vista-zapato.component';
+import { CategoryProductsComponent } from './Ventas/component/vistas/category-products/category-products.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TemplateRoutingModule } from './modules/template/template-routing.module';
@@ -62,6 +63,7 @@ import { MisPedidosComponent } from './pages/welcome/mis-pedidos/mis-pedidos.com
     ChatPagesComponent,
     VistBailarinaComponent,
     VistZapatillaComponent,
+    CategoryProductsComponent,
     ListarDetalleComponent,
     CarritoComprasComponent,
     SinPermisoComponent,

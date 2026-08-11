@@ -130,7 +130,8 @@ export class WelcomeBodyComponent implements OnInit, OnDestroy {
       }
 
       if (rawBase64Pattern.test(valor)) {
-        const payload = cleaned.replace(/^\/+/g, '');
+        // /9j/ es un inicio válido de una imagen JPEG en Base64, no una ruta.
+        const payload = cleaned;
         const mime = /^(?:\/?)(?:iVBOR|R0lGOD)/.test(valor) ? 'image/png' : 'image/jpeg';
         return `data:${mime};base64,${payload}`;
       }
@@ -271,12 +272,23 @@ export class WelcomeBodyComponent implements OnInit, OnDestroy {
     this.productFilterService.selectCategory(category);
   }
 
+  verProductos(): void {
+    this.setCategory('Todos');
+    setTimeout(() => document.getElementById('catalogo-productos')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    }));
+  }
+
   ngOnDestroy(): void {
     this.categorySubscription?.unsubscribe();
   }
 
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
+    this.modalRef = this.modalService.show(template, {
+      class: 'modal-dialog-centered product-detail-modal',
+      ignoreBackdropClick: false
+    });
   }
 
   getCloseModalEmmit(res:boolean)

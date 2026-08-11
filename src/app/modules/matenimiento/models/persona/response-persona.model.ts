@@ -7,4 +7,6 @@ export class ResponsePersona {
     telefono: string ="";
     codigoUbigeo: string ="" ;
     direccion: string ="" ;
+    email: string ="";
+    apellidoCliente: string ="";
 }

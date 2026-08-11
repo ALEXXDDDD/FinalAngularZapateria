@@ -61,7 +61,7 @@ export class CarritoService {
         return sum;
       }
       
-      return sum + precio;
+      return sum + (precio * (Number(producto.cantidad) || 1));
     }, 0);
   }
 
@@ -82,6 +82,7 @@ export class CarritoService {
   // guardar en el localstorage
   const listaJson = JSON.stringify(this.listaProducto);
   localStorage.setItem('carrito-compras', listaJson);
+  sessionStorage.setItem(this.totalKey, this.calcularTotal().toString());
 
     }
   removeProducto(id:number):void
@@ -93,6 +94,8 @@ export class CarritoService {
             this.listaProducto.splice(+index,1)
             const listJson = JSON.stringify(this.listaProducto)
             localStorage.setItem('carrito-compras',listJson)
+            sessionStorage.setItem(this.totalKey, this.calcularTotal().toString());
+            this.listaProductosSubject.next(this.listaProducto);
             break
           }
       }
@@ -107,6 +110,7 @@ export class CarritoService {
       this.listaProductosSubject.next(this.listaProducto)
       const listaJson = JSON.stringify(this.listaProducto)
       localStorage.setItem('carrito-compras',listaJson)
+      sessionStorage.setItem(this.totalKey, this.calcularTotal().toString());
 
   }
   listarCarrito():Observable<CarritoItem[]>
@@ -122,6 +126,14 @@ export class CarritoService {
     this.listaProducto = [];
     this.listaProductosSubject.next(this.listaProducto);
     localStorage.removeItem('carrito-compras');
+    sessionStorage.removeItem(this.totalKey);
+  }
+
+  private calcularTotal(): number {
+    return this.listaProducto.reduce(
+      (total, item) => total + (item.producto.precioUnitario * item.cantidad),
+      0
+    );
   }
 
 }
