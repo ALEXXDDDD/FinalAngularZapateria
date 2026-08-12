@@ -47,9 +47,10 @@ export class MantEmpleadoRegisterComponent implements OnInit{
     this.myForm = this.fb.group(
       {
         idEmpleado: [{value:0,disabled:true},[Validators.required]],
-        apellidoEmp:[null,[Validators.required]] ,
+        nombres:[null,[Validators.required]] ,
+        apellidoPaterno:[null,[Validators.required]] ,
+        apellidoMaterno:[null,[Validators.required]] ,
         salario:[null,[Validators.required]] ,
-        nombrePersona:[null,[Validators.required]] ,
         idUsuario: [{value:idUsuario},[Validators.required]],
         usuario1:[null,[Validators.required]] ,
         password:[null,[Validators.required, Validators.minLength(9)]] ,
@@ -70,8 +71,18 @@ export class MantEmpleadoRegisterComponent implements OnInit{
     console.log("Titulo =>",this.title);
     this.listarRoles();
     
-    this.myForm.patchValue(this.empleado)
-     if(this.accion== AcciontConstants.editar)
+    const apellidoEmp = this.empleado.apellidoEmp || '';
+    const [apellidoPaterno, ...restoApellidos] = apellidoEmp.split(' ');
+    const apellidoMaterno = restoApellidos.join(' ');
+
+    this.myForm.patchValue({
+      ...this.empleado,
+      nombres: this.empleado.nombrePersona || '',
+      apellidoPaterno: apellidoPaterno || '',
+      apellidoMaterno: apellidoMaterno || ''
+    });
+
+    if(this.accion== AcciontConstants.editar)
      {
        this.myForm.get('usuario1')?.disable()
        this.myForm.get('email')?.disable()
@@ -122,7 +133,13 @@ export class MantEmpleadoRegisterComponent implements OnInit{
       }
     });
 
-    this.EmpleadoEnvio = this.myForm.getRawValue()
+    const rawValue = this.myForm.getRawValue();
+    this.EmpleadoEnvio = {
+      ...rawValue,
+      nombrePersona: rawValue.nombres || '',
+      apellidoEmp: `${rawValue.apellidoPaterno || ''} ${rawValue.apellidoMaterno || ''}`.trim(),
+    } as RequestVWEmpleado;
+
     console.log("Datos enviados:", this.EmpleadoEnvio);
   
     // Validar que estado exista antes de convertir
@@ -213,17 +230,10 @@ export class MantEmpleadoRegisterComponent implements OnInit{
     this._empleadoService.buscarEmpleadoDNI(this.EmpleadoEnvio.numeroDocumento).subscribe(
       {
         next:(data:empleadoApiPeru)=>{
-          this.myForm.get("nombrePersona")?.setValue(data.nombres)
-          this.myForm.get("apellidoEmp")?.setValue(data.apellidoPaterno  + "  " + data.apellidoMaterno)
-          
-
+          this.myForm.get("nombres")?.setValue(data.nombres)
+          this.myForm.get("apellidoPaterno")?.setValue(data.apellidoPaterno)
+          this.myForm.get("apellidoMaterno")?.setValue(data.apellidoMaterno)
         },
-        error:(error)=>{
-            alert("nO ESNTRA AQUI")
-        },
-        complete:()=>{
-          
-        }
       }
     )
   }

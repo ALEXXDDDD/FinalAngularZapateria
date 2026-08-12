@@ -82,54 +82,49 @@
       <hr class="my-5 border-gray-200">
 
       <!-- Sección: Datos Personales -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
         
         <!-- Nombres -->
-        <div>
-          <label for="nombrePersona" class="block text-xs font-bold text-slate-600 uppercase mb-2">
+        <div class="lg:col-span-4">
+          <label for="nombres" class="block text-xs font-bold text-slate-600 uppercase mb-2">
             Nombres
           </label>
           <input 
-            id="nombrePersona" 
+            id="nombres" 
             type="text" 
-            formControlName="nombrePersona" 
+            formControlName="nombres" 
             class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
             placeholder="Ej. Juan Carlos">
         </div>
 
-        <!-- Apellidos -->
-        <div>
-          <label for="apellidoEmp" class="block text-xs font-bold text-slate-600 uppercase mb-2">
-            Apellidos
+        <!-- Apellido Paterno -->
+        <div class="lg:col-span-4">
+          <label for="apellidoPaterno" class="block text-xs font-bold text-slate-600 uppercase mb-2">
+            Apellido Paterno
           </label>
           <input 
-            id="apellidoEmp" 
+            id="apellidoPaterno" 
             type="text" 
-            formControlName="apellidoEmp" 
+            formControlName="apellidoPaterno" 
             class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-            placeholder="Ej. Pérez Gómez">
+            placeholder="Ej. Pérez">
         </div>
 
-        <!-- Teléfono -->
-        <div>
-          <label for="tel" class="block text-xs font-bold text-slate-600 uppercase mb-2">
-            Teléfono
+        <!-- Apellido Materno -->
+        <div class="lg:col-span-4">
+          <label for="apellidoMaterno" class="block text-xs font-bold text-slate-600 uppercase mb-2">
+            Apellido Materno
           </label>
-          <div class="relative rounded-lg shadow-sm">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-              <i class="fa-solid fa-phone text-xs"></i>
-            </div>
-            <input 
-              id="tel" 
-              type="tel" 
-              formControlName="telefono" 
-              class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-              placeholder="Ej. 987654321">
-          </div>
+          <input 
+            id="apellidoMaterno" 
+            type="text" 
+            formControlName="apellidoMaterno" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-slate-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+            placeholder="Ej. Gómez">
         </div>
 
         <!-- Asignación / Rol -->
-        <div>
+        <div class="lg:col-span-4">
           <label for="nombreRol" class="block text-xs font-bold text-slate-600 uppercase mb-2">
             Asignación
           </label>
@@ -142,8 +137,8 @@
           </select>
         </div>
 
-        <!-- Correo Electrónico (ocupa todo el ancho en LG si es necesario) -->
-        <div class="lg:col-span-2">
+        <!-- Correo Electrónico -->
+        <div class="lg:col-span-8">
           <label for="email" class="block text-xs font-bold text-slate-600 uppercase mb-2">
             Correo Electrónico
           </label>
