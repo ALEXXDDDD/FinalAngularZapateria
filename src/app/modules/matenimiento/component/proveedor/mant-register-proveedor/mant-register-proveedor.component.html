@@ -1,78 +1,83 @@
-<div class="modal-header">
-    <h4 class="modal-title pull-left">{{title}}</h4>
-    <button type="button" class="btn-close close pull-rigth">
-        <span class="visually-hidden">&times;</span>
-    </button>
+<div class="modal-header bg-primary text-white">
+  <h4 class="modal-title">{{ title }}</h4>
+  <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" (click)="cerrarModal(false)"></button>
 </div>
-<div class="modal-body" >
-    <form action="" [formGroup]="myForm">
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group" >
-                    <label for="">Id</label>
-                    <input type="text" class="form-control" formControlName="idProvedor" >
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group" >
-                    <label for="">Nombres del proveedor</label>
-                    <input type="text" class="form-control" formControlName="nombrePersona" >
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Tipo De Registro</label>
-                    <select name="" id="" class="form-select" formControlName="tipoPersona">
-                        <option value="Proveedor">Proveedor</option>
-                        <option value="Natural">Natural</option>
-                        <option value="Juridico">Juridico</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Tipo De Documento</label>
-                    <select name="" id="" class="form-select" formControlName="tipoDocumento">
-                        <option value="DNI">DNI</option>
-                        <option value="RUC">RUC</option>
-                    </select>
-                </div>
-            </div>
+
+<form [formGroup]="myForm" (ngSubmit)="guardar()">
+  <div class="modal-body">
+    <div class="row g-3">
+      <div class="col-12">
+        <label for="rucConsulta" class="form-label">Consultar RUC</label>
+        <div class="input-group">
+          <input id="rucConsulta" type="text" class="form-control" maxlength="11" inputmode="numeric"
+            placeholder="Ingrese los 11 digitos del RUC" [(ngModel)]="rucConsulta" [ngModelOptions]="{standalone: true}">
+          <button type="button" class="btn btn-outline-primary" (click)="buscarRuc()" [disabled]="buscandoRuc">
+            {{ buscandoRuc ? 'Consultando...' : 'Consultar' }}
+          </button>
         </div>
-        <div class="row">
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Numero de Documento</label>
-                    <input type="text" class="form-control"  formControlName="numerodocumento">
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Telefono</label>
-                    <input type="text" class="form-control" formControlName="telefono">
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Codigo de Ubigueo</label>
-                    <input type="text" class="form-control" formControlName="codigoUbigeo" >
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="">Direccion</label>
-                    <input type="text" class="form-control" formControlName="direccion">
-                </div>
-            </div>
-           
+      </div>
+
+      <div class="col-md-6">
+        <label for="nombrePersona" class="form-label">Razon social</label>
+        <input id="nombrePersona" type="text" class="form-control bg-light" formControlName="nombrePersona" readonly>
+      </div>
+      <div class="col-md-3">
+        <label for="tipoPersona" class="form-label">Tipo de persona</label>
+        <input id="tipoPersona" type="text" class="form-control bg-light" formControlName="tipoPersona" readonly>
+      </div>
+      <div class="col-md-3">
+        <label for="tipoDocumento" class="form-label">Tipo de documento</label>
+        <input id="tipoDocumento" type="text" class="form-control bg-light" formControlName="tipoDocumento" readonly>
+      </div>
+
+      <div class="col-md-6">
+        <label for="numeroDocumento" class="form-label">Numero de documento</label>
+        <input id="numeroDocumento" type="text" class="form-control bg-light" formControlName="numeroDocumento" readonly>
+      </div>
+      <div class="col-md-6">
+        <label for="telefono" class="form-label">Telefono</label>
+        <div class="input-group">
+          <span class="input-group-text">+51</span>
+          <input id="telefono" type="text" class="form-control" formControlName="telefono" maxlength="9" inputmode="numeric"
+            placeholder="987654321" [class.is-invalid]="myForm.get('telefono')?.invalid && myForm.get('telefono')?.touched">
+          <div class="invalid-feedback">Ingrese un telefono de 9 digitos.</div>
         </div>
-       
-            <button type="button" class="btn btn-primary btn-sm" (click)="guardar()">
-                GUARDAR
-            </button>
-            <button type="button" class="btn btn-danger btn-sm" >
-                Cancelar
-            </button>
-        
-    </form>
-</div>
+      </div>
+
+      <div class="col-12">
+        <label for="direccion" class="form-label">Direccion</label>
+        <input id="direccion" type="text" class="form-control" formControlName="direccion" maxlength="50" placeholder="Ingrese la direccion">
+      </div>
+
+      <div class="col-md-5">
+        <label for="materialEntrega" class="form-label">Material de entrega</label>
+        <select id="materialEntrega" class="form-select" formControlName="materialEntrega"
+          [class.is-invalid]="myForm.get('materialEntrega')?.invalid && myForm.get('materialEntrega')?.touched">
+          <option value="" disabled>Seleccione un material</option>
+          <option *ngFor="let material of materiales" [value]="material.nombreMaterial">{{ material.nombreMaterial }}</option>
+        </select>
+        <div class="invalid-feedback">Seleccione un material.</div>
+      </div>
+      <div class="col-md-3">
+        <label for="costoMaterialEntrega" class="form-label">Costo del material (S/.)</label>
+        <input id="costoMaterialEntrega" type="number" min="0" step="0.01" class="form-control" formControlName="costoMaterialEntrega"
+          [class.is-invalid]="myForm.get('costoMaterialEntrega')?.invalid && myForm.get('costoMaterialEntrega')?.touched">
+        <div class="invalid-feedback">Ingrese un costo valido.</div>
+      </div>
+      <div class="col-md-4">
+        <label for="unidadMaterialEntrega" class="form-label">Unidad de medida</label>
+        <select id="unidadMaterialEntrega" class="form-select" formControlName="unidadMaterialEntrega"
+          [class.is-invalid]="myForm.get('unidadMaterialEntrega')?.invalid && myForm.get('unidadMaterialEntrega')?.touched">
+          <option value="" disabled>Seleccione una unidad</option>
+          <option *ngFor="let unidad of unidades" [value]="unidad.nombreUnidad">{{ unidad.nombreUnidad }}</option>
+        </select>
+        <div class="invalid-feedback">Seleccione una unidad.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="cerrarModal(false)">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="myForm.invalid">Guardar proveedor</button>
+  </div>
+</form>

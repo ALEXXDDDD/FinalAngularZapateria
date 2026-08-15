@@ -4,20 +4,10 @@ export class RequestVWProveedor {
     nombrePersona: string ="";
     tipoPersona: string ="";
     tipoDocumento: string ="";
-    numerodocumento: string ="";
+    numeroDocumento: string ="";
     telefono: string ="";
-    codigoUbigeo: string ="" ;
     direccion: string ="" ;
-}
-export interface RequestVProveedor {
-    idProvedor: number;
-    nombreProveedor: string | null;
-    idPersona: number;
-    nombrePersona: string;
-    tipoPersona: string;
-    tipoDocumento: string;
-    numeroDocumento: string;
-    telefono: string;
-    codigoUbigeo: string | null;
-    direccion: string | null;
+    materialEntrega: string ="";
+    costoMaterialEntrega: number = 0;
+    unidadMaterialEntrega: string ="";
 }

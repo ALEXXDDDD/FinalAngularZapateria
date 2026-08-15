@@ -1,4 +1,5 @@
 export class ResponseVWProveedor {
+    idPersona: number = 0;
     nombreProveedor: string ="";
     fechaEntrega: string="";
     fechaPedido: string="";
@@ -11,5 +12,12 @@ export class ResponseVWProveedor {
     idProvedor: number=0;
     idComprobante: number=0;
     idMaterial: number=0;
+    materialEntrega: string = "";
+    costoMaterialEntrega: number = 0;
+    unidadMaterialEntrega: string = "";
+    nombrePersona: string = "";
+    tipoDocumento: string = "";
+    numeroDocumento: string = "";
+    direccion: string = "";
 }
 

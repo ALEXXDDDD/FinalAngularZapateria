@@ -1,0 +1,10 @@
+{
+  "/peruapi": {
+    "target": "https://peruapi.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/peruapi": ""
+    }
+  }
+}

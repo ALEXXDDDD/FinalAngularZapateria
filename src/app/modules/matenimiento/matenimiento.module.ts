@@ -10,7 +10,7 @@ import { MantClienteListComponent } from './component/cliente/mant-cliente-list/
 import { MantClienteRegisterComponent } from './component/cliente/mant-cliente-register/mant-cliente-register.component';
 import { MantEmpleadoListComponent } from './component/empleado/mant-empleado-list/mant-empleado-list.component';
 import { MantEmpleadoRegisterComponent } from './component/empleado/mant-empleado-register/mant-empleado-register.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { MantModeloListComponent } from './component/modelo/mant-modelo-list/mant-modelo-list.component';
 import { MantModeloResgisterComponent } from './component/modelo/mant-modelo-resgister/mant-modelo-resgister.component';
@@ -104,6 +104,8 @@ import { MantPagoCreditoResgisterComponent } from './component/detalleCredito/ma
     CommonModule,
     MatenimientoRoutingModule,
     DatePipe,
+    FormsModule,
+    ReactiveFormsModule,
     SharedModule
   ],
    providers: [DatePipe]

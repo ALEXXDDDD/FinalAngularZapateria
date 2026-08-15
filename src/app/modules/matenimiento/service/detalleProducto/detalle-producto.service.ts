@@ -18,4 +18,15 @@ export class DetalleProductoService {
    {
     return this._http.get<ResponseDetalleProcedureProducto[]>(`${urlConstants.verDetalleProducto}/${id}`);
    }
+
+  getByProductoId(idProducto: number): Observable<ResponseDetalleProcedureProducto> {
+    return this._http.get<ResponseDetalleProcedureProducto>(`${urlConstants.verDetalleProducto}/${idProducto}`);
+  }
+
+  actualizarDetalle(formData: FormData): Observable<unknown> {
+    return this._http.post(`${urlConstants.verDetalleProducto}/actualizar-detalle`, formData);
+  }
+  actualizarftpDetalle(formData: FormData): Observable<unknown> {
+    return this._http.post(`${urlConstants.verftpDetalleProducto}/actualizar`, formData);
+  }
 }

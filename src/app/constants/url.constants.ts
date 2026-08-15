@@ -34,6 +34,7 @@ export const    urlConstants ={
     detalleCredito:dominio+"api/DetalleCredito",
     /// Store Procedure
     verDetalleProducto :dominio+"api/DetalleProducto",
+    verftpDetalleProducto :dominio+"api/DetalleProductoFtp",
     perfil :dominio+"api/Perfil",
     actualizacionDireccion :dominio+"api/ActualizacionDireccion",
     vistaBailarinas:dominio+"api/BailarinasStore",
@@ -45,7 +46,8 @@ export const    urlConstants ={
     traerPerfil :dominio+"api/VIstaModeloProducto",
     traerVista:dominio+"api/VIstaModeloProducto",
     comprobanteProveedor:dominio+"api/ComprobanteProvedor",
-    comprobanteDetalle:dominio+"api/ComprobanteDetalle"
+    comprobanteDetalle:dominio+"api/ComprobanteDetalle",
+    storageUpload: dominio + "api/test/storage/upload"
 
 
 }

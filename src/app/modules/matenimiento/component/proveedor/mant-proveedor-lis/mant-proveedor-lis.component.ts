@@ -12,7 +12,7 @@ import { AcciontConstants } from 'src/app/constants/general.constans';
 })
 export class MantProveedorLisComponent {
   responseProveedor:ResponseProveedor[]=[]
-  responseWProveedor:ResponseVWProveedor[]=[]
+  responseWProveedor: ResponseVWProveedor[]=[]
   proveedorEnviar : ResponseVWProveedor = new ResponseVWProveedor ()
   modalRef?: BsModalRef;
   titleModal : string = ""
@@ -30,10 +30,10 @@ export class MantProveedorLisComponent {
   }
   listarProveedores()
   {
-    this._proveedorService.filtroProductoAcabado().subscribe({
-      next: (data:ResponseVWProveedor[])=>{
-        this.responseWProveedor = data 
-        console.log("Proveedors",data)
+    this._proveedorService.listarProveedores().subscribe({
+      next: (data:ResponseProveedor[])=>{
+        this.responseProveedor = data;
+        this.responseWProveedor = this.responseProveedor.flatMap(respuesta => respuesta.proveedors ?? []);
       },
       error: (error)=>{
         alert("Ocurrio Un error ")
