@@ -2,7 +2,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdenService } from 'src/app/modules/matenimiento/service/orden/orden.service';
 import { ResponseListOrden } from 'src/app/modules/matenimiento/models/orden/orden-request.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-mis-pedidos',
@@ -15,7 +14,7 @@ export class MisPedidosComponent implements OnInit {
   loading = true;
   errorMessage = '';
 
-  constructor(private ordenService: OrdenService, private http: HttpClient) {}
+  constructor(private ordenService: OrdenService) {}
 
   ngOnInit(): void {
     this.loadOrders();
@@ -23,21 +22,17 @@ export class MisPedidosComponent implements OnInit {
 
   loadOrders(): void {
 
-    // ID COMO STRING
-    const userId: string =
-      sessionStorage.getItem('idUsuario') ||
-      sessionStorage.getItem('idCliente') ||
-      sessionStorage.getItem('idPersona') ||
+    // El endpoint recibe el usuario, no el identificador numérico.
+    const usuario: string =
+      localStorage.getItem('usuario') ||
+      sessionStorage.getItem('usuario') ||
       '';
 
-    if (!userId.trim()) {
+    if (!usuario.trim()) {
       this.errorMessage = 'Usuario no identificado. Inicia sesión.';
       this.loading = false;
       return;
     }
-
-    const base = 'https://localhost:7282/api/Historial';
-    const urlPostPreferido = `${base}/por-usuario`;
 
     const handleResponse = (response: any) => {
       const ordersArray = this.normalizeOrdersResponse(response);
@@ -45,13 +40,10 @@ export class MisPedidosComponent implements OnInit {
       this.loading = false;
     };
 
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const bodyPayload = userId ? Number(userId) : null;
-
-    this.http.post(urlPostPreferido, JSON.stringify(bodyPayload), { headers }).subscribe({
+    this.ordenService.ordenesPorUsuario(usuario).subscribe({
       next: (res) => handleResponse(res),
       error: (err) => {
-        console.error('Error cargando pedidos desde Historial backend (por-usuario):', err);
+        console.error('Error cargando pedidos desde el backend:', err);
         try {
           const local = localStorage.getItem('historial-pedidos');
           const localOrders = local ? JSON.parse(local) : [];
@@ -143,7 +135,7 @@ export class MisPedidosComponent implements OnInit {
     const nombreProducto = (productoNombre || '').toLowerCase();
     const esProductoEntregado = /(zapato|zapatilla)/i.test(nombreProducto) && /(negro|marron|marrones|negros|marrón)/i.test(nombreProducto);
 
-    if (esProductoEntregado) {
+    if (esProductoEntregado && !estadoBase) {
       return 'Entregado';
     }
 
@@ -152,6 +144,7 @@ export class MisPedidosComponent implements OnInit {
       PENDIENTE: 'Pendiente',
       PENDING: 'Pendiente',
       ENTREGADO: 'Entregado',
+      ENTREGADA: 'Entregada',
       COMPLETO: 'Entregado',
       COMPLETADO: 'Entregado',
       CANCELADO: 'Cancelado',
@@ -206,6 +199,7 @@ export class MisPedidosComponent implements OnInit {
     return {
       'pendiente': 'pending',
       'entregado': 'entregado',
+      'entregada': 'entregado',
       'completo': 'entregado',
       'cancelado': 'cancelado',
       'rechazada': 'cancelado'

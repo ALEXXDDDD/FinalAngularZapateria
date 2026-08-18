@@ -26,6 +26,7 @@ export const    urlConstants ={
     Usuario:dominio + "api/Usuario",
     DetalleProduccion:dominio+"api/DetalleProduccion",
     Proveedor:dominio + "api/Proveedor",
+    buscarRucProveedor: dominio + "api/Proveedor/buscar-ruc",
     Credito:dominio + "api/Credito",
     Orden:dominio + "api/Orden/",
     IngresoProducto:dominio + "api/IngresoProducto",

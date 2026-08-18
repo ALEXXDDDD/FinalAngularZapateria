@@ -23,8 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
     let token = sessionStorage.getItem("token")
     let request = req;
     const esApiExterna = req.url.includes("dniruc.apisperu.com") ||
-      req.url.includes("api.hunter.io") || req.url.includes("peruapi.com") ||
-      req.url.startsWith("/peruapi/");
+      req.url.includes("api.hunter.io") || req.url.includes("peruapi.com");
 
     if(!esApiExterna)
     {

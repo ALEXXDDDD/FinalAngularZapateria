@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { urlConstants } from 'src/app/constants/url.constants';
 import { CrudService } from 'src/app/modules/shared/services/crud.service';
 import { RequestVWOrden } from '../../models/orden/orden-responseVWmodel';
@@ -35,7 +35,11 @@ export class OrdenService extends CrudService<RequestVWOrden,ResponseOrden> {
     return this._http.post<MercadoPagoResponse[]>(`${this.url_service}mercadoPago`,mercadoRequest)
    }
 
-  ordenesPorUsuario(userId: string): Observable<ResponseListOrden[]> {
-    return this._http.get<ResponseListOrden[]>(`${this.url_service}usuario/${userId}`);
+  ordenesPorUsuario(usuario: string): Observable<ResponseListOrden[]> {
+    return this._http.post<ResponseListOrden[]>(
+      `${this.url_service}ordenes-por-usuario`,
+      JSON.stringify(usuario),
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
   }
 }

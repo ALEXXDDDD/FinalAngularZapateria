@@ -17,6 +17,12 @@
         </div>
       </div>
 
+      <div *ngIf="proveedorRegistrado" class="col-12">
+        <div class="alert alert-warning mb-0" role="alert">
+          Este RUC ya tiene un proveedor registrado. Los campos de registro estan bloqueados.
+        </div>
+      </div>
+
       <div class="col-md-6">
         <label for="nombrePersona" class="form-label">Razon social</label>
         <input id="nombrePersona" type="text" class="form-control bg-light" formControlName="nombrePersona" readonly>
@@ -78,6 +84,6 @@
 
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary" (click)="cerrarModal(false)">Cancelar</button>
-    <button type="submit" class="btn btn-primary" [disabled]="myForm.invalid">Guardar proveedor</button>
+    <button type="submit" class="btn btn-primary" [disabled]="myForm.invalid || proveedorRegistrado">Guardar proveedor</button>
   </div>
 </form>

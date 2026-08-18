@@ -33,12 +33,14 @@
         </ul>
     </div>
 </div> -->
-        <div class="nav" *ngFor="let d of meny"> 
-            <div *ngFor="let x of d.subMenu"  id="{{d.target}}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+        <div class="nav">
+            <ng-container *ngFor="let d of meny">
+            <div *ngFor="let x of d.subMenu" id="{{d.target}}" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                 <nav >
                     <a class="nav-link"  href="" [routerLink]="[x.url]"><i class="{{x.incon}}" class="mr-5"></i>{{x.name}}</a>
                 </nav>
             </div>                                            
+            </ng-container>
         </div>
         
     </div>

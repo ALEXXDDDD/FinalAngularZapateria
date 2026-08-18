@@ -6,7 +6,7 @@ import { urlConstants } from 'src/app/constants/url.constants';
 import { CrudService } from 'src/app/modules/shared/services/crud.service';
 import { Observable } from 'rxjs';
 import { ResponseVWProveedor } from '../../models/proveedor/responseVWProveedor.model';
-import { RucApiResponse } from '../../models/proveedor/ruc-api-response.model';
+import { BuscarRucProveedorResponse } from '../../models/proveedor/ruc-api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +28,9 @@ export class ProveedorService  extends CrudService<RequestVWProveedor,ResponsePr
      return this._http.get<ResponseProveedor[]>(this.url_service);
    }
 
-   buscarProveedorPorRuc(ruc: string): Observable<RucApiResponse> {
-     const apiToken = 'f32df328f179d3a12c4dc521c8edfaa2';
-     const url = `/peruapi/api.php?json=ruc&id=${encodeURIComponent(ruc)}&api_token=${apiToken}`;
-     return this._http.get<RucApiResponse>(url);
+   buscarProveedorPorRuc(ruc: string): Observable<BuscarRucProveedorResponse> {
+     return this._http.get<BuscarRucProveedorResponse>(
+       `${urlConstants.buscarRucProveedor}/${encodeURIComponent(ruc)}`
+     );
    }
-
-
 }

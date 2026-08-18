@@ -110,6 +110,9 @@ export class LoginComponent implements OnInit {
               this._router.navigate(['dasboard/mantenimiento/producto']);
             } else if(data.nameRol === "Vendedor") {
               this._router.navigate(['dasboard']);
+            } 
+            else if(data.nameRol === "Administrador") {
+              this._router.navigate(['dasboard/inicioSidebar']);
             } else {
               this._router.navigate(['dasboard']);
             }

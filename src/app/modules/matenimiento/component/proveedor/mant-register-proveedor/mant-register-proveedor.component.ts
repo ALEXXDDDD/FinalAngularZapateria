@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AcciontConstants } from 'src/app/constants/general.constans';
-import { alert_error, alert_sucess } from 'src/app/funcionts/general.funcionts';
+import { alert_error, alert_sucess, alert_warning } from 'src/app/funcionts/general.funcionts';
 import { ResponseVWMaterial } from '../../../models/material/material-responseVW.model';
 import { RequestVWProveedor } from '../../../models/proveedor/requestVWProveedor.model';
 import { ResponseVWProveedor } from '../../../models/proveedor/responseVWProveedor.model';
@@ -27,6 +27,7 @@ export class MantRegisterProveedorComponent implements OnInit {
   unidades: ResponseUnidad[] = [];
   rucConsulta = '';
   buscandoRuc = false;
+  proveedorRegistrado = false;
 
   constructor(
     private fb: FormBuilder,
@@ -71,18 +72,47 @@ export class MantRegisterProveedorComponent implements OnInit {
     this.buscandoRuc = true;
     this.proveedorService.buscarProveedorPorRuc(this.rucConsulta).subscribe({
       next: (respuesta) => {
-        if (respuesta.code !== '200' || respuesta.mensaje !== 'OK') {
+        if (respuesta.api.code !== '200' || respuesta.api.mensaje !== 'OK') {
           alert_error('No se encontro informacion para el RUC ingresado.');
           return;
         }
 
+        if (respuesta.proveedor && respuesta.persona) {
+          this.proveedorRegistrado = true;
+          this.myForm.patchValue({
+            idProvedor: respuesta.proveedor.idProvedor,
+            idPersona: respuesta.persona.idPersona,
+            nombrePersona: respuesta.persona.nombrePersona,
+            tipoPersona: respuesta.persona.tipoPersona,
+            tipoDocumento: respuesta.persona.tipoDocumento,
+            numeroDocumento: respuesta.persona.numeroDocumento,
+            telefono: respuesta.persona.telefono.replace(/^\+51/, ''),
+            direccion: respuesta.persona.direccion,
+            materialEntrega: respuesta.proveedor.materialEntrega,
+            costoMaterialEntrega: respuesta.proveedor.costoMaterialEntrega,
+            unidadMaterialEntrega: respuesta.proveedor.unidadMaterialEntrega
+          });
+          this.bloquearRegistro();
+          alert_warning('Proveedor ya creado', undefined, respuesta.message);
+          return;
+        }
+
+        this.proveedorRegistrado = false;
+        this.habilitarRegistro();
         this.myForm.patchValue({
-          nombrePersona: respuesta.razon_social,
-          tipoPersona: 'Juridica',
+          idProvedor: 0,
+          idPersona: 0,
+          nombrePersona: respuesta.api.razon_social,
+          tipoPersona: 'JURIDICA',
           tipoDocumento: 'RUC',
-          numeroDocumento: respuesta.ruc,
-          direccion: respuesta.direccion ?? ''
+          numeroDocumento: respuesta.api.ruc,
+          telefono: '',
+          direccion: respuesta.api.direccion ?? '',
+          materialEntrega: '',
+          costoMaterialEntrega: null,
+          unidadMaterialEntrega: ''
         });
+        alert_sucess('Proveedor no creado', 2500, respuesta.message);
       },
       error: () => alert_error('No se pudo consultar el RUC.'),
       complete: () => this.buscandoRuc = false
@@ -94,6 +124,16 @@ export class MantRegisterProveedorComponent implements OnInit {
       next: materiales => this.materiales = materiales,
       error: () => alert_error('No se pudieron cargar los materiales.')
     });
+  }
+
+  private bloquearRegistro(): void {
+    ['telefono', 'direccion', 'materialEntrega', 'costoMaterialEntrega', 'unidadMaterialEntrega']
+      .forEach(campo => this.myForm.get(campo)?.disable());
+  }
+
+  private habilitarRegistro(): void {
+    ['telefono', 'direccion', 'materialEntrega', 'costoMaterialEntrega', 'unidadMaterialEntrega']
+      .forEach(campo => this.myForm.get(campo)?.enable());
   }
 
   listarUnidades(): void {
