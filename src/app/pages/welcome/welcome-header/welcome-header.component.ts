@@ -62,8 +62,9 @@ export class WelcomeHeaderComponent implements OnInit {
           {
             name:"Entrada", target:"TargetEntrada",
             subMenu:[
-              {name:"Carrito ",url:"carrito", incon:"fa fa-fw fa-search text-dark mr-2"},
-              {name:"Login",url:"auth", incon:"fa fa-fw fa-user text-dark mr-3"},                     
+              {name:"Carrito ",url:"/carrito", incon:"fa fa-fw fa-search text-dark mr-2"},
+              {name:"Mis pedidos",url:"/mis-pedidos", incon:"fa fa-fw fa-box text-dark mr-2"},
+              {name:"Login",url:"/auth", incon:"fa fa-fw fa-user text-dark mr-3"},                     
                   ]
                   
                 },
@@ -94,6 +95,7 @@ export class WelcomeHeaderComponent implements OnInit {
           name:"Cliente", target:"TargetCliente",
           subMenu:[
             {name:"Carrito ",url:"/carrito", incon:"fa fa-fw fa-search text-dark mr-2"},
+            {name:"Mis pedidos",url:"/mis-pedidos", incon:"fa fa-fw fa-box text-dark mr-2"},
                 
                 ]
                 

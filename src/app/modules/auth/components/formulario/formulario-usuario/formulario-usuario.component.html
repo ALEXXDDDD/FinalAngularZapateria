@@ -31,6 +31,23 @@
           <h2>Crear Cuenta</h2>
           <p class="subtitle">Regístrate para obtener acceso completo.</p>
         </div>
+        <div class="form-row selects-row">
+            <div class="select-group">
+              <label for="tipoPersona">Tipo de Persona</label>
+              <select id="tipoPersona" formControlName="tipoPersona" [disabled]="dniBuscado">
+                <option value="Natural">Natural</option>
+              </select>
+            </div>
+
+            <div class="select-group">
+              <label for="tipoDocumento">Tipo de Doc.</label>
+              <select id="tipoDocumento" formControlName="tipoDocumento">
+                <option value="" disabled selected>Seleccione...</option>
+                <option value="DNI">DNI</option>
+                <option value="CARNET">Carnet Ext.</option>
+              </select>
+            </div>
+          </div>
 
         <form [formGroup]="myForm" class="register-form">
           <div class="input-group full-width input-with-action">
@@ -91,26 +108,9 @@
             <span class="focus-border"></span>
           </div>
 
-          <div class="form-row selects-row">
-            <div class="select-group">
-              <label for="tipoPersona">Tipo de Persona</label>
-              <select id="tipoPersona" formControlName="tipoPersona" [disabled]="dniBuscado">
-                <option value="Natural">Natural</option>
-              </select>
-            </div>
-
-            <div class="select-group">
-              <label for="tipoDocumento">Tipo de Doc.</label>
-              <select id="tipoDocumento" formControlName="tipoDocumento">
-                <option value="" disabled selected>Seleccione...</option>
-                <option value="DNI">DNI</option>
-                <option value="CARNET">Carnet Ext.</option>
-              </select>
-            </div>
-          </div>
-
           
 
+      
           <button 
             type="submit" 
             [disabled]="myForm.invalid" 

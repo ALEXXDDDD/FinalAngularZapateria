@@ -10,6 +10,7 @@ import { VistEmpresaComponent } from './Ventas/component/vistas/vist-empresa/vis
 import { CarritoComprasComponent } from './Ventas/component/carrito-compras/carrito-compras.component';
 import { PerfilListComponent } from './pages/perfil/perfil-list/perfil-list.component';
 import { CategoryProductsComponent } from './Ventas/component/vistas/category-products/category-products.component';
+import { MisPedidosComponent } from './pages/welcome/mis-pedidos/mis-pedidos.component';
 
 const routes: Routes = [
   //Routeo
@@ -73,6 +74,11 @@ const routes: Routes = [
     path:'carrito',
     component:CarritoComprasComponent //Si es vacio dirigite a este componente
 
+  },
+  {
+    canActivate: [authGuard],
+    path: 'mis-pedidos',
+    component: MisPedidosComponent
   },
   {
     canActivate: [  authGuard],

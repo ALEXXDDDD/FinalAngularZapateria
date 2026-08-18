@@ -1,0 +1,23 @@
+.codigo-produccion-input {
+  min-width: 100%;
+  width: 100%;
+  min-height: 44px;
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
+  box-sizing: border-box;
+}
+
+.codigo-produccion-input:read-only {
+  white-space: nowrap;
+  overflow: visible;
+}
+
+@media (min-width: 768px) {
+  .codigo-produccion-input {
+    min-width: 25rem;
+    max-width: 100%;
+  }
+}

@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { OrdenService } from 'src/app/modules/matenimiento/service/orden/orden.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestVWOrden } from 'src/app/modules/matenimiento/models/orden/orden-responseVWmodel';
 import { PersonaService } from 'src/app/modules/matenimiento/service/persona/persona.service';
 import { ResponsePersona } from 'src/app/modules/matenimiento/models/persona/response-persona.model';
@@ -20,6 +21,7 @@ interface RequestVOrdenPayload {
   cantidad: number;
   nombrePersona: string;
   estadoOrden: string;
+  direccion?: string;
   idCliente: number;
   tipoOrden: boolean;
   idEmpleado: number;
@@ -58,7 +60,8 @@ export class PagPagoComponent implements OnInit {
     private _router: Router,
     private _carritoService: CarritoService,
     private modalService: BsModalService,
-    private _ordenService: OrdenService
+    private _ordenService: OrdenService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -207,7 +210,7 @@ export class PagPagoComponent implements OnInit {
     const nombrePersona = this.normalizarTexto(this.nombre || 'cliente') || 'cliente';
     const producto = this.normalizarTexto(nombreProducto || 'producto') || 'producto';
     const fecha = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    return `ORDEN-${nombrePersona}-${producto}-${fecha}`;
+    return `ORDEN-${nombrePersona}-${producto}`;
   }
 
   hayPagoExitoso(params: URLSearchParams): boolean {
@@ -224,6 +227,17 @@ export class PagPagoComponent implements OnInit {
     return sessionStorage.getItem('nombrePersona') || this.nombre || 'Cliente';
   }
 
+  private getEstadoOrdenPorProducto(nombreProducto: string, estadoBase: string): string {
+    const nombreNormalizado = (nombreProducto || '').toLowerCase();
+    const esZapatoEntregado = /(zapato|zapatilla)/i.test(nombreNormalizado) && /(negro|marron|marrones|negros|marrón)/i.test(nombreNormalizado);
+
+    if (esZapatoEntregado) {
+      return 'ENTREGADO';
+    }
+
+    return estadoBase;
+  }
+
   private async registrarOrdenesSecuencialmente(estadoOrdenParam: string = 'PENDIENTE'): Promise<{ exitosos: number; fallidos: number; errores: string[] }> {
     const carritoActual = this.obtenerCarritoActual();
     if (!carritoActual.length) {
@@ -236,22 +250,36 @@ export class PagPagoComponent implements OnInit {
       errores: [] as string[]
     };
 
+    // Preparar almacenamiento local de historial como fallback y registro rápido
+    let historialLocal: any[] = [];
+    try {
+      const raw = localStorage.getItem('historial-pedidos');
+      historialLocal = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(historialLocal)) historialLocal = [];
+    } catch (e) {
+      historialLocal = [];
+    }
+
     const idCliente = Number(sessionStorage.getItem('idUsuario') || '0');
     const idEmpleado = Number(sessionStorage.getItem('idEmpleado') || '0');
     const fechaOrden = new Date().toISOString();
     const fechaRequerido = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString();
 
     for (const item of carritoActual) {
+      const estadoFinal = this.getEstadoOrdenPorProducto(item.producto.nombreProd, estadoOrdenParam);
+      const direccionPedido = this.direccion || sessionStorage.getItem('direccion') || sessionStorage.getItem('direccionEnvio') || '';
+
       const payload: RequestVOrdenPayload = {
         idOrden: 0,
         nombrePersona: this.obtenerNombrePersonaSesion(),
         fechaOrden,
         fechaRequerido,
-        estadoOrden: estadoOrdenParam,
+        estadoOrden: estadoFinal,
         nombreProd: item.producto.nombreProd,
         precioUnitario: item.producto.precioUnitario,
         codigoOrden: this.generarCodigoOrden(item.producto.nombreProd),
         cantidad: item.cantidad,
+        direccion: direccionPedido,
         idCliente,
         tipoOrden: true,
         idEmpleado
@@ -261,11 +289,38 @@ export class PagPagoComponent implements OnInit {
         console.log('Enviando orden al backend (estado:', estadoOrdenParam, '):', payload);
         await firstValueFrom(this._ordenService.create(payload as any));
         resultados.exitosos += 1;
+        // Guardar en historial local una copia del payload con marca de tiempo
+        try {
+          historialLocal.push({
+            fechaGuardado: new Date().toISOString(),
+            estado: estadoFinal,
+            orden: payload
+          });
+        } catch (e) {
+          console.warn('No se pudo agregar al historial local', e);
+        }
+
+        // Intentar registrar también en el backend de Historial
+        try {
+          const historialBase = 'https://localhost:7282/api/Historial';
+          const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+          // Enviar el objeto de orden; algunos backends esperan el userId, otros la orden completa.
+          await firstValueFrom(this.http.post(`${historialBase}/por-usuario`, JSON.stringify(payload), { headers }));
+        } catch (e) {
+          console.warn('No se pudo guardar la orden en el Historial backend:', e);
+        }
       } catch (error: any) {
         resultados.fallidos += 1;
         resultados.errores.push(`Producto ${item.producto.nombreProd}: ${error?.message || 'Error desconocido'}`);
         console.warn('Error al enviar item de carrito al backend:', item.producto.nombreProd, error);
       }
+    }
+
+    // Persistir historial local actualizado
+    try {
+      localStorage.setItem('historial-pedidos', JSON.stringify(historialLocal));
+    } catch (e) {
+      console.warn('No se pudo persistir historial local en localStorage', e);
     }
 
     return resultados;
