@@ -12,6 +12,7 @@ import { ResponseUnidad } from '../../../models/unidad/p/unidad-response.model';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mant-register-orden',
@@ -36,6 +37,7 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private _ordenService: OrdenService,
     private datetTipe:DatePipe,
+    private router: Router,
     private _productoService: ProductoService,
     private _unidadService: UnidadService
   ) {
@@ -85,7 +87,11 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
       this.actualizarStock(value);
     });
   }
-  
+  recargarRuta() {
+  this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    this.router.navigate([this.router.url]);
+  });
+}
   estCantidad(): boolean {
     const cantidad = this.myForm.get('cantidad')?.value;
     return !cantidad || cantidad <= 0;
@@ -204,7 +210,7 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
     {
       next:()=>{ alert_sucess("Se creo correctamente el orde") },
       error:()=>{ alert_error("No se pudo crear el Orden")},
-      complete:()=>{ this.cerrarModal(true)}
+      complete:()=>{ this.cerrarModal(true) }
     }
   )
  }
@@ -255,7 +261,10 @@ export class MantRegisterOrdenComponent implements OnInit, OnChanges {
       {
         next:()=>{alert_sucess("Se actualizo")},
         error:()=>{},
-        complete:()=>{}
+        complete:()=>{
+          this.cerrarModal(true);
+          this.recargarRuta();
+        }
       }
     )
   }
